@@ -27,7 +27,9 @@
 
             cobrancasHub.client.daExtratoPDFCliente = function(val){
                 console.log("Connection started! Extrato Cliente");
-                console.log(val);
+                console.log(val.caminho);
+
+                enviaEmail(val.entidade,val.caminho);
             }
 
             cobrancasHub.client.daListaEmpresas = function (val) {
@@ -102,11 +104,11 @@
             });
         });
 
-        function enviaEmail(cliente) {
+        function enviaEmail(cliente,ficheiro) {
             $.ajax({
                 type: "Post",
                 url: "/Cobrancas/EnviaEmail",
-                data: { client: cliente },
+                data: { client: cliente, ficheiro: ficheiro  },
                 datatypr: "html",
                 success: function (data) {
                     $("#enviaEmail_" + cliente).append("<p>" +data.Message+"</p>");
@@ -130,6 +132,9 @@
                         $checkbox = val;
                         console.log($checkbox.value);
 
+                        //enviaEmail($checkbox.value);
+
+                        daExtratoPdfCliente($("#codigoEmpresa").text(), $checkbox.value);
                     });
                 }
 
@@ -137,10 +142,6 @@
                 
             });
 
-            for (i = 1; i < row; i++) {
-                //console.log('Row ' + parseFloat(i + 1) + ' : ' + document.getElementById('tableListaClientes').rows[i].cells.item[1].firstChild.value);
-            }
-            //enviaEmail("1004");
 
         }
 
@@ -185,7 +186,6 @@
         </div>
 
     </div>
-
 
     <div class="col-md-5">
         <table id="tableListaClientes" class="table table-striped">

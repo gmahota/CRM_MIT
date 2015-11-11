@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Mail;
+using SendGrid;
+using System.Net;
+using System.Diagnostics;
+using System.IO;
 
 namespace MIT.CRM.Services
 {
@@ -30,5 +35,156 @@ namespace MIT.CRM.Services
     public interface ISmsSender
     {
         Task SendSmsAsync(string number, string message);
+    }
+
+    public class Email
+    {
+        internal void sendEmail(string message)
+        {
+            try
+            {
+
+                string filename = null;
+                string mailboy = message;
+
+                bool enviado = false;
+                enviado = false;
+
+                
+                //imprimirPdf(codigoCliente);
+
+                try
+                {
+                    filename =  (@"wwwroot/Content/Signature.html");
+                    // "~/Content/Reports/template.htm";
+
+                    mailboy =   System.IO.File.ReadAllText(filename);
+                    //mailboy = mailboy.Replace("##FirstName##", objContacto.Titulo + " " + objContacto.PrimeiroNome + " " + objContacto.UltimoNome);
+                    //mailboy = mailboy.Replace("##cliente##", objContacto.Nome);
+                    ////mailboy = mailboy.Replace("##quantidade##", ds.Tables[0].Rows[0]["Quantidade"].ToString());
+                    //mailboy = mailboy.Replace("##divida##", objContacto.ValorPendente.ToString());
+                    //mailboy = mailboy.Replace("##empresa##", empresadb.CodEmpresaPri);
+
+                    SmtpClient Smtp_Server = new SmtpClient();
+                    MailMessage e_mail = new MailMessage();
+
+                    Smtp_Server.UseDefaultCredentials = true;
+                    Smtp_Server.Credentials = new System.Net.NetworkCredential("gmahota@mit.co.mz", "Agnes27012015");
+                    Smtp_Server.Port = 587;
+                    Smtp_Server.EnableSsl = true;
+                    Smtp_Server.Host = "smtp.gmail.com";
+
+
+
+                    //Smtp_Server.UseDefaultCredentials = empresadb.UseDefaultCredentials.Value;
+                    //Smtp_Server.Credentials = new System.Net.NetworkCredential(empresadb.Email, empresadb.Credentials);
+                    //Smtp_Server.Port = empresadb.Port.Value;
+                    //Smtp_Server.EnableSsl = empresadb.EnableSsl.Value;
+                    //Smtp_Server.Host = empresadb.Host;
+
+                    e_mail = new MailMessage();
+                    e_mail.From = new MailAddress("gmahota@mit.co.mz");
+                    e_mail.To.Add("guimaraeslucas98@hotmail.co.mz");
+                    //e_mail.To.Add(objContacto.Email);
+                    //e_mail.CC.Add(user.Email);
+
+                    e_mail.Subject = "Facturas Pendentes ";
+
+                    e_mail.IsBodyHtml = true;
+                    
+
+                    e_mail.Body = mailboy;
+                    try
+                    {
+                       // e_mail.Attachments.Add(new System.Net.Mail.Attachment(imprimirPdf(objContacto.Cliente), "Extrato Pendentes.pdf"));
+
+                    }
+                    catch (Exception e)
+                    {
+                        e_mail.Body = mailboy + "/n" + e.Message;
+                    }
+
+
+                    //if (files != null)
+                    //{
+                    //    foreach (var file in files)
+                    //    {
+                    //        e_mail.Attachments.Add(new System.Net.Mail.Attachment(file.InputStream, Path.GetFileName(file.FileName)));
+                    //    }
+                    //}
+
+                    //if (!string.IsNullOrEmpty(anexo1))
+                    //    e_mail.Attachments.Add(new System.Net.Mail.Attachment(anexo1));
+                    //if (!string.IsNullOrEmpty(anexo2))
+                    //    e_mail.Attachments.Add(new System.Net.Mail.Attachment(anexo2));
+
+                    Smtp_Server.Send(e_mail);
+
+                    enviado = true;
+                }
+                catch (Exception error_t)
+                {
+                    //Interaction.MsgBox(error_t.ToString());
+                    enviado = false;
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+
+        // Use NuGet to install SendGrid (Basic C# client lib) 
+        internal void configSendGridasync(string email,string ficheiro)
+        {
+            string filename = @"wwwroot/Content/template.html";// "~/Content/Reports/template.htm";
+            
+            string template = (@"wwwroot/Content/Signature.html");
+
+            string mailboy = System.IO.File.ReadAllText(filename);
+            //filename = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/Reports/emailTemplate.htm");// "~/Content/Reports/template.htm";
+
+            string emailTemplate = System.IO.File.ReadAllText(template);
+
+            var myMessage = new SendGridMessage();
+            //myMessage.AddTo("guimaraesmahota@gmail.com");
+
+            myMessage.AddTo(email);
+            myMessage.From = new System.Net.Mail.MailAddress(
+                                "gmahota@mit.co.mz", "Email Avisos Accsys ");
+            myMessage.Subject = "Avisos De Pendentes " ;
+
+            using (var attachmentFileStream = new FileStream(ficheiro, FileMode.Open))
+            {
+                myMessage.AddAttachment(attachmentFileStream,attachmentFileStream.Name);
+            }
+
+
+            //myMessage.AddAttachment(@ficheiro);
+            myMessage.Text = mailboy;
+            myMessage.Html = mailboy;
+
+            myMessage.EnableTemplate(emailTemplate);
+
+            var credentials = new NetworkCredential(
+                       "gmahota",
+                       "Accsys2011!"
+                       );
+
+                  // Create a Web transport for sending email.
+                  var transportWeb = new Web(credentials);
+
+            // Send the email.
+            if (transportWeb != null)
+            {
+                transportWeb.DeliverAsync(myMessage);
+            }
+            else
+            {
+                Trace.TraceError("Failed to create Web transport.");
+
+            }
+        }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿{
+{
   "webroot": "wwwroot",
   "userSecretsId": "aspnet5-MIT.CRM-575463a7-f9c0-4eb9-9f1e-86a95d54c996",
   "version": "1.0.0-*",
@@ -26,7 +26,10 @@
     "Microsoft.Framework.Logging": "1.0.0-beta5",
     "Microsoft.Framework.Logging.Console": "1.0.0-beta5",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta5",
-     "Microsoft.AspNet.SignalR.Client": "2.2.0"
+    "Microsoft.AspNet.SignalR.Client": "2.2.0",
+    "Microsoft.AspNet.Http.Abstractions": "1.0.0-beta5",
+    "Sendgrid": "6.1.0"
+
   },
 
   "commands": {
@@ -37,8 +40,7 @@
   },
 
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
+    "dnx451": { }
   },
 
   "exclude": [
