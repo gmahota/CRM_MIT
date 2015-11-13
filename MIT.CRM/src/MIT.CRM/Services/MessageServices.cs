@@ -135,11 +135,11 @@ namespace MIT.CRM.Services
 
 
         // Use NuGet to install SendGrid (Basic C# client lib) 
-        internal void configSendGridasync(string email,string ficheiro)
+        internal void configSendGridasync(string email,string ficheiro, string folderServer)
         {
-            string filename = @"wwwroot/Content/template.html";// "~/Content/Reports/template.htm";
+            string filename = Path.Combine(folderServer, "Content\\template.html");// "~/Content/Reports/template.htm";
             
-            string template = (@"wwwroot/Content/Signature.html");
+            string template = Path.Combine(folderServer, "Content\\Signature.html");
 
             string mailboy = System.IO.File.ReadAllText(filename);
             //filename = System.Web.HttpContext.Current.Server.MapPath(@"~/Content/Reports/emailTemplate.htm");// "~/Content/Reports/template.htm";
@@ -154,17 +154,21 @@ namespace MIT.CRM.Services
                                 "gmahota@mit.co.mz", "Email Avisos Accsys ");
             myMessage.Subject = "Avisos De Pendentes " ;
 
-            using (var attachmentFileStream = new FileStream(ficheiro, FileMode.Open))
+            if (ficheiro != null)
             {
-                myMessage.AddAttachment(attachmentFileStream,attachmentFileStream.Name);
+                using (var attachmentFileStream = new FileStream(ficheiro, FileMode.Open))
+                {
+                    myMessage.AddAttachment(attachmentFileStream, attachmentFileStream.Name);
+                }
             }
-
 
             //myMessage.AddAttachment(@ficheiro);
             myMessage.Text = mailboy;
             myMessage.Html = mailboy;
 
-            myMessage.EnableTemplate(emailTemplate);
+            //myMessage.EnableTemplate(emailTemplate);
+
+            myMessage.EnableTemplateEngine("4ea35a49-5415-4d02-81e3-8adc54650b31");
 
             var credentials = new NetworkCredential(
                        "gmahota",

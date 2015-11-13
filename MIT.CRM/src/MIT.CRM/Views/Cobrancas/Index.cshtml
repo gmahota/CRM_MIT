@@ -21,7 +21,7 @@
     <script>
         $.connection.hub.url = "http://localhost:8989/signalr";
 
-            var cobrancasHub = $.connection.cobrancas;
+            var cobrancasHub = $.connection.cobrancasHub;
 
         $(function () {
 
@@ -52,6 +52,8 @@
 
             cobrancasHub.client.daDadosEmpresa = function (val) {
                 console.log("Connection started! - da dados da empresa "+ val.codigo);
+
+                $("#listaClientes").show();
 
                 $("#codigoEmpresa").empty();
                 $("#nomeEmpresa").empty();
@@ -158,17 +160,18 @@
          }
 
         function daExtratoPdfCliente(empresa,cliente){
-             console.log("da extrato do cliente " + cliente+ " da empresa " + empresa);
+            console.log("da extrato do cliente " + cliente + " da empresa " + empresa);
+            enviaEmail(cliente)
              cobrancasHub.server.daExtratoPDFCliente(0,empresa,"gmahota","Accsys2011!",cliente);
         }
 
     </script>
 }
 
-<ol id="listaEmpresas" class="breadcrumb"></ol>
+<ol id="listaEmpresas" class="breadcrumb" ></ol>
 
 <!-- Page Heading -->
-<div id="listaClientes" class="row">
+<div id="listaClientes" class="row" style="display:none">
     <div class="panel panel-info ">
         <div id="codigoEmpresa" class="panel-heading">Empresa Acc</div>
 

@@ -1,0 +1,39 @@
+{
+  "webroot": "wwwroot",
+  "userSecretsId": "aspnet5-MIT.CRM-575463a7-f9c0-4eb9-9f1e-86a95d54c996",
+  "version": "1.0.0-*",
+  "dependencies": {
+    "MIT.CRM": "1.0.0"
+  },
+  "commands": {
+    "web": "Microsoft.AspNet.Hosting --config hosting.ini",
+    "ef": "EntityFramework.Commands",
+    "gen": "Microsoft.Framework.CodeGeneration",
+    "kestrel": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.Kestrel --config hosting.ini"
+  },
+  "frameworks": {
+    "dnx451": {}
+  },
+  "exclude": [
+    "wwwroot",
+    "node_modules",
+    "bower_components"
+  ],
+  "publishExclude": [
+    "node_modules",
+    "bower_components",
+    "**.xproj",
+    "**.user",
+    "**.vspscc"
+  ],
+  "scripts": {
+    "prepublish": [
+      "npm install",
+      "bower install",
+      "gulp clean",
+      "gulp min"
+    ]
+  },
+  "entryPoint": "MIT.CRM",
+  "loadable": false
+}

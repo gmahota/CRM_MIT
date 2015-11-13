@@ -4,7 +4,7 @@
   },
   "Data": {
     "DefaultConnection": {
-      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-MIT.CRM-575463a7-f9c0-4eb9-9f1e-86a95d54c996;Trusted_Connection=True;MultipleActiveResultSets=true"
+      "ConnectionString": "Server=.\\primavera;Database=MITCRM;Trusted_Connection=True;MultipleActiveResultSets=true"
     }
   }
 }

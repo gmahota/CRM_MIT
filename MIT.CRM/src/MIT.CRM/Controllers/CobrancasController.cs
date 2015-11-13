@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Net;
 using System.Diagnostics;
 using SendGrid;
+using Microsoft.AspNet.Hosting;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,6 +16,13 @@ namespace MIT.CRM.Controllers
 {
     public class CobrancasController : Controller
     {
+        private readonly IHostingEnvironment _environment;
+
+        public CobrancasController(IHostingEnvironment environment)
+        {
+            _environment = environment;
+        }
+
         // GET: /<controller>/
         public IActionResult Index()
         {
@@ -28,8 +36,8 @@ namespace MIT.CRM.Controllers
                 Email x = new Email();
 
                 //x.sendEmail("Cliente: " + client);
-
-                x.configSendGridasync("gmahota@mit.co.mz", ficheiro);
+                
+                x.configSendGridasync("gmahota@mit.co.mz", ficheiro,_environment.WebRootPath);
 
                 return Json(new
                 {
