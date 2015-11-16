@@ -3,6 +3,8 @@
   <PropertyGroup>
     <ActiveDebugProfile>web</ActiveDebugProfile>
     <NameOfLastUsedPublishProfile>MIT</NameOfLastUsedPublishProfile>
+    <ShowAllFiles>true</ShowAllFiles>
+    <DebugCLRTypeOverride>NET</DebugCLRTypeOverride>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

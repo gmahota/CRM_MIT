@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
-using MIT.CRM.Services;
-using System.Configuration;
-using System.Net;
-using System.Diagnostics;
+using CRM.Services;
 using Microsoft.AspNet.Hosting;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace MIT.CRM.Controllers
+namespace CRM.Controllers
 {
     public class CobrancasController : Controller
     {
@@ -28,15 +25,15 @@ namespace MIT.CRM.Controllers
             return View();
         }
 
-        public JsonResult EnviaEmail(string client,string ficheiro)
+        public JsonResult EnviaEmail(string empresa,string client,string to, string cc,string ficheiro)
         {
             try
             {
                 Email x = new Email();
 
                 //x.sendEmail("Cliente: " + client);
-                
-                x.configSendGridasync("gmahota@mit.co.mz", ficheiro,_environment.WebRootPath);
+
+                x.configSendGridasync(empresa,"avisos@accsys.co.mz",to, cc,ficheiro, _environment.WebRootPath);
 
                 return Json(new
                 {
@@ -45,7 +42,7 @@ namespace MIT.CRM.Controllers
                     //PartialViewHtml = RenderPartialViewToString("PersonList", new PersonListViewModel { PersonList = _personList })
                 });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Json(new
                 {
@@ -54,8 +51,8 @@ namespace MIT.CRM.Controllers
                     //PartialViewHtml = RenderPartialViewToString("PersonList", new PersonListViewModel { PersonList = _personList })
                 });
             }
-            
-            
+
+
 
         }
 

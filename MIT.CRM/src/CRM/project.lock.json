@@ -1165,6 +1165,21 @@
           "lib/net45/Microsoft.AspNet.SignalR.Client.dll": {}
         }
       },
+      "Microsoft.AspNet.SignalR.Core/2.1.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.0.1",
+          "Microsoft.Owin.Security": "2.0.1",
+          "Newtonsoft.Json": "6.0.4",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        }
+      },
       "Microsoft.AspNet.StaticFiles/1.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -1853,6 +1868,31 @@
           "lib/dnx451/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "Microsoft.Owin/2.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        }
+      },
+      "Microsoft.Owin.Security/2.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.0.1",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        }
+      },
       "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -1881,6 +1921,15 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "Owin/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Owin.dll": {}
         }
       },
       "Remotion.Linq/2.0.0-beta-002": {
@@ -3268,6 +3317,21 @@
           "lib/net45/Microsoft.AspNet.SignalR.Client.dll": {}
         }
       },
+      "Microsoft.AspNet.SignalR.Core/2.1.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.0.1",
+          "Microsoft.Owin.Security": "2.0.1",
+          "Newtonsoft.Json": "6.0.4",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        }
+      },
       "Microsoft.AspNet.StaticFiles/1.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -3956,6 +4020,31 @@
           "lib/dnx451/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "Microsoft.Owin/2.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        }
+      },
+      "Microsoft.Owin.Security/2.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.0.1",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        }
+      },
       "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -3984,6 +4073,15 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "Owin/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Owin.dll": {}
         }
       },
       "Remotion.Linq/2.0.0-beta-002": {
@@ -5371,6 +5469,21 @@
           "lib/net45/Microsoft.AspNet.SignalR.Client.dll": {}
         }
       },
+      "Microsoft.AspNet.SignalR.Core/2.1.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.0.1",
+          "Microsoft.Owin.Security": "2.0.1",
+          "Newtonsoft.Json": "6.0.4",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.AspNet.SignalR.Core.dll": {}
+        }
+      },
       "Microsoft.AspNet.StaticFiles/1.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -6059,6 +6172,31 @@
           "lib/dnx451/Microsoft.Net.Http.Headers.dll": {}
         }
       },
+      "Microsoft.Owin/2.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.dll": {}
+        }
+      },
+      "Microsoft.Owin.Security/2.0.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Owin": "2.0.1",
+          "Owin": "1.0.0"
+        },
+        "compile": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Microsoft.Owin.Security.dll": {}
+        }
+      },
       "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-beta8": {
         "type": "package",
         "dependencies": {
@@ -6087,6 +6225,15 @@
         },
         "runtime": {
           "lib/net45/Newtonsoft.Json.dll": {}
+        }
+      },
+      "Owin/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/Owin.dll": {}
+        },
+        "runtime": {
+          "lib/net40/Owin.dll": {}
         }
       },
       "Remotion.Linq/2.0.0-beta-002": {
@@ -7162,6 +7309,18 @@
         "Microsoft.AspNet.SignalR.Client.nuspec"
       ]
     },
+    "Microsoft.AspNet.SignalR.Core/2.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "1ElkLWVBAwJcPkN0CgnroM4gQ2J7MuLO3iiSvP4UChPRExRVaZXV5JZczsfNuO7rqsne+MzN+Rf0yfWNFs2hHw==",
+      "files": [
+        "lib/net45/Microsoft.AspNet.SignalR.Core.dll",
+        "lib/net45/Microsoft.AspNet.SignalR.Core.xml",
+        "Microsoft.AspNet.SignalR.Core.2.1.2.nupkg",
+        "Microsoft.AspNet.SignalR.Core.2.1.2.nupkg.sha512",
+        "Microsoft.AspNet.SignalR.Core.nuspec"
+      ]
+    },
     "Microsoft.AspNet.StaticFiles/1.0.0-beta8": {
       "type": "package",
       "serviceable": true,
@@ -7782,6 +7941,32 @@
         "Microsoft.Net.Http.Headers.nuspec"
       ]
     },
+    "Microsoft.Owin/2.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "oyHTA0w3hxEhGea7h5ndhjN3UAL4RmkRw+YUnaiXUsHL5aJ1tvxQYg0Cq1P/8a0mO3o1uhkpr6EGq2qHlLIpMQ==",
+      "files": [
+        "lib/net40/Microsoft.Owin.dll",
+        "lib/net40/Microsoft.Owin.XML",
+        "lib/net45/Microsoft.Owin.dll",
+        "lib/net45/Microsoft.Owin.XML",
+        "Microsoft.Owin.2.0.1.nupkg",
+        "Microsoft.Owin.2.0.1.nupkg.sha512",
+        "Microsoft.Owin.nuspec"
+      ]
+    },
+    "Microsoft.Owin.Security/2.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "YXS4Ca88d49gco6tmPFHYFl4cJioDslzGduxwMtRqo/oFaYwg9YTag5RDK9azN2hh42EOg38AdThqnGmYY1J3g==",
+      "files": [
+        "lib/net45/Microsoft.Owin.Security.dll",
+        "lib/net45/Microsoft.Owin.Security.XML",
+        "Microsoft.Owin.Security.2.0.1.nupkg",
+        "Microsoft.Owin.Security.2.0.1.nupkg.sha512",
+        "Microsoft.Owin.Security.nuspec"
+      ]
+    },
     "Microsoft.VisualStudio.Web.BrowserLink.Loader/14.0.0-beta8": {
       "type": "package",
       "sha512": "9xnaaC+fJAteN5ysbzEktjXC59LLIbR/99ondUxNW5jptdo9ftX8DHlHaZw8B7x2rTozTuyYyA9zDRemUtBEWA==",
@@ -7817,6 +8002,16 @@
         "Newtonsoft.Json.6.0.6.nupkg.sha512",
         "Newtonsoft.Json.nuspec",
         "tools/install.ps1"
+      ]
+    },
+    "Owin/1.0.0": {
+      "type": "package",
+      "sha512": "OseTFniKmyp76mEzOBwIKGBRS5eMoYNkMKaMXOpxx9jv88+b6mh1rSaw43vjBOItNhaLFG3d0a20PfHyibH5sw==",
+      "files": [
+        "lib/net40/Owin.dll",
+        "Owin.1.0.0.nupkg",
+        "Owin.1.0.0.nupkg.sha512",
+        "Owin.nuspec"
       ]
     },
     "Remotion.Linq/2.0.0-beta-002": {
@@ -8576,7 +8771,8 @@
       "Microsoft.Framework.Logging.Debug >= 1.0.0-beta8",
       "Microsoft.VisualStudio.Web.BrowserLink.Loader >= 14.0.0-beta8",
       "Microsoft.AspNet.SignalR.Client >= 2.2.0",
-      "Sendgrid >= 6.1.0"
+      "Sendgrid >= 6.1.0",
+      "Microsoft.AspNet.SignalR.Core >= 2.1.2"
     ],
     "DNX,Version=v4.5.1": []
   }
