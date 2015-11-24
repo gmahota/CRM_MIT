@@ -29,7 +29,8 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta8",
     "Microsoft.AspNet.SignalR.Client": "2.2.0",
     "Sendgrid": "6.1.0",
-    "Microsoft.AspNet.SignalR.Core": "2.1.2"
+    "Microsoft.AspNet.SignalR.Core": "2.1.2",
+    "Microsoft.Extensions.OptionsModel": "1.0.0-rc2-15827"
   },
 
   "commands": {
@@ -38,7 +39,11 @@
   },
 
   "frameworks": {
-    "dnx451": {  }
+    "dnx451": {
+      "dependencies": {
+        
+      }
+    }
   },
 
   "exclude": [

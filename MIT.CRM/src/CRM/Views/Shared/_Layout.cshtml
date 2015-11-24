@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Authorization
+
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
@@ -8,7 +12,9 @@
         <environment names="Development">
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
             <link rel="stylesheet" href="~/lib/bootstrap-touch-carousel/dist/css/bootstrap-touch-carousel.css" />
+            <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" />
             <link rel="stylesheet" href="~/css/site.css" />
+            
         </environment>
         <environment names="Staging,Production">
             <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.0.0/css/bootstrap.min.css"
@@ -17,11 +23,12 @@
             <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap-touch-carousel/0.8.0/css/bootstrap-touch-carousel.css"
                   asp-fallback-href="~/lib/bootstrap-touch-carousel/css/bootstrap-touch-carousel.css"
                   asp-fallback-test-class="carousel-caption" asp-fallback-test-property="display" asp-fallback-test-value="none" />
+            <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" asp-fallback-test-property="display" asp-fallback-test-value="none"/>
             <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
         </environment>
     </head>
     <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -35,7 +42,33 @@
                     <ul class="nav navbar-nav">
                         <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                         <li><a asp-controller="Home" asp-action="About">About</a></li>
-                        <li><a asp-controller="RH" asp-action="Index">RH</a></li>
+                        
+                        @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
+                        {
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" href="#">  <i class="fa fa-user"></i> RH</a>
+                                <ul class="dropdown-menu" role="menu"> 
+                                    <li><a asp-controller="RH" asp-action="Index">Funcionario</a></li>  
+                                    <li><a asp-controller="RH" asp-action="MarcacaoFerias">Marcação Ferias</a></li>  
+                                </ul>
+                        
+                        
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" href="#">  <i class="fa fa-user"></i> Gestão</a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a asp-controller="Gestao" asp-action="Index">Geral</a></li>
+                                    <li><a asp-controller="Gestao" asp-action="RH">Importação RH</a></li>
+                                </ul>
+
+
+                            </li>
+                        }
+
                         <li><a asp-controller="Cobrancas" asp-action="Index">Cobranças</a></li>
                         <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
                     </ul>
@@ -55,8 +88,20 @@
             <script src="~/lib/jquery/dist/jquery.js"></script>
             <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
             <script src="~/lib/hammer.js/hammer.js"></script>
-            <script src="~/lib/bootstrap-touch-carousel/dist/js/bootstrap-touch-carousel.js"></script>
+            <script src="~/lib/jquery/dist/jquery.min.js"></script>
+            <script src="~/lib/moment/moment.js"></script>
+            <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
             <script src="~/js/site.js" asp-append-version="true"></script>
+            <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
+
+                                    @*
+                            <script src='lib/jquery.min.js'></script>
+                        <script src='lib/moment.min.js'></script>
+        <script src='fullcalendar/fullcalendar.js'></script>
+                                    *@
+    
+
+
         </environment>
         <environment names="Staging,Production">
             <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"

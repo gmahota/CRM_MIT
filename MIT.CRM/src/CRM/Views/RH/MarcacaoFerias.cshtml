@@ -1,0 +1,192 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    // ViewBag.Title = "Home Page";
+}
+
+@section scripts {
+    <script type="text/javascript">
+        var tipoFerias = "Dia de Ferias";
+        var numDiasMarcados = 0;
+
+        $(document).ready(function () {
+
+            var calendar = $('#calendar').fullCalendar({
+                lang: 'pt',
+                dayClick: function (date, jsEvent, view) {
+                    var existe = false;
+                    //alert('Clicked on: ' + date.format());
+
+                    //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+                    //alert('Current view: ' + view.name);
+
+                    // change the day's background color just for fun
+                    
+                    var row = document.getElementById("tabelaMarcacaoFerias").rows.length;
+
+                    $('#tabelaMarcacaoFerias tr').find(".DataM").each(function (i, row) {
+
+                        var row = $(this);
+                        console.log($(row).text());
+
+                        if (date.format("L") == $(row).text()) {
+                            existe = true;
+
+                        }
+                    });
+
+                    if (existe == true)
+                    {
+                        alert("O dia " + date.format("L") + " já foi selecionado já existe na lista de férias por submeter");
+
+                    } else
+                    {
+                        $("#tabelaMarcacaoFerias").append(
+                            "<tr>" +
+                                "<td class ='DataM'>" + date.format("L") + "</td> " +
+                                "<td>" +  tipoFerias + "</td> " +
+                                "<td>" + "Por Aprovar" + "</td> " +
+                            "</tr>"
+                        );
+
+
+                        switch (tipoFerias) {
+                            case 'Dia de Férias': $(this).css('background-color', '#eea236'); break;
+                            case 'Meio Dia de Férias': $(this).css('background-color', '#d43f3a'); break;
+                            case 'Dia Antecipado': $(this).css('background-color', '#46b8da'); break;
+                            case 'Meio Dia Antecipado': $(this).css('background-color', '#cccccc'); break;
+
+                        }
+
+                        numDiasMarcados++;
+                    }
+                    
+
+                    
+                   
+                },
+                
+
+                header: {
+                    center: 'month' // buttons for switching between views
+                },
+                views: {
+                    
+                }
+            });
+
+        });
+
+    </script>
+}
+
+<ul id="listaEmpresas" class="nav breadcrumb">
+    <li id="codigoEmpresa"> ACC </li>
+    <li id="modulo"> R.H </li>
+    <li id="modulo_type"> Marcacao Ferias</li>
+    <li id="modulo_value" class="active">@ViewData["modulo_value"]</li>
+
+</ul>
+
+<div class="row">
+    <div class="col-md-8">
+        <table>
+            <tr>
+                <td> Ano de Férias:</td>
+                <td id="anoFerias" style="padding-right:10px"> <input type="number" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> </td>
+
+                <td>Dias Marcados: </td>
+                <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
+                
+                <td>Meios Dias: </td>
+                <td style="padding-right:10px"> <text id="txtMeiosDias">0,0</text> </td>
+                
+                <td>Dias Antecipados: </td>
+                <td style="padding-right:10px"> <text id="txtDiasAntecipados">0,0</text> </td>
+                 
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-offset-8">
+        <b>Dados da Ficha do Funcionario</b>
+        
+        <table>
+            <tr>
+                <td>Máximo de dias Férias: </td>
+                <td style="padding-right:10px"> <text id="txtMaximoDiaFerias">0,0</text> </td>
+
+            </tr>
+            <tr>
+                <td>Gozados: </td>
+                <td style="padding-right:10px"> <text id="txtGozados">0,0</text> </td>
+
+                <td>Por Gozar: </td>
+                <td style="padding-right:10px"> <text id="txtPorGozar">0,0</text> </td>
+
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-8" style="padding-bottom:20px">
+        <!-- Split button -->
+        <div class="btn-group">
+            <button type="button" class="btn btn-warning btn-sm" onclick="tipoFerias = 'Dia de Férias'">Dias de Férias</button>
+            <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+
+            <button type="button" class="btn btn-danger btn-sm" onclick="tipoFerias = 'Meio Dia de Férias'" >Meios Dias de Ferias</button>
+            <button type="button" class="btn btn-danger btn-sm dropdown-toggle " onclick="tipoFerias = 'Meio Dia de Férias'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+
+            <button type="button" class="btn btn-info btn-sm" onclick="tipoFerias = 'Dia Antecipado'">Dias Antecipados </button>
+            <button type="button" class="btn btn-info btn-sm dropdown-toggle" onclick="tipoFerias = 'Dia Antecipado'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+
+            <button type="button" class="btn btn-default btn-sm" onclick="tipoFerias = 'Meio Dia Antecipado'">Meios Dias Antecipados </button>
+            <button type="button" class="btn btn-default btn-sm dropdown-toggle" onclick="tipoFerias = 'Meio Dia Antecipado'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="caret"></span>
+                <span class="sr-only">Toggle Dropdown</span>
+            </button>
+
+            @*<button type="button" class="btn btn-danger">Desmarcar</button>
+                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>*@
+        </div>
+    </div>
+</div>
+
+<div class="row" >
+    <div id="calendar" class="calendario col-md-6 "></div>
+    <div  class="col-md-6 ">
+
+        <table id="tabelaMarcacaoFerias" class="table">
+
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>                
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+
+        </table>
+
+
+    </div>
+</div>
+
+

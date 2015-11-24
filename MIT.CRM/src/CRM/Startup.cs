@@ -17,6 +17,7 @@ using Microsoft.Framework.DependencyInjection;
 using Microsoft.Framework.Logging;
 using CRM.Models;
 using CRM.Services;
+using Microsoft.AspNet.Authorization;
 
 namespace CRM
 {
@@ -51,6 +52,11 @@ namespace CRM
                 .AddSqlServer()
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            services.Configure<IdentityDbContextOptions>(options =>
+            {
+                options.DefaultAdminUserName = Configuration["DefaultAdminUsername"];
+                options.DefaultAdminPassword = Configuration["DefaultAdminPassword"];
+            });
 
             // Add Identity services to the services container.
             services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -59,6 +65,16 @@ namespace CRM
 
             // Add MVC services to the services container.
             services.AddMvc();
+
+
+            var policy = new AuthorizationPolicyBuilder()
+                //This is what makes it function like the basic [Authorize] attribute
+                .RequireAuthenticatedUser()
+                //add functionality similar to [Authorize(Roles="myrole")]
+                .RequireRole("Administrator")
+                //add functionality similar to [ClaimsAuthorize("myclaim")]
+                //.RequireClaim("myclaim")
+                .Build();
 
             // Uncomment the following line to add Web API services which makes it easier to port Web API 2 controllers.
             // You will also need to add the Microsoft.AspNet.Mvc.WebApiCompatShim package to the 'dependencies' section of project.json.
@@ -72,6 +88,8 @@ namespace CRM
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+
+
             loggerFactory.MinimumLevel = LogLevel.Information;
             loggerFactory.AddConsole();
             loggerFactory.AddDebug();
@@ -135,6 +153,9 @@ namespace CRM
                 // Uncomment the following line to add a route for porting Web API 2 controllers.
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
             });
+
+            //Populates the Admin user and role
+            SampleData.InitializeIdentityDatabaseAsync(app.ApplicationServices).Wait();
         }
     }
 }

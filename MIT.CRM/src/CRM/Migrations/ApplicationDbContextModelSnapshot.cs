@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
@@ -16,8 +13,221 @@ namespace CRM.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .Annotation("ProductVersion", "7.0.0-beta8")
+                .Annotation("ProductVersion", "7.0.0-beta8-15964")
                 .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CRM.Models.ApplicationUser", b =>
+                {
+                    b.Property<string>("Id");
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Email")
+                        .Annotation("MaxLength", 256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("NormalizedEmail")
+                        .Annotation("MaxLength", 256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .Annotation("MaxLength", 256);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .Annotation("MaxLength", 256);
+
+                    b.HasKey("Id");
+
+                    b.Index("NormalizedEmail")
+                        .Annotation("Relational:Name", "EmailIndex");
+
+                    b.Index("NormalizedUserName")
+                        .Annotation("Relational:Name", "UserNameIndex");
+
+                    b.Annotation("Relational:TableName", "AspNetUsers");
+                });
+
+            modelBuilder.Entity("CRM.Models.Departamento", b =>
+                {
+                    b.Property<string>("departamento");
+
+                    b.Property<string>("descricao");
+
+                    b.Property<string>("empresaId");
+
+                    b.Property<string>("responsavelId");
+
+                    b.HasKey("departamento");
+                });
+
+            modelBuilder.Entity("CRM.Models.Empresa", b =>
+                {
+                    b.Property<string>("codigo");
+
+                    b.Property<byte[]>("LogoTipo");
+
+                    b.Property<string>("categoria");
+
+                    b.Property<string>("codEmpresaPri");
+
+                    b.Property<string>("conexao");
+
+                    b.Property<string>("credentials");
+
+                    b.Property<string>("email");
+
+                    b.Property<bool?>("empresaPrimavera");
+
+                    b.Property<bool?>("enableSsl");
+
+                    b.Property<string>("host");
+
+                    b.Property<string>("localidadeEmpresa");
+
+                    b.Property<string>("morada");
+
+                    b.Property<string>("moradaEmpresa");
+
+                    b.Property<string>("nome");
+
+                    b.Property<string>("nomeEmpresa");
+
+                    b.Property<string>("nuit");
+
+                    b.Property<string>("nuitEmpresa");
+
+                    b.Property<string>("passwordUtilizadorPrimavera");
+
+                    b.Property<int?>("port");
+
+                    b.Property<string>("telefoneEmpresa");
+
+                    b.Property<string>("tipoEmpresa");
+
+                    b.Property<bool?>("useDefaultCredentials");
+
+                    b.Property<string>("utilizadorPrimavera");
+
+                    b.HasKey("codigo");
+                });
+
+            modelBuilder.Entity("CRM.Models.FuncFerias", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<short>("ano");
+
+                    b.Property<DateTime>("dataFeria");
+
+                    b.Property<bool>("estadoGozo");
+
+                    b.Property<string>("funcionarioId");
+
+                    b.Property<bool>("originouFalta");
+
+                    b.Property<bool>("originouFaltaSubAlim");
+
+                    b.Property<bool>("tipoMarcacao");
+
+                    b.HasKey("id");
+                });
+
+            modelBuilder.Entity("CRM.Models.FuncInfFerias", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<short>("ano");
+
+                    b.Property<double>("diasAdicionais");
+
+                    b.Property<double>("diasAnoAnterior");
+
+                    b.Property<double>("diasDireito");
+
+                    b.Property<double>("diasFeriasJaPagas");
+
+                    b.Property<double>("diasJaGozados");
+
+                    b.Property<double>("diasPorGozar");
+
+                    b.Property<double>("diasPorMarcar");
+
+                    b.Property<bool>("funcSemFerias");
+
+                    b.Property<string>("funcionarioId");
+
+                    b.Property<double>("totalDias");
+
+                    b.HasKey("id");
+                });
+
+            modelBuilder.Entity("CRM.Models.Funcionario", b =>
+                {
+                    b.Property<string>("codigo");
+
+                    b.Property<string>("categoria");
+
+                    b.Property<string>("classificacao");
+
+                    b.Property<DateTime?>("dataAdmissao");
+
+                    b.Property<DateTime?>("dataClassificacao");
+
+                    b.Property<DateTime?>("dataFimContrato");
+
+                    b.Property<DateTime?>("dataNascimento");
+
+                    b.Property<DateTime?>("dataReadmissao");
+
+                    b.Property<string>("departamentoId");
+
+                    b.Property<string>("distrito");
+
+                    b.Property<string>("email");
+
+                    b.Property<string>("empresaId");
+
+                    b.Property<string>("estadoCivil");
+
+                    b.Property<string>("habilitacao");
+
+                    b.Property<string>("localidade");
+
+                    b.Property<string>("nacionalidade");
+
+                    b.Property<string>("naturalidade");
+
+                    b.Property<string>("nome");
+
+                    b.Property<string>("profissao");
+
+                    b.Property<string>("sexo");
+
+                    b.Property<string>("telefone");
+
+                    b.Property<string>("utilizadorId");
+
+                    b.HasKey("codigo");
+                });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
                 {
@@ -98,52 +308,44 @@ namespace CRM.Migrations
                     b.Annotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("CRM.Models.ApplicationUser", b =>
+            modelBuilder.Entity("CRM.Models.Departamento", b =>
                 {
-                    b.Property<string>("Id");
+                    b.HasOne("CRM.Models.Empresa")
+                        .WithMany()
+                        .ForeignKey("empresaId");
 
-                    b.Property<int>("AccessFailedCount");
+                    b.HasOne("CRM.Models.ApplicationUser")
+                        .WithOne()
+                        .ForeignKey("CRM.Models.Departamento", "responsavelId");
+                });
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
+            modelBuilder.Entity("CRM.Models.FuncFerias", b =>
+                {
+                    b.HasOne("CRM.Models.Funcionario")
+                        .WithMany()
+                        .ForeignKey("funcionarioId");
+                });
 
-                    b.Property<string>("Email")
-                        .Annotation("MaxLength", 256);
+            modelBuilder.Entity("CRM.Models.FuncInfFerias", b =>
+                {
+                    b.HasOne("CRM.Models.Funcionario")
+                        .WithMany()
+                        .ForeignKey("funcionarioId");
+                });
 
-                    b.Property<bool>("EmailConfirmed");
+            modelBuilder.Entity("CRM.Models.Funcionario", b =>
+                {
+                    b.HasOne("CRM.Models.Departamento")
+                        .WithMany()
+                        .ForeignKey("departamentoId");
 
-                    b.Property<bool>("LockoutEnabled");
+                    b.HasOne("CRM.Models.Empresa")
+                        .WithMany()
+                        .ForeignKey("empresaId");
 
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
-                    b.Property<string>("NormalizedEmail")
-                        .Annotation("MaxLength", 256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .Annotation("MaxLength", 256);
-
-                    b.Property<string>("PasswordHash");
-
-                    b.Property<string>("PhoneNumber");
-
-                    b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("SecurityStamp");
-
-                    b.Property<bool>("TwoFactorEnabled");
-
-                    b.Property<string>("UserName")
-                        .Annotation("MaxLength", 256);
-
-                    b.HasKey("Id");
-
-                    b.Index("NormalizedEmail")
-                        .Annotation("Relational:Name", "EmailIndex");
-
-                    b.Index("NormalizedUserName")
-                        .Annotation("Relational:Name", "UserNameIndex");
-
-                    b.Annotation("Relational:TableName", "AspNetUsers");
+                    b.HasOne("CRM.Models.ApplicationUser")
+                        .WithOne()
+                        .ForeignKey("CRM.Models.Funcionario", "utilizadorId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
