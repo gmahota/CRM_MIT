@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace CRM.Models
 {
-   
-
     public class Funcionario
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid id { get; set; }
+
         public string codigo { get; set; }
 
         public string nome { get; set; }
@@ -50,10 +50,13 @@ namespace CRM.Models
 
         public string email { get; set; }
 
-        [ForeignKey("departamento"), Column(Order = 0)]
-        public string departamentoId { get; set; }
+        public string telemovel { get; set; }
+        public string telefoneAlternativo { get; set; }
 
-       
+        [ForeignKey("departamento")]
+        public Guid departamentoId { get; set; }
+
+        
         public string empresaId { get; set; }
 
         public string utilizadorId { get; set; }
@@ -76,7 +79,7 @@ namespace CRM.Models
         
         public short ano { get; set; }
 
-        public string funcionarioId { get; set; }
+        public Guid funcionarioId { get; set; }
 
         public double diasDireito { get; set; }
 
@@ -105,9 +108,8 @@ namespace CRM.Models
         public int id { get; set; }
 
         public short ano { get; set; }
-
         
-        public string funcionarioId { get; set; }
+        public Guid funcionarioId { get; set; }
 
         [Required]
         public DateTime dataFeria { get; set; }
@@ -122,7 +124,9 @@ namespace CRM.Models
 
     public class Departamento
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
+
         public string departamento { get; set; }
         
         public string empresaId { get; set; }
@@ -134,8 +138,8 @@ namespace CRM.Models
         [ForeignKey("responsavelId")]
         public virtual ApplicationUser responsavel { get; set; }
 
-        //[ForeignKey("empresaId")]
-        //public virtual Empresa empresa { get; set; }
+        [ForeignKey("empresaId")]
+        public virtual Empresa empresa { get; set; }
         
         public virtual List<Funcionario> listaFuncionarios { get; set; }
     }

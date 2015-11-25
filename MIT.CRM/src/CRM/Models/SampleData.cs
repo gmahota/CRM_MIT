@@ -55,6 +55,11 @@ namespace CRM.Models
                 await userManager.AddToRoleAsync(user, adminRole);
                 await userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed"));
             }
+            else
+            {
+                //await userManager.AddToRoleAsync(user, adminRole);
+                await userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed"));
+            }
         }
     }
 }

@@ -9,7 +9,8 @@
     "jquery": "2.1.4",
     "jquery-validation": "1.11.1",
     "jquery-validation-unobtrusive": "3.2.2",
-    "fullcalendar": "2.4.0"
+    "fullcalendar": "2.4.0",
+    "signalr": "2.2.0"
   },
   "resolutions": {
     "bootstrap": "3.0.0",

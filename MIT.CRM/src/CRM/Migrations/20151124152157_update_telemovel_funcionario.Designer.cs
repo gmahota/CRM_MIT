@@ -8,9 +8,10 @@ using CRM.Models;
 namespace CRM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151124152157_update_telemovel_funcionario")]
+    partial class update_telemovel_funcionario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Annotation("ProductVersion", "7.0.0-beta8-15964")
@@ -142,7 +143,7 @@ namespace CRM.Migrations
 
                     b.Property<bool>("estadoGozo");
 
-                    b.Property<Guid>("funcionarioId");
+                    b.Property<string>("funcionarioId");
 
                     b.Property<bool>("originouFalta");
 
@@ -176,7 +177,7 @@ namespace CRM.Migrations
 
                     b.Property<bool>("funcSemFerias");
 
-                    b.Property<Guid>("funcionarioId");
+                    b.Property<string>("funcionarioId");
 
                     b.Property<double>("totalDias");
 
@@ -185,14 +186,11 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Models.Funcionario", b =>
                 {
-                    b.Property<Guid>("id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<string>("codigo");
 
                     b.Property<string>("categoria");
 
                     b.Property<string>("classificacao");
-
-                    b.Property<string>("codigo");
 
                     b.Property<DateTime?>("dataAdmissao");
 
@@ -236,7 +234,7 @@ namespace CRM.Migrations
 
                     b.Property<string>("utilizadorId");
 
-                    b.HasKey("id");
+                    b.HasKey("codigo");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
