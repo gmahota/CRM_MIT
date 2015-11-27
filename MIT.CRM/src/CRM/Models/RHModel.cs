@@ -113,7 +113,7 @@ namespace CRM.Models
         public DateTime dataFeria { get; set; }
         public bool estadoGozo { get; set; }
         public bool originouFalta { get; set; }
-        public bool tipoMarcacao { get; set; }
+        public int tipoMarcacao { get; set; }
         public bool originouFaltaSubAlim { get; set; }
 
         [ForeignKey("funcionarioId")]

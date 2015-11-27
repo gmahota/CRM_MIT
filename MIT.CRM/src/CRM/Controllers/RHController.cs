@@ -35,14 +35,35 @@ namespace CRM.Controllers
 
             return View();
         }
-        
+
+        public IActionResult Details()
+        {
+            ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
+
+            var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
+
+
+            if (list.Count() > 0)
+            {
+                Funcionario funcionario = list.First();
+                ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
+                return View(funcionario.funcInfFerias);
+            }
+            else
+            {
+                ViewData["Message"] = String.Format("Não existe nenhum funcionario associado ao Utilizador {0}, por favor contacte o administrador do sistema", User.Identity.Name);
+                return View("Error");
+            }
+
+        }
+
         public IActionResult MarcacaoFerias()
         {
             ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
 
             var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
-            
-            if(list.Count() > 0)
+
+            if (list.Count() > 0)
             {
                 Funcionario funcionario = list.First();
                 ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
@@ -53,10 +74,23 @@ namespace CRM.Controllers
                 ViewData["Message"] = String.Format("Não existe nenhum funcionario associado ao Utilizador {0}, por favor contacte o administrador do sistema", User.Identity.Name);
                 return View("Error");
             }
-                
-           
+        }
+
+        [HttpPost]
+        public string MarcacaoFerias(FuncFerias feria)
+        {
+            //foreach (var item in listFerias)
+            //{
+                _applicationDbContext.FuncionariosFerias.Add(feria);
+            //}
+               
+             
+             _applicationDbContext.SaveChanges();
+
+             return "sucesso";
             
-            
+
+
         }
     }
 }

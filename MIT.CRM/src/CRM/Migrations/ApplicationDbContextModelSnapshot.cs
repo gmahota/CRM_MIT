@@ -148,7 +148,7 @@ namespace CRM.Migrations
 
                     b.Property<bool>("originouFaltaSubAlim");
 
-                    b.Property<bool>("tipoMarcacao");
+                    b.Property<int>("tipoMarcacao");
 
                     b.HasKey("id");
                 });
