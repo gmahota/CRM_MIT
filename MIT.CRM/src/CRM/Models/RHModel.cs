@@ -9,8 +9,7 @@ namespace CRM.Models
 {
     public class Funcionario
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid id { get; set; }
+        public int id { get; set; }
 
         public string codigo { get; set; }
 
@@ -53,14 +52,13 @@ namespace CRM.Models
         public string telemovel { get; set; }
         public string telefoneAlternativo { get; set; }
 
-        [ForeignKey("departamento")]
-        public Guid departamentoId { get; set; }
-
+        public int departamentoId { get; set; }
         
         public string empresaId { get; set; }
 
         public string utilizadorId { get; set; }
 
+        [ForeignKey("departamentoId")]
         public virtual Departamento departamento { get; set; }
 
         [ForeignKey("empresaId")]
@@ -79,7 +77,7 @@ namespace CRM.Models
         
         public short ano { get; set; }
 
-        public Guid funcionarioId { get; set; }
+        public int funcionarioId { get; set; }
 
         public double diasDireito { get; set; }
 
@@ -109,7 +107,7 @@ namespace CRM.Models
 
         public short ano { get; set; }
         
-        public Guid funcionarioId { get; set; }
+        public int funcionarioId { get; set; }
 
         [Required]
         public DateTime dataFeria { get; set; }
@@ -124,8 +122,7 @@ namespace CRM.Models
 
     public class Departamento
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public string departamento { get; set; }
         

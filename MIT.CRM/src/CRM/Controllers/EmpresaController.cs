@@ -32,9 +32,9 @@ namespace CRM.Controllers
                 empresaPrimavera = true
             };
 
-            var temp = _applicationDbContext.Empresas.First(emp => emp.codigo == codigo);
+            var temp = _applicationDbContext.Empresas.Where(emp => emp.codigo == codigo);
 
-            if (temp == null)
+            if (temp.Count() == 0)
             {
                 _applicationDbContext.Empresas.Add(empresa);
                 _applicationDbContext.SaveChanges();

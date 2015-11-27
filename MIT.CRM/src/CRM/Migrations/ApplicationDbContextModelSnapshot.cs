@@ -66,7 +66,7 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Models.Departamento", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("departamento");
@@ -142,7 +142,7 @@ namespace CRM.Migrations
 
                     b.Property<bool>("estadoGozo");
 
-                    b.Property<Guid>("funcionarioId");
+                    b.Property<int>("funcionarioId");
 
                     b.Property<bool>("originouFalta");
 
@@ -176,7 +176,7 @@ namespace CRM.Migrations
 
                     b.Property<bool>("funcSemFerias");
 
-                    b.Property<Guid>("funcionarioId");
+                    b.Property<int>("funcionarioId");
 
                     b.Property<double>("totalDias");
 
@@ -185,7 +185,7 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Models.Funcionario", b =>
                 {
-                    b.Property<Guid>("id")
+                    b.Property<int>("id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("categoria");
@@ -204,7 +204,7 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("dataReadmissao");
 
-                    b.Property<Guid>("departamentoId");
+                    b.Property<int>("departamentoId");
 
                     b.Property<string>("distrito");
 

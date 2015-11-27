@@ -31,8 +31,8 @@ namespace CRM.Controllers
             };
             try
             {
-                var temp = _applicationDbContext.Departamentos.First(d => d.departamento == departamento && d.empresaId == empresaId);
-                if (temp == null)
+                var temp = _applicationDbContext.Departamentos.Where(d => d.departamento == departamento && d.empresaId == empresaId);
+                if (temp.Count() == 0)
                 {
                     _applicationDbContext.Departamentos.Add(dep);
                     _applicationDbContext.SaveChanges();
@@ -44,14 +44,9 @@ namespace CRM.Controllers
                     return "null";
                 }
             }
-            catch
+            catch (Exception e)
             {
-                _applicationDbContext.Departamentos.Add(dep);
-                _applicationDbContext.SaveChanges();
-
-                 return "ok";
-               
-                
+                return "error";
             }
             
             

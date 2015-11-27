@@ -8,8 +8,8 @@ using CRM.Models;
 namespace CRM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20151118093858_ActulizacaoDadosFuncionarios")]
-    partial class ActulizacaoDadosFuncionarios
+    [Migration("20151126084807_first_commit")]
+    partial class first_commit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -67,13 +67,18 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Models.Departamento", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
                     b.Property<string>("departamento");
 
                     b.Property<string>("descricao");
 
                     b.Property<string>("empresaId");
 
-                    b.HasKey("departamento");
+                    b.Property<string>("responsavelId");
+
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("CRM.Models.Empresa", b =>
@@ -138,7 +143,7 @@ namespace CRM.Migrations
 
                     b.Property<bool>("estadoGozo");
 
-                    b.Property<string>("funcionarioId");
+                    b.Property<int>("funcionarioId");
 
                     b.Property<bool>("originouFalta");
 
@@ -172,7 +177,7 @@ namespace CRM.Migrations
 
                     b.Property<bool>("funcSemFerias");
 
-                    b.Property<string>("funcionarioId");
+                    b.Property<int>("funcionarioId");
 
                     b.Property<double>("totalDias");
 
@@ -181,11 +186,14 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Models.Funcionario", b =>
                 {
-                    b.Property<string>("codigo");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("categoria");
 
                     b.Property<string>("classificacao");
+
+                    b.Property<string>("codigo");
 
                     b.Property<DateTime?>("dataAdmissao");
 
@@ -197,7 +205,7 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("dataReadmissao");
 
-                    b.Property<string>("departamentoId");
+                    b.Property<int>("departamentoId");
 
                     b.Property<string>("distrito");
 
@@ -223,7 +231,13 @@ namespace CRM.Migrations
 
                     b.Property<string>("telefone");
 
-                    b.HasKey("codigo");
+                    b.Property<string>("telefoneAlternativo");
+
+                    b.Property<string>("telemovel");
+
+                    b.Property<string>("utilizadorId");
+
+                    b.HasKey("id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
@@ -310,6 +324,10 @@ namespace CRM.Migrations
                     b.HasOne("CRM.Models.Empresa")
                         .WithMany()
                         .ForeignKey("empresaId");
+
+                    b.HasOne("CRM.Models.ApplicationUser")
+                        .WithOne()
+                        .ForeignKey("CRM.Models.Departamento", "responsavelId");
                 });
 
             modelBuilder.Entity("CRM.Models.FuncFerias", b =>
@@ -335,6 +353,10 @@ namespace CRM.Migrations
                     b.HasOne("CRM.Models.Empresa")
                         .WithMany()
                         .ForeignKey("empresaId");
+
+                    b.HasOne("CRM.Models.ApplicationUser")
+                        .WithOne()
+                        .ForeignKey("CRM.Models.Funcionario", "utilizadorId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>

@@ -18,7 +18,6 @@ namespace CRM.Controllers
         public ApplicationDbContext _applicationDbContext { get; set; }
 
         // GET: /<controller>/
-        [Authorize (Roles ="Administrator")]
         public IActionResult Index()
         {
             ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
@@ -36,27 +35,28 @@ namespace CRM.Controllers
 
             return View();
         }
-
         
-
         public IActionResult MarcacaoFerias()
         {
             ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
-            Funcionario funcionario = user.funcionario;
 
-            if(funcionario == null)
+            var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
+            
+            if(list.Count() > 0)
             {
-                ViewData["Message"] = String.Format("Não existe nenhum funcionario associado ao Utilizador {0}, por favor contacte o administrador do sistema",User.Identity.Name);
-                return View("Error");
+                Funcionario funcionario = list.First();
+                ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
+                return View(funcionario);
             }
             else
             {
-                ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
+                ViewData["Message"] = String.Format("Não existe nenhum funcionario associado ao Utilizador {0}, por favor contacte o administrador do sistema", User.Identity.Name);
+                return View("Error");
             }
                 
            
             
-            return View();
+            
         }
     }
 }
