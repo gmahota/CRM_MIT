@@ -8,9 +8,10 @@ using CRM.Models;
 namespace CRM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151130083629_add_tabela_ferias")]
+    partial class add_tabela_ferias
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Annotation("ProductVersion", "7.0.0-beta8-15964")
@@ -156,7 +157,7 @@ namespace CRM.Migrations
 
                     b.Property<bool>("estadoGozo");
 
-                    b.Property<int?>("feriasId");
+                    b.Property<int>("feriasId");
 
                     b.Property<int>("funcionarioId");
 

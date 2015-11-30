@@ -1,6 +1,156 @@
-﻿@*
+﻿@model Funcionario
+
+@*
     For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
     // ViewBag.Title = "Home Page";
 }
+
+
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            var tipoFerias = "Dia de Férias";
+	        var eventos = [];
+
+	        $('#calendar').fullCalendar({
+	            right: 'month,agendaWeek,agendaDay',
+	            lang: 'pt',
+	            defaultView: 'month',
+	            editable: false,
+	            events: eventos
+	        });
+
+	        var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
+
+	        $.ajax({
+	            type: "POST",
+	            dataType: "json",
+
+	            url: apiUrl,
+	            data: {funcionarioId: '@Model.id', ano: '@DateTime.Now.Year'},
+	            success: function (data) {
+	                
+	                data.forEach(preencherCalendario);
+
+	                function preencherCalendario(value, index, ar) {
+	                    var evento = {
+	                        //id: value.funcionarioId,
+	                        title: 'Pedido Ferias',
+	                        start: value.dataFeria, //'2014-06-09T16:00:00'
+	                        end: value.dataFeria,
+                            allDay:true
+	                    }
+	                    
+	                    $('#calendar').fullCalendar('renderEvent', evento, true);
+
+
+	                    switch (value.tipoMarcacao) {
+	                        case 1:
+	                            tipoFerias = 'Dia de Férias'
+	                            break;
+
+	                        case 2:
+	                            tipoFerias = 'Meio Dia de Férias'
+	                            break; 
+	                        case 3:
+	                            tipoFerias = 'Dia Antecipado'
+	                            
+	                            break;
+	                        case 4:
+	                            tipoFerias = 'Meio Dia Antecipado'
+	                            break;
+
+	                    }
+
+
+	                    console.log(value);
+	                    var day = moment(value.dataFeria);
+	                    console.log(day);
+	                    var d = new Date(value.dataFeria);
+
+	                    $("#tabelaMarcacaoFerias").append(
+                            "<tr>" +
+                                "<td class ='DataM'>" + day.format("DD/MM/YYYY") + "</td> " +
+                                "<td>" + tipoFerias + "</td> " +
+                                "<td>" + "Por Aprovar" + "</td> " +
+                                "<td> </td>" +
+                            "</tr>"
+                        );
+
+	                }
+	            },
+	            error: function (error) {
+	                var x = error; //break here for debugging.
+	            }
+	        });
+
+	        console.log("ola");
+
+		    
+
+        });
+
+        function formatDate(value) {
+            return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getYear();
+        }
+
+    </script>
+}
+
+<ul id="listaEmpresas" class="nav breadcrumb">
+    <li id="codigoEmpresa"> ACC </li>
+    <li id="modulo"> R.H </li>
+    <li id="modulo_type"> Ferias Detalhes</li>
+    <li id="modulo_value" class="active">@ViewData["modulo_value"]</li>
+</ul>
+
+<div class="row">
+    <div class="col-md-6">
+        <div id="calendar"></div>
+    </div>
+
+    <div class="col-md-6 ">
+
+        <table id="tabelaMarcacaoFerias" class="table">
+
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+
+        </table>
+
+
+    </div>
+    
+</div>
+
+<div class="row">
+    <div id="calendar" class="calendario col-md-6 "></div>
+    
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-4" style="padding-top:10px">
+        <a href="@Url.Action("MarcacaoFerias", "RH",new { id = Model.id })" type="button" class="btn btn-primary btn-lg " role="button">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            Alterar
+        </a>
+
+
+        <a  class="btn btn-default btn-lg " role="button" asp-controller="RH" asp-action="Index">
+            <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+            Voltar
+        </a>
+    </div>
+</div>

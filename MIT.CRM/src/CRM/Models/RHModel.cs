@@ -66,6 +66,10 @@ namespace CRM.Models
 
         public List<FuncInfFerias> funcInfFerias { get; set; }
 
+        public List<Ferias> ferias { get; set; }
+
+        public List<Ferias_Itens> ferias_item { get; set; }
+
         [ForeignKey("utilizadorId")]
         public virtual ApplicationUser utilizador { get; set; }
 
@@ -141,4 +145,46 @@ namespace CRM.Models
         public virtual List<Funcionario> listaFuncionarios { get; set; }
     }
 
+    public class Ferias
+    {
+        public int id { get; set; }
+        public DateTime dataInicio { get; set; }
+        public DateTime dataFim { get; set; }
+        public int funcionarioId { get; set; }
+
+        public virtual List <Ferias_Itens> itens {get;set;}
+
+        [ForeignKey("funcionarioId")]
+        public virtual Funcionario funcionario { get; set; }
+
+    }
+
+    public class Ferias_Itens
+    {
+        public int id { get; set; }
+
+        public short ano { get; set; }
+
+        public int funcionarioId { get; set; }
+
+        public int? feriasId { get; set; }
+
+        [ForeignKey("feriasId")]
+        public Ferias ferias { get; set; }
+
+        [Required]
+        public DateTime dataFeria { get; set; }
+        public bool estadoGozo { get; set; }
+        public bool originouFalta { get; set; }
+        public int tipoMarcacao { get; set; }
+        public bool originouFaltaSubAlim { get; set; }
+
+        [ForeignKey("funcionarioId")]
+        public virtual Funcionario funcionario { get; set; }
+
+        public string daString_Data_Feria()
+        {
+            return dataFeria.ToString("dd/MM/yyyy");
+        }
+    }
 }
