@@ -1,0 +1,548 @@
+﻿@model Funcionario
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+// ViewBag.Title = "Home Page";
+}
+
+
+@section scripts {
+
+    <script>
+        $(document).ready(function () {
+            //$('[data-toggle="tooltip"]').tooltip()
+
+            var tipoFerias = "Dia de Férias";
+	        var eventos = [];
+
+	        $('#calendar').fullCalendar({
+	            right: 'month,agendaWeek,agendaDay',
+	            lang: 'pt',
+	            defaultView: 'month',
+	            editable: false,
+	            events: eventos
+	        });
+
+	        var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
+
+	        $.ajax({
+	            type: "POST",
+	            dataType: "json",
+
+	            url: apiUrl,
+	            data: {funcionarioId: '@Model.id', ano: '@DateTime.Now.Year'},
+	            success: function (data) {
+
+	                data.forEach(preencherCalendario);
+
+	                function preencherCalendario(value, index, ar) {
+
+	                    var color = "#337ab7";
+
+	                    switch (value.estado) {
+	                        case "Por Aprovar":
+	                            color = "#f0ad4e";
+	                            break;
+
+	                        case "Aprovado":
+	                            color = '#257e4a';
+	                            break;
+	                        case "Reprovado":
+	                            color = "#d9534f";
+
+	                            break;
+	                        
+	                    }
+
+
+	                    var evento = {
+	                        //id: value.funcionarioId,
+	                        title: value.tipo,// 'Pedido Ferias',
+	                        start: value.dataFeria, //'2014-06-09T16:00:00'
+	                        end: value.dataFeria,
+	                        allDay: true,
+	                        color: color
+	                    }
+
+	                    $('#calendar').fullCalendar('renderEvent', evento, true);
+
+
+	                    switch (value.tipoMarcacao) {
+	                        case 1:
+	                            tipoFerias = 'Dia de Férias'
+	                            break;
+
+	                        case 2:
+	                            tipoFerias = 'Meio Dia de Férias'
+	                            break;
+	                        case 3:
+	                            tipoFerias = 'Dia Antecipado'
+
+	                            break;
+	                        case 4:
+	                            tipoFerias = 'Meio Dia Antecipado'
+	                            break;
+
+	                    }
+
+	                    var day = moment(value.dataFeria);
+	                    
+	                    var d = new Date(value.dataFeria);
+
+	                    if (value.estado == "Por Aprovar") {
+	                        $("#tabelaMarcacaoFerias").append(
+                                "<tr>" +
+                                    "<td class ='DataM'>" + day.format("DD/MM/YYYY") + "</td> " +
+                                    "<td>" + tipoFerias + "</td> " +
+                                    "<td class='txtEstado'>" + value.estado + "</td> " +
+                                    "<td style='text-align:center'>" +
+                                        "<a onclick='selecionaAprovado(this.parentNode.parentNode.rowIndex)' > " +
+                                            "<span class='btnAprovado glyphicon glyphicon-thumbs-up btn btn-default'  style='font-size: 20px; ' aria-hidden='true'></span>" +
+                                         "</a>" +
+                                    "</td>" +
+                                    "<td style='text-align:center'>" +
+                                         "<a onclick='selecionaReprovado(this.parentNode.parentNode.rowIndex)'> " +
+                                            "<span class='btnReprovado glyphicon glyphicon-thumbs-down btn btn-default '  style='font-size: 20px; ' aria-hidden='true'></span>" +
+                                         "</a>" +
+
+                                    "</td>" +
+                                "</tr>"
+                            );
+
+	                    }
+
+	                    
+
+	                }
+	            },
+	            error: function (error) {
+	                var x = error; //break here for debugging.
+	            }
+	        });
+
+	        console.log("ola");
+
+
+
+        });
+
+        function formatDate(value) {
+            return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getYear();
+        }
+
+        function selecionarTodosReprovados() {
+
+            if ($('#selTodosReprovados').is(':checked')) {
+
+                $('.txtEstado').text("Reprovado");
+
+                $('#selTodosAprovados').prop('checked', false);
+                //$('.btnReprovado').prop('checked', false);
+                $('.btnReprovado').attr('class', 'btnReprovado glyphicon glyphicon-thumbs-down btn btn-default active');
+                $('.btnAprovado').attr('class', 'btnAprovado glyphicon glyphicon-thumbs-up btn btn-default');
+
+            } else {
+                $('.btnReprovado').attr('class', 'btnReprovado glyphicon glyphicon-thumbs-down btn btn-default');
+                $('.txtEstado').text("Por Aprovar");
+
+            }
+        }
+
+        function selecionarTodosAprovados() {
+
+            if ($('#selTodosAprovados').is(':checked')) {
+                $('.txtEstado').text("Aprovado");
+                $('#selTodosReprovados').prop('checked', false);
+                //$('.btnReprovado').prop('checked', false);
+                $('.btnAprovado').attr('class', 'btnAprovado glyphicon glyphicon-thumbs-up btn btn-default active');
+                $('.btnReprovado').attr('class', 'btnReprovado glyphicon glyphicon-thumbs-down btn btn-default');
+
+            } else {
+                $('.btnAprovado').attr('class', 'btnAprovado glyphicon glyphicon-thumbs-up btn btn-default');
+                $('.txtEstado').text("Por Aprovar");
+            }
+        }
+
+        function selecionaAprovado(numero) {
+
+            var row = $('#tabelaMarcacaoFerias').get(0).rows.item(numero)
+            var row = $(row);
+
+            var spanAprovado = row.children('td').eq(3).children('a').eq(0).children('span');
+            $(spanAprovado).addClass("active");
+
+            row.children('td').eq(2).text('Aprovado');
+
+
+            var spanReprovado = row.children('td').eq(4).children('a').eq(0).children('span');
+            $(spanReprovado).removeClass("active");
+
+        }
+
+        function selecionaReprovado(numero) {
+
+            var row = $('#tabelaMarcacaoFerias').get(0).rows.item(numero)
+            var row = $(row);
+
+            var spanAprovado = row.children('td').eq(3).children('a').eq(0).children('span');
+            $(spanAprovado).removeClass("active");
+
+            row.children('td').eq(2).text('Recusado');
+
+            var spanReprovado = row.children('td').eq(4).children('a').eq(0).children('span');
+            $(spanReprovado).addClass("active");
+
+        }
+
+        function aprovarPedidos() {
+
+
+            var ferias = [];
+            var feriasPrimavera = [];
+
+            var apiUrl = location.origin + "/RH/AprovacaoFerias";
+
+            var row = document.getElementById("tabelaMarcacaoFerias").rows.length;
+
+            $('#tabelaMarcacaoFerias tr').each(function (i, row) {
+
+                var row = $(this);
+                var td = row.children('td');
+
+                if (i != 0 && td.eq(2).text() != "Por Aprovar") {
+
+
+                    var feria = {
+                        'ano': $("#ano").val(),
+                        'dataFeria': td.eq(0).text(),
+                        'funcionarioId': '@Model.id',
+                        'tipo': td.eq(1).text(),
+                        'estado': td.eq(2).text(),
+                        'funcionario_Codigo': '@Model.codigo'
+                    };
+
+                    ferias.push(feria);
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+
+                        url: apiUrl,
+                        data: feria,
+                        success: function (data) {
+
+                            //window.location = "/RH/Index";
+
+                            if (feria.estado == "Aprovado") {
+                                feria.funcionarioId
+                                feriasPrimavera.push(feria);
+
+                            }
+
+                        },
+                        error: function (error) {
+                            var x = error; //break here for debugging.
+                        }
+                    });
+
+                }
+
+
+
+            });
+
+            if (feriasPrimavera.length > 0) {
+                fazMarcacaoFerias($("#ano").val(), '@Model.empresaId', feriasPrimavera);
+
+            }
+
+
+        }
+
+
+
+
+    </script>
+
+    <!--SignalR script to update the chat page and send messages.-->
+<script>
+            $.connection.hub.url = "http://localhost:8989/signalr";
+
+            var rhHub = $.connection.rhHub;
+
+            $(function () {
+
+
+
+                rhHub.client.daInfFeriasFuncionario = function (val) {
+                    console.log(val);
+                    console.log("Connection started! Client - daInfFeriasFuncionario ");
+
+                    $("#txtGozados").text(val.diasJaGozados);
+                    $("#txtPorGozar").text(val.diasPorGozar);
+                    $("#txtMaximoDiaFerias").text(val.diasDireito);
+                };
+
+                rhHub.client.daListaEmpresas = function (val) {
+                    console.log("Connection started! client");
+                    console.log(val);
+                    $("#tabelaEmpresas").empty();
+
+                    val.forEach(preencherEmpresas);
+
+                    function preencherEmpresas(value, index, ar) {
+
+                        $("#tabelaEmpresas").append(
+                                "<tr>" +
+                                    "<td> <a href='#' onclick= preencheDadosEmpresa('" + value.codigo + "') >" + value.codigo + "</a></td> " +
+                                    "<td>" + value.nome + "</td> " +
+                                    "<td id='btSave" + value.codigo + "' class = 'listBtSave'> </td>" +
+                                "</tr>"
+                            );
+                    }
+                };
+
+                rhHub.client.daDadosEmpresa = function (val) {
+                    console.log("Connection started! - da dados da empresa "+ val.codigo);
+
+                    $("#divDadosEmpresa").show();
+
+                    $("#codigo").val(val.codigo);
+                    $("#nome").val(val.nome);
+
+                };
+
+                rhHub.client.daListaFuncionarios = function (val) {
+                    console.log("Connection started! client - Lista Funcionarios");
+                    console.log(val);
+                    $("#tableListaFuncionarios").empty();
+
+                    $("#tableListaFuncionarios").append("<tr> <th> Codigo  </th> <th> Funcionario </th> <th> Departamento </th>  <th> Email </th> <th> Nr. Telefone</th> </tr>");
+
+                    val.forEach(preencheFuncionarios);
+
+                    function preencheFuncionarios(value, index, ar){
+
+                        $("#tableListaFuncionarios").append(
+                            "<tr>" +
+                                "<td>" +
+                                    "<a href='#' onclick= daExtratoPdfCliente('" + $("#codigoEmpresa").text() + "','" + value.codigo + "')>" + value.codigo + "</a>" +
+                                "</td> " +
+                                "<td> " + value.nome + " </td> " +
+                                "<td> " + value.departamentoId + "</td>" +
+                                "<td id='email'>" + value.email + " </td>  "+
+                                "<td> " + value.telemovel + "</td>" +
+                            "</tr>"
+                        );
+
+
+                         console.log();
+                    }
+
+
+                }
+
+                rhHub.client.daListaDepartamentos = function (val) {
+                    console.log("Connection started! client - Lista Departamentos");
+                    console.log(val);
+
+                    $("#tableListaDepartamentos").empty();
+
+                    $("#tableListaDepartamentos").append("<tr> <th> Departamento  </th> <th> Descrição </th> </tr>");
+
+                    val.forEach(preencheDepartamento);
+
+                    function preencheDepartamento(value, index, ar) {
+
+                        //var funcionarios = "";
+
+                        //value.contacto.forEach(daContactos)
+
+                        $("#tableListaDepartamentos").append(
+                            "<tr> " +
+                                "<td>" + value.departamento + "</td>" +
+                                "<td>" + value.descricao + "</td>" +
+                            "</tr>"
+                        );
+
+                        //function daContactos(value, index, ar){
+                        //    if (value != null) {
+                        //        contacto = contacto + value.Email + "; ";
+                        //    }
+
+                        //}
+
+                        //console.log();
+                    }
+
+
+                }
+
+                $.connection.hub.start().done(function () {
+                    console.log("connection started! server");
+
+                    getFuncInfFerias(2015, '@Model.empresaId', '@Model.codigo');
+                });
+            });
+
+            // This optional function html-encodes messages for display in the page.
+            function htmlEncode(value) {
+                var encodedValue = $('<div />').text(value).html();
+                return encodedValue;
+            }
+
+            function daFuncionarios(empresa){
+                rhHub.server.daListaFuncionarios(0, empresa, "gmahota", "Accsys2011!", "");
+            }
+
+            function preencheDadosEmpresa(empresa) {
+                console.log("da Lista de Funcionarios da empresa " + empresa);
+                rhHub.server.daDadosEmpresa(0, empresa, "gmahota", "Accsys2011!");
+                daFuncionarios(empresa);
+                daListaDepartamentos(empresa)
+
+                $(".listBtSave").empty();
+                $("#btSave" + empresa).append("<a onclick= 'importarDadosEmpresa()'  class='btSave glyphicon glyphicon-floppy-save' style=' color:red'></a>");
+
+
+            }
+
+            function daListaDepartamentos(empresa) {
+                console.log("Connection started! Server - Lista Departamentos");
+                rhHub.server.daListaDepartamentos(0, empresa, "gmahota", "Accsys2011!","");
+
+            }
+
+            function daExtratoPdfCliente(empresa,cliente){
+                console.log("da extrato do cliente " + cliente + " da empresa " + empresa);
+                enviaEmail(cliente)
+                rhHub.server.daExtratoPDFCliente(0, empresa, "gmahota", "Accsys2011!", cliente);
+            }
+
+            function importarDadosEmpresa() {
+
+                GravarEmpresa();
+                GravarDepartamentos();
+                GravarFuncionarios();
+
+            }
+
+            function getFuncInfFerias(ano,empresa,codigo) {
+                console.log("Connection started! Server - getFuncInfFerias");
+                rhHub.server.daInfFeriasFuncionario(0, empresa, "gmahota", "Accsys2011!", codigo, ano);
+            }
+
+            function fazMarcacaoFerias(ano, empresa, listFerias) {
+                console.log("Connection started! Server - MarcacaoFerias");
+                rhHub.server.fazMarcacaoFerias(0, empresa, "gmahota", "Accsys2011!", listFerias);
+            }
+</script>
+}
+
+<ul id="listaEmpresas" class="nav breadcrumb">
+    <li id="codigoEmpresa"> ACC </li>
+    <li id="modulo"> R.H </li>
+    <li id="modulo_type"> Aprovação Ferias </li>
+    <li id="modulo_value" class="active">@ViewData["modulo_value"]</li>
+</ul>
+
+<div class="row">
+    <div class="col-md-8">
+        <table>
+            <tr>
+                <td> Ano de Férias:</td>
+                <td id="anoFerias" style="padding-right:10px"> <input type="number" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> </td>
+
+                <td>Dias Marcados: </td>
+                <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
+
+                <td>Meios Dias: </td>
+                <td style="padding-right:10px"> <text id="txtMeiosDiasMarcados">0,0</text> </td>
+
+                <td>Dias Antecipados: </td>
+                <td style="padding-right:10px"> <text id="txtDiasAntecipados">0,0</text> </td>
+
+                <td>Meios Dias Antecipados: </td>
+                <td style="padding-right:10px"> <text id="txtMeiosDiasAntecipados">0,0</text> </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-offset-8">
+        <b>Dados da Ficha do Funcionario</b>
+
+        <table>
+            <tr>
+                <td>Máximo de dias Férias: </td>
+                <td style="padding-right:10px"> <text id="txtMaximoDiaFerias">0,0</text> </td>
+
+            </tr>
+            <tr>
+                <td>Gozados: </td>
+                <td style="padding-right:10px"> <text id="txtGozados">0,0</text> </td>
+
+                <td>Por Gozar: </td>
+                <td style="padding-right:10px"> <text id="txtPorGozar">0,0</text> </td>
+
+            </tr>
+        </table>
+    </div>
+
+    
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div id="calendar"></div>
+    </div>
+
+    <div class="col-md-6 ">
+
+        <table id="tabelaMarcacaoFerias" class="table">
+
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th style="text-align:center" data-toggle="tooltip" data-placement="top" title="Aprovar Todos">
+
+
+                        <input id="selTodosAprovados" type="checkbox" style="align-content:center" onchange="selecionarTodosAprovados()">
+                        <span class='glyphicon glyphicon-thumbs-up' style='font-size: 12px; align-content:center ' aria-hidden='true' 
+                              ></span>
+                    </th>
+                    
+                    <th style="text-align:center" data-toggle="tooltip" data-placement="top" title="Reprovar Todos">
+                        
+                        <input id="selTodosReprovados" type="checkbox" onchange="selecionarTodosReprovados()">
+                        <span class='glyphicon glyphicon-thumbs-down ' style='font-size: 12px; ' aria-hidden='true'></span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+
+        </table>
+
+
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-4" style="padding-top:10px">
+        
+        <button type="button" class="btn btn-success btn-lg " role="button" onclick="aprovarPedidos()"
+                data-toggle="modal" data-target="#myModal">
+            <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+            Submeter
+        </button>
+
+        <a href="@Url.Action("Index", "RH",new { id = Model.id })" class="btn btn-default btn-lg " role="button">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            Cancelar
+        </a>
+    </div>
+</div>

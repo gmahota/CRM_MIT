@@ -29,7 +29,7 @@
                 console.log("Connection started! Extrato Cliente");
                 console.log(val.caminho);
 
-                enviaEmail(val.entidade,val.caminho);
+                enviaEmail(val.empresa,val.entidade,val.to,val.cc,val.caminho);
             }
 
             cobrancasHub.client.daListaEmpresas = function (val) {
@@ -106,11 +106,11 @@
             });
         });
 
-        function enviaEmail(cliente,ficheiro) {
+        function enviaEmail(empresa,cliente,email_to,email_cc,ficheiro) {
             $.ajax({
                 type: "Post",
                 url: "/Cobrancas/EnviaEmail",
-                data: { client: cliente, ficheiro: ficheiro  },
+                data: { empresa:empresa, client: cliente,to:email_to,cc:email_cc, ficheiro: ficheiro  },
                 datatypr: "html",
                 success: function (data) {
                     $("#enviaEmail_" + cliente).append("<p>" +data.Message+"</p>");
@@ -161,8 +161,7 @@
 
         function daExtratoPdfCliente(empresa,cliente){
             console.log("da extrato do cliente " + cliente + " da empresa " + empresa);
-            enviaEmail(cliente)
-             cobrancasHub.server.daExtratoPDFCliente(0,empresa,"gmahota","Accsys2011!",cliente);
+            cobrancasHub.server.daExtratoPDFCliente(0,empresa,"gmahota","Accsys2011!",cliente);
         }
 
     </script>
