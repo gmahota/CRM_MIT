@@ -2,21 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
-using Microsoft.Data.Entity.Metadata;
-using Microsoft.Framework.OptionsModel;
 
 namespace MIT.CRM.Models
 {
-    // Add profile data for application users by adding properties to the ApplicationUser class
-    public class ApplicationUser : IdentityUser
-    {
-    }
-
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        public DbSet<Funcionario> Funcionarios { get; set; }
+        public DbSet<FuncFerias> FuncionariosFerias { get; set; }
+        public DbSet<FuncInfFerias> FuncInfFerias { get; set; }
+        public DbSet<Departamento> Departamentos { get; set; }
+        public DbSet<Ferias> Ferias { get; set; }
+        public DbSet<Ferias_Itens> Ferias_Itens { get; set; }
+        public DbSet<Historio_Ferias_Item> Historio_Ferias_Item { get; set; }
+
+
+        public DbSet<Empresa> Empresas { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -25,4 +28,12 @@ namespace MIT.CRM.Models
             // Add your customizations after calling base.OnModelCreating(builder);
         }
     }
+
+    public class IdentityDbContextOptions
+    {
+        public string DefaultAdminUserName { get; set; }
+
+        public string DefaultAdminPassword { get; set; }
+    }
 }
+

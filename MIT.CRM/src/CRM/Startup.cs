@@ -2,45 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Authentication.Facebook;
-using Microsoft.AspNet.Authentication.Google;
-using Microsoft.AspNet.Authentication.MicrosoftAccount;
-using Microsoft.AspNet.Authentication.Twitter;
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Diagnostics.Entity;
 using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Data.Entity;
-using Microsoft.Dnx.Runtime;
-using Microsoft.Framework.Configuration;
-using Microsoft.Framework.DependencyInjection;
-using Microsoft.Framework.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using CRM.Models;
-using CRM.Services;
-using Microsoft.AspNet.Authorization;
-using Microsoft.Extensions.OptionsModel;
 using CRM.Models.Helper;
+using Microsoft.AspNet.Authorization;
+using CRM.Services;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace CRM
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
+        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+
+        public Startup(IHostingEnvironment env)
         {
-            // Setup configuration sources.
-
+            // Set up configuration sources.
             var builder = new ConfigurationBuilder()
-                .SetBasePath(appEnv.ApplicationBasePath)
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // This reads the configuration keys from the secret store.
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets();
-            }
-            builder.AddEnvironmentVariables();
+                .AddEnvironmentVariables();
             Configuration = builder.Build();
         }
 
@@ -52,20 +36,20 @@ namespace CRM
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             // Add Entity Framework services to the services container.
-            services.AddEntityFramework()
-                .AddSqlServer()
-                .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
-            services.Configure<IdentityDbContextOptions>(options =>
-            {
-                options.DefaultAdminUserName = Configuration["DefaultAdminUsername"];
-                options.DefaultAdminPassword = Configuration["DefaultAdminPassword"];
-            });
+            //services.AddEntityFramework()
+            //    .AddSqlServer()
+            //    .AddDbContext<ApplicationDbContext>(options =>
+            //        options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            //services.Configure<IdentityDbContextOptions>(options =>
+            //{
+            //    options.DefaultAdminUserName = Configuration["DefaultAdminUsername"];
+            //    options.DefaultAdminPassword = Configuration["DefaultAdminPassword"];
+            //});
 
-            // Add Identity services to the services container.
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            //// Add Identity services to the services container.
+            //services.AddIdentity<ApplicationUser, IdentityRole>()
+            //    .AddEntityFrameworkStores<ApplicationDbContext>()
+            //    .AddDefaultTokenProviders();
 
             
            
@@ -98,35 +82,23 @@ namespace CRM
         {
 
 
-            loggerFactory.MinimumLevel = LogLevel.Information;
-            loggerFactory.AddConsole();
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            // Configure the HTTP request pipeline.
-
-            // Add the following to the request pipeline only in development environment.
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
             }
             else
             {
-                // Add Error handling middleware which catches all application specific errors and
-                // sends the request to the following path or controller action.
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            // Add the platform handler to the request pipeline.
             app.UseIISPlatformHandler();
 
-            // Add static files to the request pipeline.
-            app.UseStaticFiles();
-
-            // Add cookie-based authentication to the request pipeline.
-            app.UseIdentity();
-
+            //app.UseStaticFiles(); --migration
+            
             // Add and configure the options for authentication middleware to the request pipeline.
             // You can add options for middleware as shown below.
             // For more information see http://go.microsoft.com/fwlink/?LinkID=532715

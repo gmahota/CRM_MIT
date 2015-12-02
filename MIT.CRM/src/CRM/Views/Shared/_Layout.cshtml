@@ -68,7 +68,7 @@
 
                             </li>
                         }
-                        @if (User.IsInRole("Cobranças"))
+                        @if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
                         {
                             <li><a asp-controller="Cobrancas" asp-action="Index">Cobranças</a></li>
                         }                       

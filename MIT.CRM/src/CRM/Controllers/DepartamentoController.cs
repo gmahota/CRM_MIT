@@ -46,7 +46,7 @@ namespace CRM.Controllers
             }
             catch (Exception e)
             {
-                return "error";
+                return "error " + e.Message;
             }
             
             
