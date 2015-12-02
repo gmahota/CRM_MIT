@@ -8,9 +8,10 @@ using CRM.Models;
 namespace CRM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151201143641_update_tabela_historico_ferias_itens_data")]
+    partial class update_tabela_historico_ferias_itens_data
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .Annotation("ProductVersion", "7.0.0-beta8-15964")

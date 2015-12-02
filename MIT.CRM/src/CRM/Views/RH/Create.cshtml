@@ -62,7 +62,7 @@
                                 "<td class ='DataM'>" + date.format("L") + "</td> " +
                                 "<td>" +  tipoFerias + "</td> " +
                                 "<td>" + "Por Aprovar" + "</td> " +
-                                "<td> <a onclick='removeLinhaMarcacaoFerias(this.parentNode.parentNode.rowIndex,tipoFerias)' > " + "<span class='glyphicon glyphicon-remove-circle' aria-hidden='true'></span> </a></td>" +
+                                "<td> <a onclick='removeLinhaMarcacaoFerias(this.parentNode.parentNode.rowIndex,tipoFerias)' > " + "<span class='glyphicon glyphicon-remove-circle' aria-hidden='true' style='font-size: 18px; '></span> </a></td>" +
                             "</tr>"
                         );
 
@@ -117,7 +117,7 @@
             //deleteRow.deleteRow(numero);
 
             //alert(document.getElementById('tabelaMarcacaoFerias').index);
-
+            
 
 
             document.getElementById('tabelaMarcacaoFerias').deleteRow(numero);
@@ -175,26 +175,10 @@
                         'ano': $("#ano").val(),
                         'dataFeria': td.eq(0).text(),
                         'funcionarioId': '@Model.id',
-                        'tipoMarcacao': 1
+                        'tipo': td.eq(1).text(),
+                        'estado': td.eq(2).text()
                     };
 
-                    switch (tipoFerias) {
-                        case 'Dia de Férias':
-                            feria.tipoMarcacao = 1;
-                            break;
-
-                        case 'Meio Dia de Férias':
-                            feria.tipoMarcacao = 2;
-                            break;
-                        case 'Dia Antecipado':
-
-                            feria.tipoMarcacao = 3;
-                            break;
-                        case 'Meio Dia Antecipado':
-                            feria.tipoMarcacao = 4;
-                            break;
-
-                    }
 
                     ferias.push(feria);
 
@@ -539,12 +523,12 @@
 
 <div class="row">
     <div class="col-md-4" style="padding-top:10px">
-        <button type="button" class="btn btn-primary btn-lg " role="button" onclick="submeterPedido()" 
+        <button type="button" class="btn btn-success btn-lg " role="button" onclick="submeterPedido()" 
                 data-toggle="modal" data-target="#myModal">
             <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
             Submeter
         </button>
-        <a href="#" class="btn btn-default btn-lg " role="button">
+        <a href="@Url.Action("Index", "RH",new { id = Model.id })" class="btn btn-default btn-lg " role="button">
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             Cancelar
         </a>

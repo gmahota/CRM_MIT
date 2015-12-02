@@ -18,6 +18,8 @@ using Microsoft.Framework.Logging;
 using CRM.Models;
 using CRM.Services;
 using Microsoft.AspNet.Authorization;
+using Microsoft.Extensions.OptionsModel;
+using CRM.Models.Helper;
 
 namespace CRM
 {
@@ -47,6 +49,8 @@ namespace CRM
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
             // Add Entity Framework services to the services container.
             services.AddEntityFramework()
                 .AddSqlServer()
@@ -63,6 +67,8 @@ namespace CRM
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            
+           
             // Add MVC services to the services container.
             services.AddMvc();
 
@@ -83,6 +89,8 @@ namespace CRM
             // Register application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            
         }
 
         // Configure is called after ConfigureServices is called.
@@ -127,16 +135,19 @@ namespace CRM
             //    options.AppId = Configuration["Authentication:Facebook:AppId"];
             //    options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
             //});
+
             //app.UseGoogleAuthentication(options =>
             //{
             //    options.ClientId = Configuration["Authentication:Google:ClientId"];
             //    options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
             //});
+
             //app.UseMicrosoftAccountAuthentication(options =>
             //{
             //    options.ClientId = Configuration["Authentication:MicrosoftAccount:ClientId"];
             //    options.ClientSecret = Configuration["Authentication:MicrosoftAccount:ClientSecret"];
             //});
+
             //app.UseTwitterAuthentication(options =>
             //{
             //    options.ConsumerKey = Configuration["Authentication:Twitter:ConsumerKey"];
@@ -153,9 +164,48 @@ namespace CRM
                 // Uncomment the following line to add a route for porting Web API 2 controllers.
                 // routes.MapWebApiRoute("DefaultApi", "api/{controller}/{id?}");
             });
-
             //Populates the Admin user and role
             SampleData.InitializeIdentityDatabaseAsync(app.ApplicationServices).Wait();
+        }
+
+        public AppSettings getAplicationSettings()
+        {
+            AppSettings appSettings = new AppSettings()
+            {
+                SiteTitle = Configuration["AppSettings:SiteTitle"],
+                themeOptions = new ThemeOptions()
+                {
+                    themeName = Configuration["AppSettings:ThemeOptions:ThemeName"],
+                    font = Configuration["AppSettings:ThemeOptions:Font"],
+                },
+
+                defaultAdminUsername = Configuration["AppSettings:DefaultAdminUsername"],
+                defaultAdminPassword = Configuration["AppSettings:DefaultAdminPassword"],
+
+                signalRConfig = new SignalR_Config()
+                {
+                    server_Url = Configuration["AppSettings:SignalR_Config:Server_Url"],
+                    javaScript_Url = Configuration["AppSettings:SignalR_Config:JavaScript_Url"],
+                },
+
+                sendGridConfig = new SendGrid_Config()
+                {
+                    userName = Configuration["AppSettings:SendGrid_Config:UserName"],
+                    password = Configuration["AppSettings:SendGrid_Config:Password"],
+                    templateId = Configuration["AppSettings:SendGrid_Config:TemplateId"],
+
+                },
+
+                primaveraConfig = new Primavera_Config()
+                {
+                    userName = Configuration["AppSettings:Primavera_Config:UserName"],
+                    password = Configuration["AppSettings:Primavera_Config:Password"],
+                    instancia = Convert.ToInt16(Configuration["AppSettings:Primavera_Config:Instancia"])
+
+                }
+            };
+
+            return appSettings;
         }
     }
 }

@@ -36,12 +36,39 @@
 	                data.forEach(preencherCalendario);
 
 	                function preencherCalendario(value, index, ar) {
+	                    var color = "#337ab7";
+	                    var attrClass = "";
+	                    var span =  "" 
+
+	                    switch (value.estado) {
+	                        case "Por Aprovar":
+	                            color = "#f0ad4e";
+	                            
+	                            break;
+
+	                        case "Aprovado":
+	                            color = '#257e4a';
+	                            attrClass = "class='success'";
+	                            span = "<span class='btnAprovado glyphicon glyphicon-thumbs-up'  style='font-size: 15px; ' aria-hidden='true'></span>";
+
+	                            break;
+	                        case "Recusado":
+	                            color = "#d9534f";
+	                            attrClass = "class='danger'";
+	                            span = "<span class='btnAprovado glyphicon glyphicon-thumbs-down'  style='font-size: 15px; ' aria-hidden='true'></span>";
+
+	                            break;
+
+	                    }
+
+
 	                    var evento = {
 	                        //id: value.funcionarioId,
-	                        title: 'Pedido Ferias',
+	                        title: value.tipo,// 'Pedido Ferias',
 	                        start: value.dataFeria, //'2014-06-09T16:00:00'
 	                        end: value.dataFeria,
-                            allDay:true
+	                        allDay: true,
+	                        color: color
 	                    }
 	                    
 	                    $('#calendar').fullCalendar('renderEvent', evento, true);
@@ -72,11 +99,11 @@
 	                    var d = new Date(value.dataFeria);
 
 	                    $("#tabelaMarcacaoFerias").append(
-                            "<tr>" +
+                            "<tr " + attrClass + ">" +
                                 "<td class ='DataM'>" + day.format("DD/MM/YYYY") + "</td> " +
                                 "<td>" + tipoFerias + "</td> " +
-                                "<td>" + "Por Aprovar" + "</td> " +
-                                "<td> </td>" +
+                                "<td >" + value.estado + "</td> " +
+                                "<td> "+ span +" </td>" +
                             "</tr>"
                         );
 
@@ -98,6 +125,175 @@
         }
 
     </script>
+
+    <!--SignalR script to update the chat page and send messages.-->
+<script>
+            $.connection.hub.url = "http://localhost:8989/signalr";
+
+            var rhHub = $.connection.rhHub;
+
+            $(function () {
+
+
+
+                rhHub.client.daInfFeriasFuncionario = function (val) {
+                    console.log(val);
+                    console.log("Connection started! Client - daInfFeriasFuncionario ");
+
+                    $("#txtGozados").text(val.diasJaGozados);
+                    $("#txtPorGozar").text(val.diasPorGozar);
+                    $("#txtMaximoDiaFerias").text(val.diasDireito);
+                };
+
+                rhHub.client.daListaEmpresas = function (val) {
+                    console.log("Connection started! client");
+                    console.log(val);
+                    $("#tabelaEmpresas").empty();
+
+                    val.forEach(preencherEmpresas);
+
+                    function preencherEmpresas(value, index, ar) {
+
+                        $("#tabelaEmpresas").append(
+                                "<tr>" +
+                                    "<td> <a href='#' onclick= preencheDadosEmpresa('" + value.codigo + "') >" + value.codigo + "</a></td> " +
+                                    "<td>" + value.nome + "</td> " +
+                                    "<td id='btSave" + value.codigo + "' class = 'listBtSave'> </td>" +
+                                "</tr>"
+                            );
+                    }
+                };
+
+                rhHub.client.daDadosEmpresa = function (val) {
+                    console.log("Connection started! - da dados da empresa "+ val.codigo);
+
+                    $("#divDadosEmpresa").show();
+
+                    $("#codigo").val(val.codigo);
+                    $("#nome").val(val.nome);
+
+                };
+
+                rhHub.client.daListaFuncionarios = function (val) {
+                    console.log("Connection started! client - Lista Funcionarios");
+                    console.log(val);
+                    $("#tableListaFuncionarios").empty();
+
+                    $("#tableListaFuncionarios").append("<tr> <th> Codigo  </th> <th> Funcionario </th> <th> Departamento </th>  <th> Email </th> <th> Nr. Telefone</th> </tr>");
+
+                    val.forEach(preencheFuncionarios);
+
+                    function preencheFuncionarios(value, index, ar){
+
+                        $("#tableListaFuncionarios").append(
+                            "<tr>" +
+                                "<td>" +
+                                    "<a href='#' onclick= daExtratoPdfCliente('" + $("#codigoEmpresa").text() + "','" + value.codigo + "')>" + value.codigo + "</a>" +
+                                "</td> " +
+                                "<td> " + value.nome + " </td> " +
+                                "<td> " + value.departamentoId + "</td>" +
+                                "<td id='email'>" + value.email + " </td>  "+
+                                "<td> " + value.telemovel + "</td>" +
+                            "</tr>"
+                        );
+
+
+                         console.log();
+                    }
+
+
+                }
+
+                rhHub.client.daListaDepartamentos = function (val) {
+                    console.log("Connection started! client - Lista Departamentos");
+                    console.log(val);
+
+                    $("#tableListaDepartamentos").empty();
+
+                    $("#tableListaDepartamentos").append("<tr> <th> Departamento  </th> <th> Descrição </th> </tr>");
+
+                    val.forEach(preencheDepartamento);
+
+                    function preencheDepartamento(value, index, ar) {
+
+                        //var funcionarios = "";
+
+                        //value.contacto.forEach(daContactos)
+
+                        $("#tableListaDepartamentos").append(
+                            "<tr> " +
+                                "<td>" + value.departamento + "</td>" +
+                                "<td>" + value.descricao + "</td>" +
+                            "</tr>"
+                        );
+
+                        //function daContactos(value, index, ar){
+                        //    if (value != null) {
+                        //        contacto = contacto + value.Email + "; ";
+                        //    }
+
+                        //}
+
+                        //console.log();
+                    }
+
+
+                }
+
+                $.connection.hub.start().done(function () {
+                    console.log("connection started! server");
+
+                    getFuncInfFerias(2015, '@Model.empresaId', '@Model.codigo');
+                });
+            });
+
+            // This optional function html-encodes messages for display in the page.
+            function htmlEncode(value) {
+                var encodedValue = $('<div />').text(value).html();
+                return encodedValue;
+            }
+
+            function daFuncionarios(empresa){
+                rhHub.server.daListaFuncionarios(0, empresa, "gmahota", "Accsys2011!", "");
+            }
+
+            function preencheDadosEmpresa(empresa) {
+                console.log("da Lista de Funcionarios da empresa " + empresa);
+                rhHub.server.daDadosEmpresa(0, empresa, "gmahota", "Accsys2011!");
+                daFuncionarios(empresa);
+                daListaDepartamentos(empresa)
+
+                $(".listBtSave").empty();
+                $("#btSave" + empresa).append("<a onclick= 'importarDadosEmpresa()'  class='btSave glyphicon glyphicon-floppy-save' style=' color:red'></a>");
+
+
+            }
+
+            function daListaDepartamentos(empresa) {
+                console.log("Connection started! Server - Lista Departamentos");
+                rhHub.server.daListaDepartamentos(0, empresa, "gmahota", "Accsys2011!","");
+
+            }
+
+            function daExtratoPdfCliente(empresa,cliente){
+                console.log("da extrato do cliente " + cliente + " da empresa " + empresa);
+                enviaEmail(cliente)
+                rhHub.server.daExtratoPDFCliente(0, empresa, "gmahota", "Accsys2011!", cliente);
+            }
+
+            function importarDadosEmpresa() {
+
+                GravarEmpresa();
+                GravarDepartamentos();
+                GravarFuncionarios();
+
+            }
+
+            function getFuncInfFerias(ano,empresa,codigo) {
+                console.log("Connection started! Server - getFuncInfFerias");
+                rhHub.server.daInfFeriasFuncionario(0, empresa, "gmahota", "Accsys2011!", codigo, ano);
+            }
+</script>
 }
 
 <ul id="listaEmpresas" class="nav breadcrumb">
@@ -106,6 +302,53 @@
     <li id="modulo_type"> Ferias Detalhes</li>
     <li id="modulo_value" class="active">@ViewData["modulo_value"]</li>
 </ul>
+
+<div class="row">
+    <div class="col-md-8">
+        <table>
+            <tr>
+                <td> Ano de Férias:</td>
+                <td id="anoFerias" style="padding-right:10px"> <input type="number" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> </td>
+
+                <td>Dias Marcados: </td>
+                <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
+
+                <td>Meios Dias: </td>
+                <td style="padding-right:10px"> <text id="txtMeiosDiasMarcados">0,0</text> </td>
+
+                <td>Dias Antecipados: </td>
+                <td style="padding-right:10px"> <text id="txtDiasAntecipados">0,0</text> </td>
+
+                <td>Meios Dias Antecipados: </td>
+                <td style="padding-right:10px"> <text id="txtMeiosDiasAntecipados">0,0</text> </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-offset-8">
+        <b>Dados da Ficha do Funcionario</b>
+
+        <table>
+            <tr>
+                <td>Máximo de dias Férias: </td>
+                <td style="padding-right:10px"> <text id="txtMaximoDiaFerias">0,0</text> </td>
+
+            </tr>
+            <tr>
+                <td>Gozados: </td>
+                <td style="padding-right:10px"> <text id="txtGozados">0,0</text> </td>
+
+                <td>Por Gozar: </td>
+                <td style="padding-right:10px"> <text id="txtPorGozar">0,0</text> </td>
+
+            </tr>
+        </table>
+    </div>
+
+    
+</div>
+
+
 
 <div class="row">
     <div class="col-md-6">
@@ -138,15 +381,17 @@
     
 </div>
 
-
-
 <div class="row">
     <div class="col-md-4" style="padding-top:10px">
-        <a href="@Url.Action("MarcacaoFerias", "RH",new { id = Model.id })" type="button" class="btn btn-primary btn-lg " role="button">
+        <a href="@Url.Action("Create", "RH",new { id = Model.id })" type="button" class="btn btn-primary btn-lg " role="button">
             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            Alterar
+            Editar
         </a>
 
+        <a href="@Url.Action("Edit", "RH",new { id = Model.id })" type="button" class="btn btn-success btn-lg " role="button">
+            <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+            Aprovação
+        </a>
 
         <a  class="btn btn-default btn-lg " role="button" asp-controller="RH" asp-action="Index">
             <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>

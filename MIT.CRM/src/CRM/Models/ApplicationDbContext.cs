@@ -15,6 +15,8 @@ namespace CRM.Models
         public DbSet<Departamento> Departamentos { get; set; }
         public DbSet<Ferias> Ferias { get; set; }
         public DbSet<Ferias_Itens> Ferias_Itens { get; set; }
+        public DbSet<Historio_Ferias_Item> Historio_Ferias_Item { get; set; }
+
 
         public DbSet<Empresa> Empresas { get; set; }
 

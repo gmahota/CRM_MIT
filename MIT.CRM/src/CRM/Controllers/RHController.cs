@@ -22,18 +22,7 @@ namespace CRM.Controllers
         public IActionResult Index()
         {
             ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
-            //Funcionario funcionario = user.funcionario;
-
-            //if (funcionario == null)
-            //{
-            //    ViewData["Message"] = String.Format("Não existe nenhum funcionario associado ao Utilizador {0}, por favor contacte o administrador do sistema", User.Identity.Name);
-            //    return View("Error");
-            //}
-            //else
-            //{
-            //    ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
-            //}
-
+            
             return View();
         }
 
@@ -58,7 +47,28 @@ namespace CRM.Controllers
 
         }
 
-        public IActionResult MarcacaoFerias(int id)
+        public IActionResult Edit(int id)
+        {
+            //ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
+
+            //var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
+            var list = _applicationDbContext.Funcionarios.Where(f => f.id == id);
+
+
+            if (list.Count() > 0)
+            {
+                Funcionario funcionario = list.First();
+                ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
+                return View(funcionario);
+            }
+            else
+            {
+                ViewData["Message"] = String.Format("Não existe nenhum funcionario associado ao Utilizador {0}, por favor contacte o administrador do sistema", User.Identity.Name);
+                return View("Error");
+            }
+        }
+
+        public IActionResult Create(int id)
         {
             //ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
 
@@ -81,77 +91,60 @@ namespace CRM.Controllers
         public async Task<string> MarcacaoFerias(Ferias_Itens feria)
         {
             
-
-            //var listFerias = _applicationDbContext.Ferias.Where(f => f.funcionarioId == feria.funcionarioId);
-            //bool existe = false;
-
-            //if(listFerias.Count() == 0)
-            //{
-            //    Ferias ferias = new Ferias()
-            //    {
-            //        funcionarioId = feria.funcionarioId,
-            //        dataInicio = feria.dataFeria,
-            //        dataFim = feria.dataFeria
-            //    };
-
-            //    _applicationDbContext.Ferias.Add(ferias);
-            //    _applicationDbContext.SaveChanges();
-
-            //    feria.feriasId = ferias.id;
-            //}
-            //else
-            //{
-
-            //    foreach (var f in listFerias)
-            //    {
-            //        if (f.dataFim.AddDays(1).Date.Equals(feria.dataFeria.Date))
-            //        {
-            //            feria.feriasId = f.id;
-            //            f.dataFim = feria.dataFeria;
-            //            _applicationDbContext.Ferias.Update(f);
-            //            existe = true;
-            //            _applicationDbContext.SaveChanges();
-            //            break;
-            //        }
-            //        if (f.dataInicio.AddDays(-1).Date.Equals(feria.dataFeria.Date))
-            //        {
-            //            feria.feriasId = f.id;
-            //            f.dataInicio = feria.dataFeria;
-            //            _applicationDbContext.Ferias.Update(f);
-            //            existe = true;
-            //            _applicationDbContext.SaveChanges();
-            //            break;
-                        
-            //        }
-            //    }
-
-            //    if(existe == false)
-            //    {
-            //        Ferias ferias = new Ferias()
-            //        {
-            //            funcionarioId = feria.funcionarioId,
-            //            dataInicio = feria.dataFeria,
-            //            dataFim = feria.dataFeria
-            //        };
-
-            //        _applicationDbContext.Ferias.Add(ferias);
-            //        _applicationDbContext.SaveChanges();
-            //        feria.feriasId = ferias.id;
-            //    }
-
-            //}
-             
             _applicationDbContext.Ferias_Itens.Add(feria);
             _applicationDbContext.SaveChanges();
 
-             return "sucesso";
+            ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
+
+            Historio_Ferias_Item historico = new Historio_Ferias_Item
+            {
+                estado = feria.estado,
+                ferias_item_id = feria.id,
+                utilizadorId = user.Id,
+                data = DateTime.Now
+            };
+
+            _applicationDbContext.Historio_Ferias_Item.Add(historico);
+            _applicationDbContext.SaveChanges();
+
+            return "sucesso";
         }
 
         [HttpPost]
         public JsonResult ListaMarcacaoFerias(int funcionarioId, short ano)
         {
-            var listaFerias = _applicationDbContext.Ferias_Itens.Where(f => f.funcionarioId == funcionarioId);
+            var listaFerias = _applicationDbContext.Ferias_Itens.Where(f => f.funcionarioId == funcionarioId).OrderBy(x => x.dataFeria);
             return Json(listaFerias);
+        }
+
+        [HttpPost]
+        public void AprovacaoFerias(Ferias_Itens _feria)
+        {
+            var list = _applicationDbContext.Ferias_Itens.Where(f => 
+                f.dataFeria.Date.Equals(_feria.dataFeria.Date) &&
+                f.funcionarioId == _feria.funcionarioId && 
+                f.tipo == _feria.tipo
+            );
+
+            if(list.Count() > 0)
+            {
+                Ferias_Itens feria = list.First();
+
+                feria.estado = _feria.estado;
+
+                ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
+
+                Historio_Ferias_Item historico = new Historio_Ferias_Item
+                {
+                    estado = feria.estado,
+                    ferias_item_id = feria.id,
+                    utilizadorId = user.Id,
+                    data = DateTime.Now
+                };
+                _applicationDbContext.Ferias_Itens.Update(feria);
+                _applicationDbContext.Historio_Ferias_Item.Add(historico);
+                _applicationDbContext.SaveChanges();
+            }
         }
     }
 }

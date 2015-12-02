@@ -174,10 +174,14 @@ namespace CRM.Models
 
         [Required]
         public DateTime dataFeria { get; set; }
+
         public bool estadoGozo { get; set; }
         public bool originouFalta { get; set; }
         public int tipoMarcacao { get; set; }
         public bool originouFaltaSubAlim { get; set; }
+
+        public string estado { get; set; }
+        public string tipo { get; set; }
 
         [ForeignKey("funcionarioId")]
         public virtual Funcionario funcionario { get; set; }
@@ -186,5 +190,26 @@ namespace CRM.Models
         {
             return dataFeria.ToString("dd/MM/yyyy");
         }
+
+        public virtual List<Historio_Ferias_Item> historio_Ferias_Itens { get; set; }
+    }
+
+    public class Historio_Ferias_Item
+    {
+        public int id { get; set; }
+
+        public int ferias_item_id { get; set; }
+
+        public string estado { get; set; }
+
+        public string utilizadorId { get; set; }
+
+        public DateTime data { get; set; }
+
+        [ForeignKey("utilizadorId")]
+        public virtual ApplicationUser utilizador { get; set; }
+
+        [ForeignKey("ferias_item_id")]
+        public virtual Ferias_Itens ferias_Itens { get; set; }
     }
 }
