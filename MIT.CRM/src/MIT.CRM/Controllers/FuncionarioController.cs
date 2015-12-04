@@ -7,6 +7,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
 using MIT.CRM.Models;
+using MIT.CRM.Services;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,15 +15,18 @@ namespace MIT.CRM.Controllers
 {
     public class FuncionarioController : Controller
     {
-
-
-
         [FromServices]
         public ApplicationDbContext _applicationDbContext { get; set; }
 
         [FromServices]
         public UserManager<ApplicationUser> _userManager {get;set;}
 
+        private readonly IEmailSender _emailSender;
+
+        public FuncionarioController(IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+        }
 
         // GET: /<controller>/
         public IActionResult Index()
@@ -64,6 +68,19 @@ namespace MIT.CRM.Controllers
                     await _userManager.AddClaimAsync(user, new Claim("Funcionario", "Allowed"));
 
                     funcionario.utilizadorId = user.Id;
+
+                    var callbackUrl = "http://192.168.3.16:5000/";
+
+                    string mensaguem = " <h4>Caro Colaborador " + funcionario.nome + " </h4> <br/>" +
+                        "<p>Foi criado com sucesso o seu utilizador para a marcação de ferias Online ainda em fase de Produção/Teste.</p>" +
+                        "<p><b>Utilizador: </b> " + funcionario.email + "</p> <br/>" +
+                        "<p><b>Password:   </b> Meridian123456!</p> <br/>" +
+                        "<p><b>Aplicação:  </b> <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>" +
+                        "<br/> <p> <b> Faça Login e depois seleciona o menu RH e depois Ferias e em seguida o botão editar. </b></p>";
+
+
+                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", funcionario.email, "Aplicação de Marcação de Ferias -Em Produção / Teste",
+                       mensaguem);
                 }
                 else
                 {

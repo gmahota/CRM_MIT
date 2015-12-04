@@ -9,8 +9,7 @@
 
 
 @section scripts {
-
-    <script>
+<script>
         $(document).ready(function () {
             //$('[data-toggle="tooltip"]').tooltip()
 
@@ -53,7 +52,7 @@
 	                            color = "#d9534f";
 
 	                            break;
-	                        
+
 	                    }
 
 
@@ -88,7 +87,7 @@
 	                    }
 
 	                    var day = moment(value.dataFeria);
-	                    
+
 	                    var d = new Date(value.dataFeria);
 
 	                    if (value.estado == "Por Aprovar") {
@@ -113,7 +112,7 @@
 
 	                    }
 
-	                    
+
 
 	                }
 	            },
@@ -121,9 +120,6 @@
 	                var x = error; //break here for debugging.
 	            }
 	        });
-
-	        console.log("ola");
-
 
 
         });
@@ -264,11 +260,10 @@
 
 
 
-    </script>
-
+</script>
     <!--SignalR script to update the chat page and send messages.-->
 <script>
-            $.connection.hub.url = "http://localhost:8989/signalr";
+            $.connection.hub.url = "http://192.168.3.16:8989/signalr";
 
             var rhHub = $.connection.rhHub;
 
@@ -439,6 +434,10 @@
                 rhHub.server.fazMarcacaoFerias(0, empresa, "gmahota", "Accsys2011!", listFerias);
             }
 </script>
+
+
+
+    
 }
 
 <ul id="listaEmpresas" class="nav breadcrumb">

@@ -22,10 +22,10 @@ textarea {
     z-index: 10 !important;
 }
 
-    .carousel-caption p {
-        font-size: 20px;
-        line-height: 1.4;
-    }
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
 
 @media (min-width: 768px) {
     .carousel-caption {
@@ -36,4 +36,11 @@ textarea {
 .fc-toolbar .fc-left {
     float: left;
     text-transform: uppercase;
+}
+
+/* scroll fixes */
+.modal-open .modal {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  overflow-y: scroll;
 }

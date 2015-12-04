@@ -8,6 +8,7 @@ using System.Security.Claims;
 
 using System.Threading;
 using MIT.CRM.Models;
+using MIT.CRM.Services;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,6 +20,13 @@ namespace MIT.CRM.Controllers
         [FromServices]
         public ApplicationDbContext _applicationDbContext { get; set; }
 
+        private readonly IEmailSender _emailSender;
+
+        public RHController(IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+        }
+
         // GET: /<controller>/
         public IActionResult Index()
         {
@@ -27,7 +35,7 @@ namespace MIT.CRM.Controllers
             return View();
         }
 
-        public IActionResult Details()
+        public async Task<IActionResult>  Details()
         {
             ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
 

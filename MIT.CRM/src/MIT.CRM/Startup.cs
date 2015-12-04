@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MIT.CRM.Models;
 using MIT.CRM.Services;
+using MIT.CRM.Models.Helper;
 
 namespace MIT.CRM
 {
@@ -38,6 +39,8 @@ namespace MIT.CRM
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
             // Add framework services.
             services.AddEntityFramework()
                 .AddSqlServer()
@@ -98,6 +101,9 @@ namespace MIT.CRM
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //Populates the Admin user and role
+            SampleData.InitializeIdentityDatabaseAsync(app.ApplicationServices).Wait();
         }
 
         // Entry point for the application.

@@ -28,21 +28,13 @@
                 lang: 'pt',
                 dayClick: function (date, jsEvent, view) {
                     var existe = false;
-                    //alert('Clicked on: ' + date.format());
 
-                    //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-
-                    //alert('Current view: ' + view.name);
-
-                    // change the day's background color just for fun
-                    
                     var row = document.getElementById("tabelaMarcacaoFerias").rows.length;
 
                     $('#tabelaMarcacaoFerias tr').find(".DataM").each(function (i, row) {
 
                         var row = $(this);
-                        console.log($(row).text());
-
+                        
                         if (date.format("L") == $(row).text()) {
                             existe = true;
 
@@ -67,9 +59,19 @@
                         );
 
 
+                        var evento = {
+                            //id: value.funcionarioId,
+                            title: tipoFerias,// 'Pedido Ferias',
+                            start: date, //'2014-06-09T16:00:00'
+                            end: date,
+                            allDay: true,
+                            color: '#eea236'
+                        }
+
                         switch (tipoFerias) {
-                            case 'Dia de Férias': 
-                                $(this).css('background-color', '#eea236'); 
+                            case 'Dia de Férias':
+                                evento.color = '#eea236';
+                                //$(this).css('background-color', '#eea236'); 
                                 numDiasMarcados++; 
                                 
                                 $("#txtDiasMarcados").text(numDiasMarcados);
@@ -77,10 +79,12 @@
                                 break;
 
                             case 'Meio Dia de Férias':
-                                $(this).css('background-color', '#d43f3a'); 
+                                //$(this).css('background-color', '#d43f3a');
+                                evento.color = '#d43f3a';
                                 numMeiosDiasMarcados++; 
                                 $("#txtMeiosDiasMarcados").text(numMeiosDiasMarcados);
                                 break;
+
                             case 'Dia Antecipado': $(this).css('background-color', '#46b8da'); 
                                 numDiasAntecipados++;
                                 
@@ -95,6 +99,8 @@
                                 break;
 
                         }
+
+                        $('#calendar').fullCalendar('renderEvent', evento, true);
 
                     }
                     
@@ -112,13 +118,14 @@
         });
 
         function removeLinhaMarcacaoFerias(numero,tipoferias) {
-            //document.getElementById('tabelaMarcacaoFerias').removeChild(document.getElementById(i));
-            //var rows = document.getElementById('tabelaMarcacaoFerias').getElementsByTagName('tbody')[0];
-            //deleteRow.deleteRow(numero);
+           
+            var row = $('#tabelaMarcacaoFerias').get(0).rows.item(numero)
+            var row = $(row);
 
-            //alert(document.getElementById('tabelaMarcacaoFerias').index);
-            
-
+            $('#calendar').fullCalendar('removeEvents', function (event) {
+                if (event.start.format("L") === row.children('td').eq(0).text())
+                    return true;
+            });
 
             document.getElementById('tabelaMarcacaoFerias').deleteRow(numero);
 
@@ -205,14 +212,7 @@
                     
                 }
 
-
-
             });
-
-            console.log(ferias);
-
-            
-            
 
 
         }
@@ -221,7 +221,7 @@
 
     <!--SignalR script to update the chat page and send messages.-->
     <script>
-            $.connection.hub.url = "http://localhost:8989/signalr";
+            $.connection.hub.url = "http://192.168.3.16:8989/signalr";
 
             var rhHub = $.connection.rhHub;
 
@@ -389,177 +389,207 @@
     </script>
 }
 
-<ul id="listaEmpresas" class="nav breadcrumb">
+@*<ul id="listaEmpresas" class="nav breadcrumb">
     <li id="codigoEmpresa"> ACC </li>
     <li id="modulo"> R.H </li>
     <li id="modulo_type"> Marcacao Ferias</li>
     <li id="modulo_value" class="active">@ViewData["modulo_value"]</li>
-</ul>
-
-<div id="#myModal" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
-
-
+</ul>*@
 
 <div class="row">
-    <div class="col-md-8">
-        <table>
-            <tr>
-                <td> Ano de Férias:</td>
-                <td id="anoFerias" style="padding-right:10px"> <input type="number" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> </td>
-
-                <td>Dias Marcados: </td>
-                <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
-                
-                <td>Meios Dias: </td>
-                <td style="padding-right:10px"> <text id="txtMeiosDiasMarcados">0,0</text> </td>
-                
-                <td>Dias Antecipados: </td>
-                <td style="padding-right:10px"> <text id="txtDiasAntecipados">0,0</text> </td>
-                
-                <td>Meios Dias Antecipados: </td>
-                <td style="padding-right:10px"> <text id="txtMeiosDiasAntecipados">0,0</text> </td> 
-            </tr>
-        </table>
+    <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+            <li>
+                <a href="#">Ferias </a>
+                <ul class="nav nav-sidebar">
+                    <li >
+                        <a href="#">Detalhes </a>
+                    </li>
+                    <li class="active">
+                        <a href="#">Marcação <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Export</a></li>
+        </ul>
+        <ul class="nav nav-sidebar">
+            <li><a href="">Nav item</a></li>
+            <li><a href="">Nav item again</a></li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+            <li><a href="">More navigation</a></li>
+        </ul>
+        <ul class="nav nav-sidebar">
+            <li><a href="">Nav item again</a></li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+        </ul>
     </div>
 
-    <div class="col-md-offset-8">
-        <b>Dados da Ficha do Funcionario</b>
-        
-        <table>
-            <tr>
-                <td>Máximo de dias Férias: </td>
-                <td style="padding-right:10px"> <text id="txtMaximoDiaFerias">0,0</text> </td>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <h4 class="page-header">Marcação de Ferias : @ViewData["modulo_value"]</h4>
 
-            </tr>
-            <tr>
-                <td>Gozados: </td>
-                <td style="padding-right:10px"> <text id="txtGozados">0,0</text> </td>
+        <div class="row placeholders">
 
-                <td>Por Gozar: </td>
-                <td style="padding-right:10px"> <text id="txtPorGozar">0,0</text> </td>
+            <div id="calendar" class="calendario col-md-6 placeholder"></div>
 
-            </tr>
-        </table>
-    </div>
+            <div class="col-md-6 placeholder ">
 
-    <div class="col-md-8" style="padding-bottom:20px">
-        <!-- Split button -->
-        <div class="btn-group">
-            <button type="button" class="btn btn-warning btn-sm" onclick="tipoFerias = 'Dia de Férias'">Dias de Férias</button>
-            <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
+                <table id="tabelaMarcacaoFerias" class="table">
 
-            <button type="button" class="btn btn-danger btn-sm" onclick="tipoFerias = 'Meio Dia de Férias'" >Meios Dias de Ferias</button>
-            <button type="button" class="btn btn-danger btn-sm dropdown-toggle " onclick="tipoFerias = 'Meio Dia de Férias'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
 
-            <button type="button" class="btn btn-info btn-sm" onclick="tipoFerias = 'Dia Antecipado'">Dias Antecipados </button>
-            <button type="button" class="btn btn-info btn-sm dropdown-toggle" onclick="tipoFerias = 'Dia Antecipado'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
+                </table>
 
-            <button type="button" class="btn btn-default btn-sm" onclick="tipoFerias = 'Meio Dia Antecipado'">Meios Dias Antecipados </button>
-            <button type="button" class="btn btn-default btn-sm dropdown-toggle" onclick="tipoFerias = 'Meio Dia Antecipado'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="caret"></span>
-                <span class="sr-only">Toggle Dropdown</span>
-            </button>
 
-            @*<button type="button" class="btn btn-danger">Desmarcar</button>
+            </div>
+
+
+        </div>
+
+        <div class="row placeholders">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Dados Funcionario</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-8 placeholder">
+                        <table>
+                            <tr>
+                                <td> Ano de Férias:</td>
+                                <td id="anoFerias" style="padding-right:10px"> <input type="number" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> </td>
+
+                                <td>Dias Marcados: </td>
+                                <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
+
+                                <td>Meios Dias: </td>
+                                <td style="padding-right:10px"> <text id="txtMeiosDiasMarcados">0,0</text> </td>
+
+                                <td>Dias Antecipados: </td>
+                                <td style="padding-right:10px"> <text id="txtDiasAntecipados">0,0</text> </td>
+
+                                <td>Meios Dias Antecipados: </td>
+                                <td style="padding-right:10px"> <text id="txtMeiosDiasAntecipados">0,0</text> </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="col-md-offset-8 placeholder">
+                        <b>Dados da Ficha do Funcionario</b>
+
+                        <table>
+                            <tr>
+                                <td>Máximo de dias Férias: </td>
+                                <td style="padding-right:10px"> <text id="txtMaximoDiaFerias">0,0</text> </td>
+
+                            </tr>
+                            <tr>
+                                <td>Gozados: </td>
+                                <td style="padding-right:10px"> <text id="txtGozados">0,0</text> </td>
+
+                                <td>Por Gozar: </td>
+                                <td style="padding-right:10px"> <text id="txtPorGozar">0,0</text> </td>
+
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="col-md-8 placeholder" style="padding-bottom:20px">
+                        <!-- Split button -->
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-warning btn-sm" onclick="tipoFerias = 'Dia de Férias'">Dias de Férias</button>
+                            <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+
+                            <button type="button" class="btn btn-danger btn-sm" onclick="tipoFerias = 'Meio Dia de Férias'">Meios Dias de Ferias</button>
+                            <button type="button" class="btn btn-danger btn-sm dropdown-toggle " onclick="tipoFerias = 'Meio Dia de Férias'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+
+                            <button type="button" class="btn btn-info btn-sm" onclick="tipoFerias = 'Dia Antecipado'">Dias Antecipados </button>
+                            <button type="button" class="btn btn-info btn-sm dropdown-toggle" onclick="tipoFerias = 'Dia Antecipado'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+
+                            <button type="button" class="btn btn-default btn-sm" onclick="tipoFerias = 'Meio Dia Antecipado'">Meios Dias Antecipados </button>
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" onclick="tipoFerias = 'Meio Dia Antecipado'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+
+                            @*<button type="button" class="btn btn-danger">Desmarcar</button>
                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>*@
-        </div>
-    </div>
-</div>
-
-<div class="row" >
-    <div id="calendar" class="calendario col-md-6 "></div>
-    <div  class="col-md-6 ">
-
-        <table id="tabelaMarcacaoFerias" class="table">
-
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Tipo</th>
-                    <th>Estado</th>      
-                    <th></th>          
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-
-        </table>
-
-
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="col-md-4" style="padding-top:10px">
-        <button type="button" class="btn btn-success btn-lg " role="button" onclick="submeterPedido()" 
-                data-toggle="modal" data-target="#myModal">
-            <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
-            Submeter
-        </button>
-        <a href="@Url.Action("Index", "RH",new { id = Model.id })" class="btn btn-default btn-lg " role="button">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            Cancelar
-        </a>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body">
-                Deseja Mesmo actualizar os dados?
-
-                <div id="progressBar">
-                    <div class="progress">
-                        <div id="progressbar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="20" aria-valuemin="0"
-                             aria-valuemax="100" style="width:0%">
-                            <span class="sr-only">20% Complete</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+
+
+            
+        </div>
+
+        <div class="row placeholders">
+            <div class="col-md-5 placeholder">
+                <button type="button" class="btn btn-success btn-sm " role="button" onclick="submeterPedido()"
+                        data-toggle="modal" data-target="#myModal">
+                    <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+                    Submeter
+                </button>
+                <a href="@Url.Action("Index", "RH",new { id = Model.id })" class="btn btn-default btn-sm " role="button">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    Cancelar
+                </a>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Validação do Pedido</h4>
+                </div>
+                <div class="modal-body">
+                    Deseja Mesmo actualizar os dados?
+
+                    <div id="progressBar">
+                        <div class="progress">
+                            <div id="progressbar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                 aria-valuemax="100" style="width:0%">
+                                <span class="sr-only">0% Complete</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Submeter O Pedido</button>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
+
+        
