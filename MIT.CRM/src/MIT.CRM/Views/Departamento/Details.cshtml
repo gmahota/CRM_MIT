@@ -1,0 +1,30 @@
+@model MIT.CRM.Models.Departamento
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Departamento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.departamento)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.departamento)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.descricao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.descricao)
+        </dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>

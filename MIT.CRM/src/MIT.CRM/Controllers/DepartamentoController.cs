@@ -1,28 +1,65 @@
-ï»¿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.Data.Entity;
 using MIT.CRM.Models;
-
-
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+using System;
+using MIT.CRM.Services;
+using System.Threading.Tasks;
 
 namespace MIT.CRM.Controllers
 {
     public class DepartamentoController : Controller
     {
-        [FromServices]
-        public ApplicationDbContext _applicationDbContext { get; set; }
+        private ApplicationDbContext _context;
+        private readonly IEmailSender _emailSender;
 
-        // GET: /<controller>/
+        public DepartamentoController(ApplicationDbContext context,IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+            _context = context;    
+        }
+
+        // GET: Departamento
         public IActionResult Index()
         {
+            var applicationDbContext = _context.Empresas.ToList();
+
+            for(int i = 0; i < applicationDbContext.Count(); i++)
+            {
+                applicationDbContext.ElementAt(i).departamento = _context.Departamentos.Include(e => e.responsavel).Where(e => e.empresaId == applicationDbContext.ElementAt(i).codigo).ToList();
+            }
+           
+            return View(applicationDbContext.ToList());
+        }
+
+        // GET: Departamento/Details/5
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            Departamento departamento = _context.Departamentos.Single(m => m.Id == id);
+            if (departamento == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(departamento);
+        }
+
+        // GET: Departamento/Create
+        public IActionResult Create()
+        {
+            ViewData["empresaId"] = new SelectList(_context.Empresas, "codigo","nome");
+            ViewData["responsavelId"] = new SelectList(_context.Users, "Id","UserName");
             return View();
         }
 
         [HttpPost]
-        public string Create(string empresaId,string departamento, string descricao)
+        public string Create(string empresaId, string departamento, string descricao)
         {
             Departamento dep = new Departamento
             {
@@ -32,11 +69,11 @@ namespace MIT.CRM.Controllers
             };
             try
             {
-                var temp = _applicationDbContext.Departamentos.Where(d => d.departamento == departamento && d.empresaId == empresaId);
+                var temp = _context.Departamentos.Where(d => d.departamento == departamento && d.empresaId == empresaId);
                 if (temp.Count() == 0)
                 {
-                    _applicationDbContext.Departamentos.Add(dep);
-                    _applicationDbContext.SaveChanges();
+                    _context.Departamentos.Add(dep);
+                    _context.SaveChanges();
 
                     return "ok";
                 }
@@ -49,8 +86,108 @@ namespace MIT.CRM.Controllers
             {
                 return "error " + e.Message;
             }
-            
-            
+
+
         }
+
+        // POST: Departamento/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Departamento departamento)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Departamentos.Add(departamento);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewData["empresaId"] = new SelectList(_context.Empresas, "codigo", "empresa", departamento.empresaId);
+            ViewData["responsavelId"] = new SelectList(_context.Users, "Id", "responsavel", departamento.responsavelId);
+            return View(departamento);
+        }
+
+        // GET: Departamento/Edit/5
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            Departamento departamento = _context.Departamentos.Single(m => m.Id == id);
+            if (departamento == null)
+            {
+                return HttpNotFound();
+            }
+            ViewData["empresaId"] = new SelectList(_context.Empresas, "codigo", "nome", departamento.empresaId);
+            ViewData["responsavelId"] = new SelectList(_context.Users, "Id", "UserName", departamento.responsavelId);
+            return View(departamento);
+        }
+
+        // POST: Departamento/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Departamento dep )
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(dep);
+                _context.SaveChanges();
+
+                var callbackUrl = "http://192.168.3.16:5000/";
+
+                ApplicationUser user = _context.Users.Include(m => m.funcionario).Single(m => m.Id == dep.responsavelId);
+                Empresa emp = _context.Empresas.Single(m => m.codigo == dep.empresaId);
+                if (dep != null && user != null)
+                {
+                    string mensaguem = " <h4>Caro (a) " + user.funcionario.nome + " </h4> <br/>" +
+                        "<p>Foi adicionado como responsavel do departamento " + dep.descricao + " da empresa " + emp.nome + " para a gestão das ferias do colobaroados afectos ao respectivo departamento.</p> <br/>" +
+                        "<p><b>Aplicação:  </b> <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>";
+
+
+                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", user.Email, "Aplicação de Marcação de Ferias -Em Produção / Teste",
+                       mensaguem);
+                }
+
+
+                
+
+                return RedirectToAction("Index");
+            }
+            ViewData["empresaId"] = new SelectList(_context.Empresas, "codigo", "empresa", dep.empresaId);
+            ViewData["responsavelId"] = new SelectList(_context.Users, "Id", "responsavel", dep.responsavelId);
+            return View(dep);
+        }
+
+        // GET: Departamento/Delete/5
+        [ActionName("Delete")]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return HttpNotFound();
+            }
+
+            Departamento departamento = _context.Departamentos.Single(m => m.Id == id);
+            if (departamento == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(departamento);
+        }
+
+        // POST: Departamento/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            Departamento departamento = _context.Departamentos.Single(m => m.Id == id);
+            _context.Departamentos.Remove(departamento);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+       
     }
 }

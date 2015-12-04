@@ -8,9 +8,10 @@ using MIT.CRM.Models;
 namespace MIT.CRM.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20151204125446_add_display_name")]
+    partial class add_display_name
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -151,13 +152,9 @@ namespace MIT.CRM.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<bool>("activo");
+                    b.Property<string>("departamento");
 
-                    b.Property<string>("departamento")
-                        .IsRequired();
-
-                    b.Property<string>("descricao")
-                        .IsRequired();
+                    b.Property<string>("descricao");
 
                     b.Property<string>("empresaId");
 

@@ -47,6 +47,8 @@ namespace MIT.CRM.Services
             myMessage.Html = message;
             myMessage.Text = message;
 
+            
+            
             myMessage.EnableTemplateEngine("4ea35a49-5415-4d02-81e3-8adc54650b31");
 
             // Create credentials, specifying your SendGrid username and password.

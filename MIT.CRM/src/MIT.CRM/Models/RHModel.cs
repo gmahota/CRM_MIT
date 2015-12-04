@@ -128,16 +128,24 @@ namespace MIT.CRM.Models
     {
         public int Id { get; set; }
 
+        [Required]
         public string departamento { get; set; }
         
         public string empresaId { get; set; }
 
+        [Required]
         public string descricao { get; set; }
+
+        [Display(Name = "Responsavel Departamento")]
 
         public string responsavelId { get; set; }
 
+        public bool activo { get; set; }
+
         [ForeignKey("responsavelId")]
         public virtual ApplicationUser responsavel { get; set; }
+
+        
 
         [ForeignKey("empresaId")]
         public virtual Empresa empresa { get; set; }
