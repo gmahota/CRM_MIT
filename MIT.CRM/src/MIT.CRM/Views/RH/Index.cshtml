@@ -1,157 +1,371 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
-     ViewBag.Title = "RH";
+    ViewBag.Title = "RH";
+    var conexao = "";
+    
 }
+
+<environment names="Development">
+    @{conexao = "http://localhost:8989/signalr";}
+</environment>
+<environment names="Staging,Production">
+    @{conexao = "http://192.168.3.16:8989/signalr";}
+</environment>
 
 @section scripts {
 
-    <!--SignalR script to update the chat page and send messages.-->
-    <script>
-        $.connection.hub.url = "http://192.168.3.16:8989/signalr";
+<script>
 
-            var rhHub = $.connection.rhHub;
+    $.connection.hub.url = "@conexao";
 
-        $(function () {
+    $(document).ready(function () {
+            var tipoFerias = "Dia de Férias";
+	        var eventos = [];
 
-            
 
-            rhHub.client.daListaEmpresas = function (val) {
-                console.log("Connection started! client");
-                console.log(val);
-                $("#listaEmpresas").empty();
+            $.get('/RH/ListaFuncionarios', function(result) {
+                var funcionarios = result;
 
-                val.forEach(preencherEmpresas);
+                $.each(funcionarios, function () {
 
-                function preencherEmpresas(value, index, ar) {
+                    funcionarioCalendario(this);
 
-                    $("#listaEmpresas").append(
-                        $('<li>').append(
-                            $('<a>').attr('onclick',"daFuncionarios('"+ value.codigo +"')").append(value.codigo)
+                });
+            });
 
-                        )
-                    );
+            var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
+
+            $('#calendar').fullCalendar({
+                right: 'month,agendaWeek,agendaDay',
+                header: {
+                    left: 'today prev,next',
+                    center: 'title',
+                    right: 'timelineDay,timelineTenDay,timelineMonth,timelineYear'
+                },
+                defaultView: 'month',
+                views: {
+                    timelineDay: {
+                        buttonText: ':15 slots',
+                        slotDuration: '00:15'
+                    },
+                    timelineTenDay: {
+                        type: 'timeline',
+                        duration: { days: 10 }
+                    }
+                },
+                lang: 'pt',
+                //defaultView: 'month',
+                editable: false,
+                events: eventos,
+                resourceColumns: [
+                    {
+                        labelText: 'First Name',
+                        field: 'fname'
+                    },
+                    {
+                        labelText: 'Last Name',
+                        field: 'lname'
+                    }
+                ],
+
+                resources: [
+                {
+                    id: 'a',
+                    fname: 'John',
+                    lname: 'Smith'
+                },
+                {
+                    id: 'b',
+                    fname: 'Jerry',
+                    lname: 'Garcia'
+                }]
+	        });
+
+
+        });
+
+        function funcionarioCalendario(id) {
+
+            var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+
+                url: apiUrl,
+                data: { funcionarioId: id, ano: '@DateTime.Now.Year' },
+                success: function (data) {
+
+                    data.forEach(preencherCalendario);
+
+                    function preencherCalendario(value, index, ar) {
+                        var color = "#337ab7";
+                        var attrClass = "";
+                        var span = ""
+
+                        switch (value.estado) {
+                            case "Por Aprovar":
+                                color = "#f0ad4e";
+
+                                break;
+
+                            case "Aprovado":
+                                color = '#257e4a';
+                                attrClass = "class='success'";
+                                span = "<span class='btnAprovado glyphicon glyphicon-thumbs-up'  style='font-size: 15px; ' aria-hidden='true'></span>";
+
+                                break;
+                            case "Recusado":
+                                color = "#d9534f";
+                                attrClass = "class='danger'";
+                                span = "<span class='btnAprovado glyphicon glyphicon-thumbs-down'  style='font-size: 15px; ' aria-hidden='true'></span>";
+
+                                break;
+
+                        }
+
+
+                        var evento = {
+                            //id: value.funcionarioId,
+                            title: value.tipo,// 'Pedido Ferias',
+                            start: value.dataFeria, //'2014-06-09T16:00:00'
+                            end: value.dataFeria,
+                            allDay: true,
+                            color: color
+                        }
+
+                        $('#calendar').fullCalendar('renderEvent', evento, true);
+
+
+                        var day = moment(value.dataFeria);
+
+                        var d = new Date(value.dataFeria);
+
+                        $("#tabelaMarcacaoFerias").append(
+                            "<tr " + attrClass + ">" +
+                                "<td class ='DataM'>" + day.format("DD/MM/YYYY") + "</td> " +
+                                "<td>" + value.tipo + "</td> " +
+                                "<td >" + value.estado + "</td> " +
+                                "<td> " + span + " </td>" +
+                            "</tr>"
+                        );
+
+                    }
+                },
+                error: function (error) {
+                    var x = error; //break here for debugging.
                 }
-            };
+            });
 
-            rhHub.client.daDadosEmpresa = function (val) {
-                console.log("Connection started! - da dados da empresa "+ val.codigo);
+        }
 
-                $("#listaFuncionarios").show();
 
-                $("#codigoEmpresa").empty();
-                $("#nomeEmpresa").empty();
-                $("#nuitEmpresa").empty();
+        function formatDate(value) {
+            return value.getMonth() + 1 + "/" + value.getDate() + "/" + value.getYear();
+        }
 
-                $("#codigoEmpresa").text(val.codigo);
-                $("#nomeEmpresa").text(val.nome);
-                $("#nuitEmpresa").text(val.nuit);
-            };
+        
 
-            rhHub.client.daListaFuncionarios = function (val) {
-                console.log("Connection started! client - Lista Funcionarios");
-                console.log(val);
-                $("#tableListaFuncionarios").empty();
+</script>
 
-                $("#tableListaFuncionarios").append("<tr> <th> Codigo  </th> <th> Funcionario </th> <th> Departamento </th>  <th> Email </th> <th> Nr. Telefone</th> </tr>");
+<script>
 
-                val.forEach(preencheFuncionarios);
+    $(function () { // document ready
+        var mes = $("#cbMes").select(12);
+        $('#menu_rh_ul').attr('class', 'collapse in');
+        $('#menu_rh_index').attr('class', 'active');
 
-                function preencheFuncionarios(value, index, ar){
+        $('#calendar2').fullCalendar({
+            right: 'month,agendaWeek,agendaDay',
+            lang: 'pt',
+            defaultView: 'month',
+            editable: false,
+           }
+        );
 
-                    var funcionarios="";
+	});
 
-                    //value.contacto.forEach(daContactos)
+    function update_tabela_calendar() {
+        var mes = $("#cbMes").val();
+        
+        var startDate = moment([2015, mes - 1, 1]);
+        var endDate = moment(startDate).endOf('month');
 
-                    $("#tableListaFuncionarios").append("<tr> <td><a href='#' onclick= daExtratoPdfCliente('" + $("#codigoEmpresa").text() + "','" + value.codigo + "')>" + value.codigo + "</a> </td>" +
-                        " <td> " + value.nome + " </td> <td> Primavera</td> <td id='email'>" + value.email + " </td>  <td>   " + value.departamento + "</td>" + "</tr>");
+        var linha = "<td>Empresa</td> <td>Funcionario</td> <td>Departamento</td>";
 
-                    //function daContactos(value, index, ar){
-                    //    if (value != null) {
-                    //        contacto = contacto + value.Email + "; ";
-                    //    }
+        for (var i = 1; i <= endDate.date() ; i++) {
+            linha += "<td style='width:20px;'>" + i + "</td>";
 
-                    //}
+        }
+        $("#table_calendar").empty();
 
-                     console.log();
+        $("#table_calendar").append(
+            "<tr >" + linha +
+            "</tr>"
+        );
+
+      
+
+        $.get(location.origin + '/Funcionario/listaFuncionarios/', { empresa:"Acc",departamento:"" }, function (result) {
+
+            $.each(result, function () {
+                var ferias = [];
+
+                var departamento = '@ViewBag.departamento';
+                var link = "";
+                if (departamento == this.departamento.descricao) {
+                    link = "<a href='" + location.origin + '/RH/Edit/'+this.id + "'>" + this.nome + "</a>";
+
+                } else {
+                    link = this.nome;
+
                 }
 
 
-            }
-
-            $.connection.hub.start().done(function () {
-                rhHub.server.daListaEmpresas(0, "gmahota", "Accsys2011!", "");
-                console.log("connection started! server");
 
 
+                linha = "<td>" + this.empresaId + "</td>" +
+                        "<td>" + link + "</td>" +
+                        "<td>" + this.departamento.descricao + "</td>";
+
+                for (var i = 1; i <= endDate.date() ; i++) {
+                    linha += "<td id='"+this.id +"_"+i +"' style='width:20px;'> </td>";
+
+                }
+
+                $("#table_calendar").append(
+                        "<tr id = '" + this.id + "'>" + linha +
+                        "</tr>"
+                );
+
+                $.get(location.origin + '/RH/DataMarcacaoFerias', { funcionarioId: this.id, ano: 2015, mes: mes }, function (fer) {
+                    ferias = fer;
+                    linha = "";
+
+                    var estilo = "";
+                    
+                    for (var j = 0; j < ferias.length; j++) {
+                        var f = ferias[j];
+                        var color = "";
+
+                        switch (f.estado) {
+                            case "Por Aprovar": color = "#f0ad4e";break;
+                            case "Aprovado":
+                                if (f.tipo = "Dia de Férias") {
+                                    color = '#257e4a';
+
+                                } else {
+                                    color = "#5bc0de";
+
+                                }; break;
+                            //case "Recusado": color = "#d9534f"; break;
+
+                        }
+                        
+                        $("#" + ferias[j].funcionarioId + "_" + moment(f.dataFeria).date()).css("background-color", color);
+                    }
+
+
+                });
+
+                
+
+                
             });
         });
 
-        function enviaEmail(cliente,ficheiro) {
-            $.ajax({
-                type: "Post",
-                url: "/RH/EnviaEmail",
-                data: { client: cliente, ficheiro: ficheiro  },
-                datatypr: "html",
-                success: function (data) {
-                    $("#enviaEmail_" + cliente).append("<p>" +data.Message+"</p>");
-
-                }
-
-            });
-
-        }
 
 
-        // This optional function html-encodes messages for display in the page.
-        function htmlEncode(value) {
-            var encodedValue = $('<div />').text(value).html();
-            return encodedValue;
-        }
 
-        function daFuncionarios(empresa){
-                console.log("da Lista de Funcionarios da empresa " + empresa);
-                rhHub.server.daDadosEmpresa(0, empresa, "gmahota", "Accsys2011!");
-                rhHub.server.daListaFuncionarios(0, empresa, "gmahota", "Accsys2011!","");
-         }
 
-        function daExtratoPdfCliente(empresa,cliente){
-            console.log("da extrato do cliente " + cliente + " da empresa " + empresa);
-            enviaEmail(cliente)
-            rhHub.server.daExtratoPDFCliente(0, empresa, "gmahota", "Accsys2011!", cliente);
-        }
+    }
 
-    </script>
+</script>
 }
 
-<ol id="listaEmpresas" class="breadcrumb"></ol>
 
-<!-- Page Heading -->
-<div id="listaFuncionarios" class="row" style="display:none">
-    <div class="panel panel-info ">
-        <div id="codigoEmpresa" class="panel-heading">Empresa Acc</div>
+<h4 class="page-header">Detalhes de Ferias : @ViewData["modulo_value"]</h4>
 
-        <div class="panel-body">
-            <p>
-                <b>Nome: </b>
-                <text id="nomeEmpresa"> </text>
-            </p>
-            <p>
-                <b>NUIT: </b>
-                <text id="nuitEmpresa"> </text>
-            </p>
+<div class="row placeholders">
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        
+        <li role="presentation" class="active">
+            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+                <span class="fa fa-calendar-o"></span>
+                Mensal 
+            </a>
+        </li>
+        <li role="presentation" >
+            <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                <span class="fa fa-calendar"></span>
+                Calendario
+            </a>
+        </li>
+                
+        <li role="presentation">
+                    
+            <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">
+                <span class="fa fa-tasks"></span>
+            Propriedades</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane" id="profile">
+
+            <div class="col-md-10 placeholder">
+
+                <div class="row">
+                    <div class="table-responsive">
+                        <select id="cbMes" class="form-control" onchange="update_tabela_calendar()">
+                            <option value="1">Janeiro</option>
+                            <option value="2">Fevreiro</option>
+                            <option value="3">Março</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Maio</option>
+                            <option value="6">Junho</option>
+                            <option value="7">Julho</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="container">
+                        <div id="table_calendar" class="table table-bordered"></div>
+                    </div>
+
+                </div>
+
+
+            </div>
+
 
         </div>
 
+        <div role="tabpanel" class="tab-pane active" id="home">
+            <div class="row placeholders">
+                <div class="col-md-9 placeholder">
+
+                    <div id="calendar"></div>
+                </div>
+
+            </div>
+        </div>
+
+        
+                
+                
+        <div role="tabpanel" class="tab-pane" id="settings"></div>
     </div>
-
-    <div class="col-md-5">
-        <table id="tableListaFuncionarios" class="table table-striped">
-            <tr></tr>
-
-        </table>
-    </div>
-
 
 </div>
+  
+

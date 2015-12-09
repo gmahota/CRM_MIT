@@ -30,7 +30,7 @@ namespace MIT.CRM.Services
             return Task.FromResult(0);
         }
 
-        public async Task SendAsync(string from,string from_name, string email, string subject, string message)
+        public async Task SendAsync(string from,string from_name, string to,string cc, string subject, string message)
         {
             // Create the email object first, then add the properties.
             var myMessage = new SendGridMessage();
@@ -39,7 +39,10 @@ namespace MIT.CRM.Services
             myMessage.From = new MailAddress(from, from_name);
 
             // set where we are sending the email
-            myMessage.AddTo(email);
+            myMessage.AddTo(to);
+
+            if (cc != null && cc != "")
+                myMessage.AddCc(cc);
 
             myMessage.Subject = subject;
 

@@ -1,19 +1,28 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
+    var conexao = "";
     // ViewBag.Title = "Home Page";
 }
 
 
-@section scripts {
+<environment names="Development">
+     @{conexao = "http://localhost:8989/signalr";} 
+</environment>
+<environment names="Staging,Production">
+    @{conexao = "http://192.168.3.16:8989/signalr";} 
+</environment>
 
+
+@section scripts {
+    
+    
     
     <!--SignalR script to update the chat page and send messages.-->
     <script>
-        $.connection.hub.url = "http://192.168.3.16:8989/signalr";
 
-            var rhHub = $.connection.rhHub;
+        $.connection.hub.url = "@conexao";
+
+        var rhHub = $.connection.rhHub;
 
         $(function () {
 
@@ -157,8 +166,8 @@
 
             $(".listBtSave").empty();
             $("#btSave" + empresa).append("<a onclick= 'importarDadosEmpresa()'  class='btSave glyphicon glyphicon-floppy-save' style=' color:red'></a>");
-            
-            
+
+
         }
 
         function daListaDepartamentos(empresa) {
@@ -180,7 +189,7 @@
             GravarFuncionarios();
 
         }
-        
+
         function GravarEmpresa() {
 
             var source = {
@@ -207,7 +216,7 @@
 
         function GravarDepartamentos() {
 
-            var apiUrl = location.origin + "/Departamento/Create";
+            var apiUrl = location.origin + "/Departamento/Create_Json";
 
             var row = document.getElementById("tableListaDepartamentos").rows.length;
 
@@ -215,7 +224,7 @@
 
                 var row = $(this);
                 if (i != 0 ) {
-                    
+
                     var td = row.children('td');
 
 
@@ -303,7 +312,6 @@
         
     </div>
 </div>
-
 <div class="row">
     <div id="divlistaEmpresas" class="col-md-8">
         <table id="tabelaEmpresas" class="table table-striped">

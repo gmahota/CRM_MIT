@@ -58,7 +58,7 @@ namespace MIT.CRM.Models
             else
             {
                 //await userManager.AddToRoleAsync(user, adminRole);
-                await userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed"));
+                //await userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed"));
             }
         }
     }

@@ -57,9 +57,8 @@ namespace MIT.CRM.Controllers
             ViewData["responsavelId"] = new SelectList(_context.Users, "Id","UserName");
             return View();
         }
-
-        [HttpPost]
-        public string Create(string empresaId, string departamento, string descricao)
+        
+        public string Create_Json(string empresaId, string departamento, string descricao)
         {
             Departamento dep = new Departamento
             {
@@ -145,7 +144,7 @@ namespace MIT.CRM.Controllers
                         "<p><b>Aplicação:  </b> <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>";
 
 
-                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", user.Email, "Aplicação de Marcação de Ferias -Em Produção / Teste",
+                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", user.Email,"", "Aplicação de Marcação de Ferias -Em Produção / Teste",
                        mensaguem);
                 }
 

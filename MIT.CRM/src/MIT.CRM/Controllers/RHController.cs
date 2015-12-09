@@ -4,21 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Authorization;
+using Microsoft.Data.Entity;
 using System.Security.Claims;
 
 using System.Threading;
 using MIT.CRM.Models;
 using MIT.CRM.Services;
+using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace MIT.CRM.Controllers
 {
-    [Authorize]
+
     public class RHController : Controller
     {
         [FromServices]
-        public ApplicationDbContext _applicationDbContext { get; set; }
+        public ApplicationDbContext _context { get; set; }
 
         private readonly IEmailSender _emailSender;
 
@@ -30,16 +32,37 @@ namespace MIT.CRM.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
-            
+            ApplicationUser user = _context.Users.Include(m => m.departamento)
+                .Include(m => m.funcionario)
+                .Single(c => c.UserName == User.Identity.Name);
+
+            if (user != null && user.departamento != null)
+            {
+                //ViewData["ResponsaveId"] = user;
+                ViewBag.departamento = user.departamento.descricao;
+            }
+            else { ViewBag.departamento = ""; }
+
             return View();
         }
 
-        public async Task<IActionResult>  Details()
+        [HttpGet]
+        public IActionResult ListaFuncionarios()
         {
-            ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
+            var list = _context.Funcionarios.OrderBy(m => m.nome);
 
-            var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
+            List<int> id = new List<int>();
+            foreach (var i in list)
+                id.Add(i.id);
+
+            return Json(id);
+        }
+
+        public async Task<IActionResult> Details()
+        {
+            ApplicationUser user = _context.Users.First(c => c.UserName == User.Identity.Name);
+
+            var list = _context.Funcionarios.Where(f => f.utilizadorId == user.Id);
 
 
             if (list.Count() > 0)
@@ -56,12 +79,13 @@ namespace MIT.CRM.Controllers
 
         }
 
+        [Authorize(Roles = "Director de Area, Administrator")]
         public IActionResult Edit(int id)
         {
             //ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
 
             //var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
-            var list = _applicationDbContext.Funcionarios.Where(f => f.id == id);
+            var list = _context.Funcionarios.Where(f => f.id == id);
 
 
             if (list.Count() > 0)
@@ -82,7 +106,7 @@ namespace MIT.CRM.Controllers
             //ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
 
             //var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
-            var list = _applicationDbContext.Funcionarios.Where(f => f.id == id);
+            var list = _context.Funcionarios.Where(f => f.id == id);
             if (list.Count() > 0)
             {
                 Funcionario funcionario = list.First();
@@ -97,13 +121,23 @@ namespace MIT.CRM.Controllers
         }
 
         [HttpPost]
-        public async Task<string> MarcacaoFerias(Ferias_Itens feria)
+        public async void MarcacaoFerias(short ano, DateTime dataFeria, int funcionarioId, string tipo, string estado,int tipoMarcacao)
         {
-            
-            _applicationDbContext.Ferias_Itens.Add(feria);
-            _applicationDbContext.SaveChanges();
+            Ferias_Itens feria = new Ferias_Itens()
+            {
+                ano = ano,
+                dataFeria = dataFeria,
+                funcionarioId = funcionarioId,
+                tipo = tipo,
+                estado = estado,
+                tipoMarcacao = tipoMarcacao
 
-            ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
+            };
+            
+            _context.Ferias_Itens.Add(feria);
+            _context.SaveChanges();
+
+            ApplicationUser user = _context.Users.First(c => c.UserName == User.Identity.Name);
 
             Historio_Ferias_Item historico = new Historio_Ferias_Item
             {
@@ -113,23 +147,66 @@ namespace MIT.CRM.Controllers
                 data = DateTime.Now
             };
 
-            _applicationDbContext.Historio_Ferias_Item.Add(historico);
-            _applicationDbContext.SaveChanges();
+            _context.Historio_Ferias_Item.Add(historico);
+            _context.SaveChanges();
 
-            return "sucesso";
+            //return Json("sucesso");
+        }
+
+        // POST: Ferias/Delete/5
+        [HttpPost]
+        public async void Delete_Ferias(int id)
+        {
+            try
+            {
+                Ferias_Itens ferias = _context.Ferias_Itens.Single(m => m.id == id);
+                _context.Ferias_Itens.Remove(ferias);
+                _context.SaveChanges();
+            }catch(Exception e) { }
+            
         }
 
         [HttpPost]
         public JsonResult ListaMarcacaoFerias(int funcionarioId, short ano)
         {
-            var listaFerias = _applicationDbContext.Ferias_Itens.Where(f => f.funcionarioId == funcionarioId).OrderBy(x => x.dataFeria);
-            return Json(listaFerias);
+            var listaFerias = _context.Ferias_Itens.Include(f=> f.funcionario)
+                .Where(f => f.funcionarioId == funcionarioId).OrderBy(x => x.dataFeria);
+            return Json(listaFerias,new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
         [HttpPost]
-        public void AprovacaoFerias(Ferias_Itens _feria)
+        public JsonResult listaFuncionarios(string empresa, string departamento)
         {
-            var list = _applicationDbContext.Ferias_Itens.Where(f => 
+            var listaFuncionarios = _context.Funcionarios.OrderBy(m => m.nome);
+
+            return Json(listaFuncionarios, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+        }
+
+        [HttpGet]
+        public JsonResult DataMarcacaoFerias(int funcionarioId, int ano,int mes)
+        {
+            // &&
+            //
+            var ferias = _context.Ferias_Itens.Include(f => f.funcionario).Where(m => m.funcionarioId == funcionarioId &&
+                m.dataFeria.Year == ano && m.dataFeria.Month == mes).OrderBy(m=> m.dataFeria);
+
+            return Json(ferias, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+        }
+
+        [HttpPost]
+        public JsonResult AprovacaoFerias(Ferias_Itens _feria)
+        {
+            Ferias_Itens feria = new Ferias_Itens();
+            var list = _context.Ferias_Itens.Where(f => 
                 f.dataFeria.Date.Equals(_feria.dataFeria.Date) &&
                 f.funcionarioId == _feria.funcionarioId && 
                 f.tipo == _feria.tipo
@@ -137,11 +214,11 @@ namespace MIT.CRM.Controllers
 
             if(list.Count() > 0)
             {
-                Ferias_Itens feria = list.First();
+                feria = list.First();
 
                 feria.estado = _feria.estado;
 
-                ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
+                ApplicationUser user = _context.Users.First(c => c.UserName == User.Identity.Name);
 
                 Historio_Ferias_Item historico = new Historio_Ferias_Item
                 {
@@ -150,10 +227,15 @@ namespace MIT.CRM.Controllers
                     utilizadorId = user.Id,
                     data = DateTime.Now
                 };
-                _applicationDbContext.Ferias_Itens.Update(feria);
-                _applicationDbContext.Historio_Ferias_Item.Add(historico);
-                _applicationDbContext.SaveChanges();
+                _context.Ferias_Itens.Update(feria);
+                _context.Historio_Ferias_Item.Add(historico);
+                _context.SaveChanges();
             }
+
+            return Json(feria, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
     }
 }

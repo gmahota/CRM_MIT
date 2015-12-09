@@ -1,17 +1,25 @@
 ﻿@model Funcionario
 
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
-    // ViewBag.Title = "Home Page";
+    var conexao = "";
 }
 
+
+
+<environment names="Development">
+    @{conexao = "http://localhost:8989/signalr";}
+</environment>
+<environment names="Staging,Production">
+    @{conexao = "http://192.168.3.16:8989/signalr";}
+</environment>
 
 @section scripts {
 
 <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
+        $('#menu_rh_ul').attr('class', 'collapse in');
+        $('#menu_rh_details').attr('class', 'active');
+        
             var tipoFerias = "Dia de Férias";
 	        var eventos = [];
 
@@ -73,27 +81,6 @@
 
 	                    $('#calendar').fullCalendar('renderEvent', evento, true);
 
-
-	                    switch (value.tipoMarcacao) {
-	                        case 1:
-	                            tipoFerias = 'Dia de Férias'
-	                            break;
-
-	                        case 2:
-	                            tipoFerias = 'Meio Dia de Férias'
-	                            break;
-	                        case 3:
-	                            tipoFerias = 'Dia Antecipado'
-
-	                            break;
-	                        case 4:
-	                            tipoFerias = 'Meio Dia Antecipado'
-	                            break;
-
-	                    }
-
-
-	                    console.log(value);
 	                    var day = moment(value.dataFeria);
 	                    console.log(day);
 	                    var d = new Date(value.dataFeria);
@@ -101,7 +88,7 @@
 	                    $("#tabelaMarcacaoFerias").append(
                             "<tr " + attrClass + ">" +
                                 "<td class ='DataM'>" + day.format("DD/MM/YYYY") + "</td> " +
-                                "<td>" + tipoFerias + "</td> " +
+                                "<td>" + value.tipo + "</td> " +
                                 "<td >" + value.estado + "</td> " +
                                 "<td> "+ span +" </td>" +
                             "</tr>"
@@ -123,318 +110,225 @@
 
 </script>
     <!--SignalR script to update the chat page and send messages.-->
-    <script>
-            $.connection.hub.url = "http://192.168.3.16:8989/signalr";
+<script>
+    $.connection.hub.url = "@conexao";
+        
+        var rhHub = $.connection.rhHub;
 
-            var rhHub = $.connection.rhHub;
-
-            $(function () {
+        $(function () {
 
 
 
-                rhHub.client.daInfFeriasFuncionario = function (val) {
-                    console.log(val);
-                    console.log("Connection started! Client - daInfFeriasFuncionario ");
+            rhHub.client.daInfFeriasFuncionario = function (val) {
+                console.log(val);
+                console.log("Connection started! Client - daInfFeriasFuncionario ");
 
-                    $("#txtGozados").text(val.diasJaGozados);
-                    $("#txtPorGozar").text(val.diasPorGozar);
-                    $("#txtMaximoDiaFerias").text(val.diasDireito);
-                };
+                $("#txtGozados").text(val.diasJaGozados);
+                $("#txtPorGozar").text(val.diasPorGozar);
+                $("#txtMaximoDiaFerias").text(val.diasDireito);
+            };
 
-                rhHub.client.daListaEmpresas = function (val) {
-                    console.log("Connection started! client");
-                    console.log(val);
-                    $("#tabelaEmpresas").empty();
+            rhHub.client.daListaEmpresas = function (val) {
+                console.log("Connection started! client");
+                console.log(val);
+                $("#tabelaEmpresas").empty();
 
-                    val.forEach(preencherEmpresas);
+                val.forEach(preencherEmpresas);
 
-                    function preencherEmpresas(value, index, ar) {
+                function preencherEmpresas(value, index, ar) {
 
-                        $("#tabelaEmpresas").append(
-                                "<tr>" +
-                                    "<td> <a href='#' onclick= preencheDadosEmpresa('" + value.codigo + "') >" + value.codigo + "</a></td> " +
-                                    "<td>" + value.nome + "</td> " +
-                                    "<td id='btSave" + value.codigo + "' class = 'listBtSave'> </td>" +
-                                "</tr>"
-                            );
-                    }
-                };
-
-                rhHub.client.daDadosEmpresa = function (val) {
-                    console.log("Connection started! - da dados da empresa "+ val.codigo);
-
-                    $("#divDadosEmpresa").show();
-
-                    $("#codigo").val(val.codigo);
-                    $("#nome").val(val.nome);
-
-                };
-
-                rhHub.client.daListaFuncionarios = function (val) {
-                    console.log("Connection started! client - Lista Funcionarios");
-                    console.log(val);
-                    $("#tableListaFuncionarios").empty();
-
-                    $("#tableListaFuncionarios").append("<tr> <th> Codigo  </th> <th> Funcionario </th> <th> Departamento </th>  <th> Email </th> <th> Nr. Telefone</th> </tr>");
-
-                    val.forEach(preencheFuncionarios);
-
-                    function preencheFuncionarios(value, index, ar){
-
-                        $("#tableListaFuncionarios").append(
+                    $("#tabelaEmpresas").append(
                             "<tr>" +
-                                "<td>" +
-                                    "<a href='#' onclick= daExtratoPdfCliente('" + $("#codigoEmpresa").text() + "','" + value.codigo + "')>" + value.codigo + "</a>" +
-                                "</td> " +
-                                "<td> " + value.nome + " </td> " +
-                                "<td> " + value.departamentoId + "</td>" +
-                                "<td id='email'>" + value.email + " </td>  "+
-                                "<td> " + value.telemovel + "</td>" +
+                                "<td> <a href='#' onclick= preencheDadosEmpresa('" + value.codigo + "') >" + value.codigo + "</a></td> " +
+                                "<td>" + value.nome + "</td> " +
+                                "<td id='btSave" + value.codigo + "' class = 'listBtSave'> </td>" +
                             "</tr>"
                         );
+                }
+            };
+
+            rhHub.client.daDadosEmpresa = function (val) {
+                console.log("Connection started! - da dados da empresa "+ val.codigo);
+
+                $("#divDadosEmpresa").show();
+
+                $("#codigo").val(val.codigo);
+                $("#nome").val(val.nome);
+
+            };
+
+            rhHub.client.daListaFuncionarios = function (val) {
+                console.log("Connection started! client - Lista Funcionarios");
+                console.log(val);
+                $("#tableListaFuncionarios").empty();
+
+                $("#tableListaFuncionarios").append("<tr> <th> Codigo  </th> <th> Funcionario </th> <th> Departamento </th>  <th> Email </th> <th> Nr. Telefone</th> </tr>");
+
+                val.forEach(preencheFuncionarios);
+
+                function preencheFuncionarios(value, index, ar){
+
+                    $("#tableListaFuncionarios").append(
+                        "<tr>" +
+                            "<td>" +
+                                "<a href='#' onclick= daExtratoPdfCliente('" + $("#codigoEmpresa").text() + "','" + value.codigo + "')>" + value.codigo + "</a>" +
+                            "</td> " +
+                            "<td> " + value.nome + " </td> " +
+                            "<td> " + value.departamentoId + "</td>" +
+                            "<td id='email'>" + value.email + " </td>  "+
+                            "<td> " + value.telemovel + "</td>" +
+                        "</tr>"
+                    );
 
 
-                         console.log();
-                    }
-
-
+                        console.log();
                 }
 
-                rhHub.client.daListaDepartamentos = function (val) {
-                    console.log("Connection started! client - Lista Departamentos");
-                    console.log(val);
 
-                    $("#tableListaDepartamentos").empty();
+            }
 
-                    $("#tableListaDepartamentos").append("<tr> <th> Departamento  </th> <th> Descrição </th> </tr>");
+            rhHub.client.daListaDepartamentos = function (val) {
+                console.log("Connection started! client - Lista Departamentos");
+                console.log(val);
 
-                    val.forEach(preencheDepartamento);
+                $("#tableListaDepartamentos").empty();
 
-                    function preencheDepartamento(value, index, ar) {
+                $("#tableListaDepartamentos").append("<tr> <th> Departamento  </th> <th> Descrição </th> </tr>");
 
-                        //var funcionarios = "";
+                val.forEach(preencheDepartamento);
 
-                        //value.contacto.forEach(daContactos)
+                function preencheDepartamento(value, index, ar) {
 
-                        $("#tableListaDepartamentos").append(
-                            "<tr> " +
-                                "<td>" + value.departamento + "</td>" +
-                                "<td>" + value.descricao + "</td>" +
-                            "</tr>"
-                        );
+                    //var funcionarios = "";
 
-                        //function daContactos(value, index, ar){
-                        //    if (value != null) {
-                        //        contacto = contacto + value.Email + "; ";
-                        //    }
+                    //value.contacto.forEach(daContactos)
 
-                        //}
+                    $("#tableListaDepartamentos").append(
+                        "<tr> " +
+                            "<td>" + value.departamento + "</td>" +
+                            "<td>" + value.descricao + "</td>" +
+                        "</tr>"
+                    );
 
-                        //console.log();
-                    }
+                    //function daContactos(value, index, ar){
+                    //    if (value != null) {
+                    //        contacto = contacto + value.Email + "; ";
+                    //    }
 
+                    //}
 
+                    //console.log();
                 }
 
-                $.connection.hub.start().done(function () {
-                    console.log("connection started! server");
 
-                    getFuncInfFerias(2015, '@Model.empresaId', '@Model.codigo');
-                });
+            }
+
+            $.connection.hub.start().done(function () {
+                console.log("connection started! server");
+
+                getFuncInfFerias(2015, '@Model.empresaId', '@Model.codigo');
             });
+        });
 
-            // This optional function html-encodes messages for display in the page.
-            function htmlEncode(value) {
-                var encodedValue = $('<div />').text(value).html();
-                return encodedValue;
-            }
+        // This optional function html-encodes messages for display in the page.
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
 
-            function daFuncionarios(empresa){
-                rhHub.server.daListaFuncionarios(0, empresa, "gmahota", "Accsys2011!", "");
-            }
+        function daFuncionarios(empresa){
+            rhHub.server.daListaFuncionarios(0, empresa, "gmahota", "Accsys2011!", "");
+        }
 
-            function preencheDadosEmpresa(empresa) {
-                console.log("da Lista de Funcionarios da empresa " + empresa);
-                rhHub.server.daDadosEmpresa(0, empresa, "gmahota", "Accsys2011!");
-                daFuncionarios(empresa);
-                daListaDepartamentos(empresa)
+        function preencheDadosEmpresa(empresa) {
+            console.log("da Lista de Funcionarios da empresa " + empresa);
+            rhHub.server.daDadosEmpresa(0, empresa, "gmahota", "Accsys2011!");
+            daFuncionarios(empresa);
+            daListaDepartamentos(empresa)
 
-                $(".listBtSave").empty();
-                $("#btSave" + empresa).append("<a onclick= 'importarDadosEmpresa()'  class='btSave glyphicon glyphicon-floppy-save' style=' color:red'></a>");
+            $(".listBtSave").empty();
+            $("#btSave" + empresa).append("<a onclick= 'importarDadosEmpresa()'  class='btSave glyphicon glyphicon-floppy-save' style=' color:red'></a>");
 
 
-            }
+        }
 
-            function daListaDepartamentos(empresa) {
-                console.log("Connection started! Server - Lista Departamentos");
-                rhHub.server.daListaDepartamentos(0, empresa, "gmahota", "Accsys2011!","");
+        function daListaDepartamentos(empresa) {
+            console.log("Connection started! Server - Lista Departamentos");
+            rhHub.server.daListaDepartamentos(0, empresa, "gmahota", "Accsys2011!","");
 
-            }
+        }
 
-            function daExtratoPdfCliente(empresa,cliente){
-                console.log("da extrato do cliente " + cliente + " da empresa " + empresa);
-                enviaEmail(cliente)
-                rhHub.server.daExtratoPDFCliente(0, empresa, "gmahota", "Accsys2011!", cliente);
-            }
+        function daExtratoPdfCliente(empresa,cliente){
+            console.log("da extrato do cliente " + cliente + " da empresa " + empresa);
+            enviaEmail(cliente)
+            rhHub.server.daExtratoPDFCliente(0, empresa, "gmahota", "Accsys2011!", cliente);
+        }
 
-            function importarDadosEmpresa() {
+        function importarDadosEmpresa() {
 
-                GravarEmpresa();
-                GravarDepartamentos();
-                GravarFuncionarios();
+            GravarEmpresa();
+            GravarDepartamentos();
+            GravarFuncionarios();
 
-            }
+        }
 
-            function getFuncInfFerias(ano,empresa,codigo) {
-                console.log("Connection started! Server - getFuncInfFerias");
-                rhHub.server.daInfFeriasFuncionario(0, empresa, "gmahota", "Accsys2011!", codigo, ano);
-            }
-    </script>
-
-    
-
-    
+        function getFuncInfFerias(ano,empresa,codigo) {
+            console.log("Connection started! Server - getFuncInfFerias");
+            rhHub.server.daInfFeriasFuncionario(0, empresa, "gmahota", "Accsys2011!", codigo, ano);
+        }
+</script>
+  
 }
 
-@*<ul id="listaEmpresas" class="nav breadcrumb">
-    <li id="codigoEmpresa"> ACC </li>
-    <li id="modulo"> R.H </li>
-    <li id="modulo_type"> Ferias Detalhes</li>
-    <li id="modulo_value" class="active">@ViewData["modulo_value"]</li>
-</ul>*@
 
-<div class="row">
-    <div class="col-sm-3 col-md-2 sidebar">
-        <ul class="nav nav-sidebar">
-            <li ><a href="#" >Ferias <span class="sr-only">(current)</span></a>
-                <ul class="nav nav-sidebar">
-                    <li class="active">
-                        <a href="#">Detalhes <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li >
-                        <a href="#">Marcação </a>
-                    </li>
-                </ul>
-            </li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
-        </ul>
-        <ul class="nav nav-sidebar">
-            <li><a href="">Nav item</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-        </ul>
-        <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-        </ul>
-    </div>
-    
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h4 class="page-header">Detalhes de Ferias : @ViewData["modulo_value"]</h4>
+<h4 class="page-header">Detalhes de Ferias : @ViewData["modulo_value"]</h4>
 
-        @*<div class="row placeholders">
-
-            <div class="col-xs-6 col-sm-3 placeholder">
-                <table>
-                    <tr>
-                        <td> Ano de Férias:</td>
-                        <td id="anoFerias" style="padding-right:10px"> <input type="number" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> </td>
-
-                        <td>Dias Marcados: </td>
-                        <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
-
-                        <td>Meios Dias: </td>
-                        <td style="padding-right:10px"> <text id="txtMeiosDiasMarcados">0,0</text> </td>
-
-                        <td>Dias Antecipados: </td>
-                        <td style="padding-right:10px"> <text id="txtDiasAntecipados">0,0</text> </td>
-
-                        <td>Meios Dias Antecipados: </td>
-                        <td style="padding-right:10px"> <text id="txtMeiosDiasAntecipados">0,0</text> </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="col-xs-6 col-sm-3 placeholder">
-                <b>Dados da Ficha do Funcionario</b>
-
-                <table>
-                    <tr>
-                        <td>Máximo de dias Férias: </td>
-                        <td style="padding-right:10px"> <text id="txtMaximoDiaFerias">0,0</text> </td>
-
-                    </tr>
-                    <tr>
-                        <td>Gozados: </td>
-                        <td style="padding-right:10px"> <text id="txtGozados">0,0</text> </td>
-
-                        <td>Por Gozar: </td>
-                        <td style="padding-right:10px"> <text id="txtPorGozar">0,0</text> </td>
-
-                    </tr>
-                </table>
-            </div>
-
-
-        </div>*@
-
-        <div class="row placeholders">
-            <div class="col-md-6 placeholder">
-                <div id="calendar"></div>
-            </div>
-
-            <div class="col-md-4 placeholder">
-
-                <table id="tabelaMarcacaoFerias" class="table">
-
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Tipo</th>
-                            <th>Estado</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-
-                </table>
-
-
-            </div>
-
-        </div>
-
-        <div class="row placeholders">
-            <div class="col-md-5 placeholder" >
-                <a href="@Url.Action("Create", "RH",new { id = Model.id })" type="button" class="btn btn-primary btn-sm " role="button">
-                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                    Editar
-                </a>
-
-                @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
-                {
-                <a href="@Url.Action("Edit", "RH", new { id = Model.id })" type="button" class="btn btn-success btn-sm " role="button">
-                    <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
-                    Aprovação
-                </a>
-
-
-                }
-                <a asp-controller="RH" asp-action="Index" class="btn btn-default btn-sm " role="button">
-                    <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
-                    Voltar
-                </a>
-            </div>
-        </div>
-
-       
+<div class="row placeholders">
+    <div class="col-md-6 placeholder">
+        <div id="calendar"></div>
     </div>
 
+    <div class="col-md-4 placeholder">
 
+        <table id="tabelaMarcacaoFerias" class="table">
+
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+
+        </table>
+
+
+    </div>
+
+</div>
+
+<div class="row placeholders">
+    <div class="col-md-5 placeholder" >
+        <a href="@Url.Action("Create", "RH",new { id = Model.id })" type="button" class="btn btn-primary btn-sm " role="button">
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+            Editar
+        </a>
+
+        @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
+        {
+        <a href="@Url.Action("Edit", "RH", new { id = Model.id })" type="button" class="btn btn-success btn-sm " role="button">
+            <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+            Aprovação
+        </a>
+
+
+        }
+        <a asp-controller="RH" asp-action="Index" class="btn btn-default btn-sm " role="button">
+            <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
+            Voltar
+        </a>
+    </div>
 </div>
 

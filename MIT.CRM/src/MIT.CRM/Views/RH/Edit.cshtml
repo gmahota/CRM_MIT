@@ -1,12 +1,15 @@
 ﻿@model Funcionario
 
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
-// ViewBag.Title = "Home Page";
+    var conexao = "";
 }
 
+<environment names="Development">
+    @{conexao = "http://localhost:8989/signalr";}
+</environment>
+<environment names="Staging,Production">
+    @{conexao = "http://192.168.3.16:8989/signalr";}
+</environment>
 
 @section scripts {
 <script>
@@ -48,7 +51,7 @@
 	                        case "Aprovado":
 	                            color = '#257e4a';
 	                            break;
-	                        case "Reprovado":
+	                        case "Recusado":
 	                            color = "#d9534f";
 
 	                            break;
@@ -68,24 +71,6 @@
 	                    $('#calendar').fullCalendar('renderEvent', evento, true);
 
 
-	                    switch (value.tipoMarcacao) {
-	                        case 1:
-	                            tipoFerias = 'Dia de Férias'
-	                            break;
-
-	                        case 2:
-	                            tipoFerias = 'Meio Dia de Férias'
-	                            break;
-	                        case 3:
-	                            tipoFerias = 'Dia Antecipado'
-
-	                            break;
-	                        case 4:
-	                            tipoFerias = 'Meio Dia Antecipado'
-	                            break;
-
-	                    }
-
 	                    var day = moment(value.dataFeria);
 
 	                    var d = new Date(value.dataFeria);
@@ -94,7 +79,7 @@
 	                        $("#tabelaMarcacaoFerias").append(
                                 "<tr>" +
                                     "<td class ='DataM'>" + day.format("DD/MM/YYYY") + "</td> " +
-                                    "<td>" + tipoFerias + "</td> " +
+                                    "<td>" + value.tipo + "</td> " +
                                     "<td class='txtEstado'>" + value.estado + "</td> " +
                                     "<td style='text-align:center'>" +
                                         "<a onclick='selecionaAprovado(this.parentNode.parentNode.rowIndex)' > " +
@@ -231,9 +216,13 @@
 
                             //window.location = "/RH/Index";
 
-                            if (feria.estado == "Aprovado") {
-                                feria.funcionarioId
-                                feriasPrimavera.push(feria);
+                            if (data.estado == "Aprovado") {
+
+                                data.funcionarioId = '@Model.codigo';
+
+                                fazMarcacaoFerias('@Model.empresaId', '@Model.codigo', 2015, data.dataFeria);
+
+                                //////// Ainda por lincar com ERP
 
                             }
 
@@ -249,10 +238,10 @@
 
             });
 
-            if (feriasPrimavera.length > 0) {
+            @*if (feriasPrimavera.length > 0) {
                 fazMarcacaoFerias($("#ano").val(), '@Model.empresaId', feriasPrimavera);
 
-            }
+            }*@
 
 
         }
@@ -263,7 +252,7 @@
 </script>
     <!--SignalR script to update the chat page and send messages.-->
 <script>
-            $.connection.hub.url = "http://192.168.3.16:8989/signalr";
+    $.connection.hub.url = "@conexao";
 
             var rhHub = $.connection.rhHub;
 
@@ -429,30 +418,21 @@
                 rhHub.server.daInfFeriasFuncionario(0, empresa, "gmahota", "Accsys2011!", codigo, ano);
             }
 
-            function fazMarcacaoFerias(ano, empresa, listFerias) {
+            function fazMarcacaoFerias( empresa, funcionario_Codigo,  ano, dataFeria ) {
                 console.log("Connection started! Server - MarcacaoFerias");
-                rhHub.server.fazMarcacaoFerias(0, empresa, "gmahota", "Accsys2011!", listFerias);
+                rhHub.server.fazMarcacaoFerias(0, empresa, "gmahota", "Accsys2011!", funcionario_Codigo, ano, dataFeria);
             }
-</script>
-
-
-
-    
+</script>   
 }
 
-<ul id="listaEmpresas" class="nav breadcrumb">
-    <li id="codigoEmpresa"> ACC </li>
-    <li id="modulo"> R.H </li>
-    <li id="modulo_type"> Aprovação Ferias </li>
-    <li id="modulo_value" class="active">@ViewData["modulo_value"]</li>
-</ul>
+<h4 class="page-header">Aprovação de Ferias : @ViewData["modulo_value"]</h4>
 
 <div class="row">
     <div class="col-md-8">
         <table>
             <tr>
                 <td> Ano de Férias:</td>
-                <td id="anoFerias" style="padding-right:10px"> <input type="number" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> </td>
+                <td id="anoFerias" style="padding-right:10px"> @DateTime.Now.Year </td>
 
                 <td>Dias Marcados: </td>
                 <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
@@ -521,6 +501,7 @@
                     </th>
                 </tr>
             </thead>
+
             <tbody></tbody>
 
         </table>

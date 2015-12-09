@@ -145,8 +145,6 @@ namespace MIT.CRM.Models
         [ForeignKey("responsavelId")]
         public virtual ApplicationUser responsavel { get; set; }
 
-        
-
         [ForeignKey("empresaId")]
         public virtual Empresa empresa { get; set; }
         

@@ -7,94 +7,65 @@
 
 
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">Departamentos<span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Reports</a></li>
-                <li><a href="#">Analytics</a></li>
-                <li><a href="#">Export</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item</a></li>
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-                <li><a href="">More navigation</a></li>
-            </ul>
-            <ul class="nav nav-sidebar">
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
-            </ul>
-        </div>
-        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h4 class="page-header">Departamento - Editar Dados - @Model.departamento , @Model.descricao  </h4>
+
+<h4 class="page-header">Departamento - Editar Dados - @Model.departamento , @Model.descricao  </h4>
 
 
-            <div class="row placeholders">
-                <div class="col-md-8 placeholder">
+<div class="row placeholders">
+    <div class="col-md-8 placeholder">
                     
 
-                    <form  asp-controller="Departamento" asp-action="Edit"  method="post" asp-route-id="@Model.Id">
-                        <div class="form-horizontal">
+        <form  asp-controller="Departamento" asp-action="Edit"  method="post" asp-route-id="@Model.Id">
+            <div class="form-horizontal">
                            
-                            <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-                            <input type="hidden" asp-for="Id" />
-                            <div class="form-group">
-                                <label asp-for="departamento" class="col-md-2 control-label" ></label>
-                                <div class="col-md-10">
-                                    <input asp-for="departamento" class="form-control" readonly="readonly" />
-                                    <span asp-validation-for="departamento" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="descricao" class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <input asp-for="descricao" class="form-control" />
-                                    <span asp-validation-for="descricao" class="text-danger" />
-                                </div>
-                            </div>
+                <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="departamento" class="col-md-2 control-label" ></label>
+                    <div class="col-md-10">
+                        <input asp-for="departamento" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="departamento" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="descricao" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <input asp-for="descricao" class="form-control" />
+                        <span asp-validation-for="descricao" class="text-danger" />
+                    </div>
+                </div>
                            
 
-                            <div class="form-group">
-                                <label asp-for="empresaId" class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <select asp-for="empresaId" asp-items='ViewBag.empresaId' class="form-control"></select>
-                                    <span asp-validation-for="empresaId" class="text-danger" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label asp-for="responsavelId" class="col-md-2 control-label"></label>
-                                <div class="col-md-10">
-                                    <select asp-for="responsavelId" asp-items='ViewBag.responsavelId' class="form-control"></select>
-                                    <span asp-validation-for="responsavelId" class="text-danger" />
-                                </div>
-                            </div>
-
-
-
-                            <div class="form-group">
-                                <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Save" class="btn btn-default" />
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <div>
-                        <a asp-action="Index">Back to List</a>
+                <div class="form-group">
+                    <label asp-for="empresaId" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="empresaId" asp-items='ViewBag.empresaId' class="form-control"></select>
+                        <span asp-validation-for="empresaId" class="text-danger" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="responsavelId" class="col-md-2 control-label"></label>
+                    <div class="col-md-10">
+                        <select asp-for="responsavelId" asp-items='ViewBag.responsavelId' class="form-control"></select>
+                        <span asp-validation-for="responsavelId" class="text-danger" />
                     </div>
                 </div>
 
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </div>
             </div>
+        </form>
 
-
-
-
+        <div>
+            <a asp-action="Index">Back to List</a>
         </div>
     </div>
+
 </div>
 
 

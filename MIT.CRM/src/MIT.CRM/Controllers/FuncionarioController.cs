@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Data.Entity;
 
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
 using MIT.CRM.Models;
 using MIT.CRM.Services;
+using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,7 +18,7 @@ namespace MIT.CRM.Controllers
     public class FuncionarioController : Controller
     {
         [FromServices]
-        public ApplicationDbContext _applicationDbContext { get; set; }
+        public ApplicationDbContext _context { get; set; }
 
         [FromServices]
         public UserManager<ApplicationUser> _userManager {get;set;}
@@ -48,7 +50,7 @@ namespace MIT.CRM.Controllers
             };
             
 
-            var dep = _applicationDbContext.Departamentos.Where (d => d.descricao == departamento|| " " + d.descricao == departamento);
+            var dep = _context.Departamentos.Where (d => d.descricao == departamento|| " " + d.descricao == departamento);
 
             if (dep.Count() > 0)
                 funcionario.departamentoId = dep.First().Id;
@@ -79,7 +81,7 @@ namespace MIT.CRM.Controllers
                         "<br/> <p> <b> Faça Login e depois seleciona o menu RH e depois Ferias e em seguida o botão editar. </b></p>";
 
 
-                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", funcionario.email, "Aplicação de Marcação de Ferias -Em Produção / Teste",
+                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", funcionario.email,"", "Aplicação de Marcação de Ferias -Em Produção / Teste",
                        mensaguem);
                 }
                 else
@@ -90,11 +92,11 @@ namespace MIT.CRM.Controllers
                     funcionario.utilizadorId = user.Id;
                 }
 
-                var temp = _applicationDbContext.Funcionarios.Where(d => d.codigo == codigo && d.empresaId == empresaId);
+                var temp = _context.Funcionarios.Where(d => d.codigo == codigo && d.empresaId == empresaId);
                 if (temp.Count ()== 0)
                 {
-                    _applicationDbContext.Funcionarios.Add(funcionario);
-                    _applicationDbContext.SaveChanges();
+                    _context.Funcionarios.Add(funcionario);
+                    _context.SaveChanges();
 
                     return "ok";
                 }
@@ -113,6 +115,85 @@ namespace MIT.CRM.Controllers
             }
 
 
+        }
+
+        [HttpPost]
+        public async void sendEmailCriacaoFerias(int funcionarioId,string mensaguem, string titulo)
+        {
+            try
+            {
+                var funcionario = _context.Funcionarios.Include(f => f.utilizador).Single(f => f.id == funcionarioId);
+
+                var dep = _context.Departamentos.Include(d => d.responsavel).Single(d => d.Id == funcionario.departamentoId);
+
+                var user = funcionario.utilizador;
+
+                var callbackUrl = "http://192.168.3.16:5000/RH/Edit/" + funcionarioId;
+
+                string mensaguem1 = " <h4>Caro Responsavel do Departamento " + dep.descricao + " </h4> <br/>" +
+                        "<p>O Funcionario " + funcionario.nome + " vem por meio deste email submeter o seu pedido de ferias nas datas abaixo:</p> <br/>" +
+                         mensaguem + " <br/>" +
+                        "<p>Para aprovação queira porfavor clicar neste linK: <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>";
+
+                if (user == null)
+                {
+                    user = _context.Users.Single(c => c.UserName == User.Identity.Name);
+
+                    await _emailSender.SendAsync("global@mit.co.mz","Não Responder", dep.responsavel.Email, funcionario.email, titulo, mensaguem1);
+                }
+                else
+                {
+                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder", dep.responsavel.Email,user.Email, titulo, mensaguem1);
+                }
+            }
+            catch { }
+            
+
+        }
+
+        [HttpPost]
+        public async void sendEmailAprovacaoFerias(string reponsavel, int funcionarioId, string mensaguem, string titulo)
+        {
+            try
+            {
+                var funcionario = _context.Funcionarios.Include(f => f.utilizador).Single(f => f.id == funcionarioId);
+
+                var dep = _context.Departamentos.Include(d => d.responsavel).Single(d => d.Id == funcionario.departamentoId);
+
+                var user = funcionario.utilizador;
+
+                var callbackUrl = "http://192.168.3.16:5000/RH/Details/" + funcionarioId;
+
+                string mensaguem1 = " <h4>Caro Colaborador " + funcionario.nome + " </h4> <br/>" +
+                        "<p>Abaixo a lista de aprovações/repovações do pedido de ferias: </p> <br/>" +
+                         mensaguem + " <br/>" +
+                        "<p>Detalhes em : <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>";
+
+                if (user == null)
+                {
+                    user = _context.Users.Single(c => c.UserName == User.Identity.Name);
+
+                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder",funcionario.email, dep.responsavel.Email, titulo, mensaguem1);
+                }
+                else
+                {
+                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder", funcionario.email, dep.responsavel.Email, titulo, mensaguem1);
+                }
+            }
+            catch { }
+
+
+        }
+
+        [HttpGet]
+        public JsonResult listaFuncionarios(string empresa,string departamento)
+        {
+            var listaFuncionarios = _context.Funcionarios.Include(f => f.departamento).Include(f=> f.utilizador).OrderBy(m => m.nome);
+            
+            return Json(listaFuncionarios, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
         }
 
         private void addUser()

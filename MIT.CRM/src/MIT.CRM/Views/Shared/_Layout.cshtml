@@ -9,6 +9,8 @@
             
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
             <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" />
+            <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
+            
             <link rel="stylesheet" href="~/css/site.css" />
             <link rel="stylesheet" href="~/css/dashboard.css" />
         </environment>
@@ -16,9 +18,11 @@
             <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
                   asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
                   asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-            <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" asp-fallback-test-property="display" asp-fallback-test-value="none" />
-            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
             
+            <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" asp-fallback-test-property="display" asp-fallback-test-value="none" />
+            <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
+            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+            <link rel="stylesheet" href="~/css/dashboard.css" />
         </environment>
     </head>
     <body>
@@ -35,16 +39,94 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a asp-controller="Home" asp-action="About">About</a></li>
+                        <li><a asp-controller="Home" asp-action="Index"> <i class="fa fa-home"></i> Home</a></li>
+                        
 
-                        @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
+                        @*@if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
                         {
                             <li class="dropdown">
-                                <a data-toggle="dropdown" href="#">  <i class="fa fa-user"></i> RH</a>
+                                <a data-toggle="dropdown" href="#">  <i class="fa fa-users"></i> RH</a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li><a asp-controller="RH" asp-action="Index">Funcionario</a></li>
                                     <li><a asp-controller="RH" asp-action="Details">Ferias</a></li>
+                                </ul>
+
+
+                            </li>
+                        }*@
+
+                        @*@if (User.IsInRole("Administrator"))
+                        {
+                            <li class="dropdown">
+                                <a data-toggle="dropdown" href="#">  <i class="fa fa-bars"></i> Gestão</a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a asp-controller="Gestao" asp-action="Index">Geral</a></li>
+                                    <li><a asp-controller="Departamento" asp-action="Index">Departamentos</a></li>
+                                </ul>
+
+
+                            </li>
+                        }*@
+
+                        @*@if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
+                        {
+                            <li><a asp-controller="Cobrancas" asp-action="Index"> <i class="fa fa-money"></i> Cobranças</a></li>
+                        }*@ 
+                        <li>
+                            
+                            <a asp-controller="Home" asp-action="About"> 
+                                <i class="fa fa-question"></i>
+                                Sobre Aplicação
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Home" asp-action="Contact">
+                                <i class="fa fa-info"></i>
+                                Contacto
+                            </a>
+                        </li>
+                    </ul>
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
+            </div>
+        </div>
+        
+
+        @*<div class="container-fluid">
+            <div class="row">*@
+                <div class="col-sm-3 col-md-2 sidebar">
+
+                    <ul class="nav navbar-nav side-nav">
+                        <li id="menu_dashboard">
+                            <a asp-controller="Home" asp-action="Index">
+                                <i class="fa fa-fw fa-dashboard"></i> Dashboard
+                            </a>
+                        </li>
+
+                        @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
+                        {
+
+                            <li>
+                                <a id="menu_rh" data-toggle="collapse" href="#" data-target="#menu_rh_ul" aria-expanded="true">
+
+                                    <i class="fa fa-users"></i>
+                                    RH
+                                    <i class="fa fa-fw fa-caret-down"></i>
+                                </a>
+
+                                <ul id="menu_rh_ul" class="collapse" aria-expanded="true">
+                                    <li id="menu_rh_index">
+                                        <a asp-controller="RH" asp-action="Index">
+                                            <i class="fa fa-calendar"></i>
+                                            Mapa Ferias
+                                        </a>
+                                    </li>
+                                    <li id="menu_rh_details">
+                                        <a asp-controller="RH" asp-action="Details">
+                                            <i class="fa fa-calendar-check-o"></i>
+                                            Marcação Ferias
+                                        </a>
+                                    </li>
                                 </ul>
 
 
@@ -53,34 +135,44 @@
 
                         @if (User.IsInRole("Administrator"))
                         {
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" href="#">  <i class="fa fa-user"></i> Gestão</a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a asp-controller="Gestao" asp-action="Index">Geral</a></li>
-                                    <li><a asp-controller="Departamento" asp-action="Index">Departamentos</a></li>
+                            <li>
+                                <a data-toggle="collapse" href="#" data-target="#menu_gestao_ul" aria-expanded="true">
+                                    <i class="fa fa-bars"></i>
+                                    Gestão
+                                    <i class="fa fa-fw fa-caret-down"></i>
+                                </a>
+
+                                <ul id="menu_gestao_ul" class="collapse" role="menu">
+                                    <li><a id="menu_gestao_index" asp-controller="Gestao" asp-action="Index">Geral</a></li>
+                                    <li><a id="menu_departamento_index" asp-controller="Departamento" asp-action="Index">Departamentos</a></li>
                                 </ul>
 
 
                             </li>
                         }
+
                         @if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
                         {
-                            <li><a asp-controller="Cobrancas" asp-action="Index">Cobranças</a></li>
-                        } 
+                            <li><a id="menu_cobrancas_index" asp-controller="Cobrancas" asp-action="Index"> <i class="fa fa-money"></i> Cobranças</a></li>
+                        }
 
-                        <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+
                     </ul>
-                    @await Html.PartialAsync("_LoginPartial")
                 </div>
-            </div>
-        </div>
-        <div class="container-fluid">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; 2015 - MIT.CRM</p>
-            </footer>
-        </div>
+                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                    @RenderBody()
+
+                    <hr />
+                    <div class="row placeholders">
+                        <footer>
+                            <p>&copy; 2015 - MIT</p>
+                        </footer>
+                    </div>
+                        
+                </div>
+            @*</div>
+        </div>*@
+      
 
         <environment names="Development">
             <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -89,6 +181,7 @@
             <script src="~/lib/moment/moment.js"></script>
             <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
             <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
+            
             <script src="~/lib/signalr/jquery.signalR.min.js"></script>
 
             <!--Reference the autogenerated SignalR hub script. -->
@@ -108,6 +201,7 @@
             <script src="~/lib/moment/moment.js"></script>
             <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
             <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
+            
             <script src="~/lib/signalr/jquery.signalR.min.js"></script>
 
             <!--Reference the autogenerated SignalR hub script. -->
