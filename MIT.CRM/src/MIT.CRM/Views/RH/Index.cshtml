@@ -36,23 +36,7 @@
             var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
 
             $('#calendar').fullCalendar({
-                right: 'month,agendaWeek,agendaDay',
-                header: {
-                    left: 'today prev,next',
-                    center: 'title',
-                    right: 'timelineDay,timelineTenDay,timelineMonth,timelineYear'
-                },
-                defaultView: 'month',
-                views: {
-                    timelineDay: {
-                        buttonText: ':15 slots',
-                        slotDuration: '00:15'
-                    },
-                    timelineTenDay: {
-                        type: 'timeline',
-                        duration: { days: 10 }
-                    }
-                },
+                
                 lang: 'pt',
                 //defaultView: 'month',
                 editable: false,
@@ -187,7 +171,8 @@
 
     function update_tabela_calendar() {
         var mes = $("#cbMes").val();
-        
+        var ano = $("#ano").val();
+
         var startDate = moment([2015, mes - 1, 1]);
         var endDate = moment(startDate).endOf('month');
 
@@ -206,7 +191,7 @@
 
       
 
-        $.get(location.origin + '/Funcionario/listaFuncionarios/', { empresa:"Acc",departamento:"" }, function (result) {
+        $.get(location.origin + '/Funcionario/listaFuncionarios/', { empresa:"" ,departamento:"" }, function (result) {
 
             $.each(result, function () {
                 var ferias = [];
@@ -238,7 +223,7 @@
                         "</tr>"
                 );
 
-                $.get(location.origin + '/RH/DataMarcacaoFerias', { funcionarioId: this.id, ano: 2015, mes: mes }, function (fer) {
+                $.get(location.origin + '/RH/DataMarcacaoFerias', { funcionarioId: this.id, ano: ano, mes: mes }, function (fer) {
                     ferias = fer;
                     linha = "";
 
@@ -264,13 +249,7 @@
                         
                         $("#" + ferias[j].funcionarioId + "_" + moment(f.dataFeria).date()).css("background-color", color);
                     }
-
-
                 });
-
-                
-
-                
             });
         });
 
@@ -291,16 +270,18 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         
+        
         <li role="presentation" class="active">
-            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
-                <span class="fa fa-calendar-o"></span>
-                Mensal 
-            </a>
-        </li>
-        <li role="presentation" >
             <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
                 <span class="fa fa-calendar"></span>
                 Calendario
+            </a>
+        </li>
+
+        <li role="presentation">
+            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+                <span class="fa fa-calendar-o"></span>
+                Mensal
             </a>
         </li>
                 
@@ -319,22 +300,39 @@
             <div class="col-md-10 placeholder">
 
                 <div class="row">
-                    <div class="table-responsive">
-                        <select id="cbMes" class="form-control" onchange="update_tabela_calendar()">
-                            <option value="1">Janeiro</option>
-                            <option value="2">Fevreiro</option>
-                            <option value="3">Março</option>
-                            <option value="4">Abril</option>
-                            <option value="5">Maio</option>
-                            <option value="6">Junho</option>
-                            <option value="7">Julho</option>
-                            <option value="8">Agosto</option>
-                            <option value="9">Setembro</option>
-                            <option value="10">Outubro</option>
-                            <option value="11">Novembro</option>
-                            <option value="12">Dezembro</option>
-                        </select>
-                    </div>
+
+                    <table>
+                        <tr>
+                            <td> Ano de Férias:</td>
+                            <td id="anoFerias" style="padding-right:10px">
+                                <input type="number" id="ano" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" />
+                            </td>
+
+                            <td>
+                                <div class="table-responsive">
+                                    <select id="cbMes" class="form-control" onchange="update_tabela_calendar()">
+                                        <option value="1">Janeiro</option>
+                                        <option value="2">Fevreiro</option>
+                                        <option value="3">Março</option>
+                                        <option value="4">Abril</option>
+                                        <option value="5">Maio</option>
+                                        <option value="6">Junho</option>
+                                        <option value="7">Julho</option>
+                                        <option value="8">Agosto</option>
+                                        <option value="9">Setembro</option>
+                                        <option value="10">Outubro</option>
+                                        <option value="11">Novembro</option>
+                                        <option value="12">Dezembro</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+
+
+
+                    
                 </div>
 
                 <div class="row">

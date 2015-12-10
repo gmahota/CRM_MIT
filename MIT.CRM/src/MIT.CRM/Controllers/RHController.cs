@@ -79,26 +79,33 @@ namespace MIT.CRM.Controllers
 
         }
 
-        [Authorize(Roles = "Director de Area, Administrator")]
         public IActionResult Edit(int id)
         {
-            //ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
+            ApplicationUser user = _context.Users.First(c => c.UserName == User.Identity.Name);
 
-            //var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
-            var list = _context.Funcionarios.Where(f => f.id == id);
-
-
-            if (list.Count() > 0)
+            Funcionario funcionario = _context.Funcionarios.Include(f => f.departamento).Single(f => f.id == id);
+            
+            if (funcionario != null)
             {
-                Funcionario funcionario = list.First();
-                ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
-                return View(funcionario);
+
+                if(user.Id == funcionario.departamento.responsavelId)
+                {
+                    ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
+                    return View(funcionario);
+                }
+                else
+                {
+                    ViewData["Message"] = String.Format("O utilizador {0}, não é reponsavel pelo departamento {1} ", User.Identity.Name,funcionario.departamento.descricao);
+
+                }
+
             }
             else
             {
                 ViewData["Message"] = String.Format("Não existe nenhum funcionario associado ao Utilizador {0}, por favor contacte o administrador do sistema", User.Identity.Name);
-                return View("Error");
+                
             }
+            return View("Error");
         }
 
         public IActionResult Create(int id)

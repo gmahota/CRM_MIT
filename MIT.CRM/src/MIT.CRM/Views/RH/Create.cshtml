@@ -269,17 +269,11 @@
         }
 
         function submeterPedido() {
-
-
             var ferias = [];
-
-
 
             var row = document.getElementById("tabelaMarcacaoFerias").rows.length;
 
-
             $('#tabelaMarcacaoFerias tr').each(function (i, row) {
-
                 var row = $(this);
                 if (i != 0) {
 
@@ -364,7 +358,6 @@
 
                     window.location = "/RH/Details/"+'@Model.id';
                 }
-
             });
 
 
@@ -582,7 +575,9 @@
                 <table>
                     <tr>
                         <td> Ano de Férias:</td>
-                        <td id="anoFerias" style="padding-right:10px"> <input type="number" id="ano" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> </td>
+                        <td id="anoFerias" style="padding-right:10px"> 
+                            <input type="number" id="ano" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> 
+                        </td>
 
                         <td>Dias Marcados: </td>
                         <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
@@ -659,11 +654,11 @@
     <div class="col-md-5 placeholder">
         <button type="button" class="btn btn-success btn-sm " role="button"
                 data-toggle="modal" data-target="#myModal">
-            <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+            <span class="fa fa-save" aria-hidden="true"></span>
             Submeter
         </button>
         <a href="@Url.Action("Index", "RH",new { id = Model.id })" class="btn btn-default btn-sm " role="button">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            <span class="fa fa-remove" aria-hidden="true"></span>
             Cancelar
         </a>
     </div>
@@ -690,8 +685,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="submeterPedido()">Submeter O Pedido</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+                    <button type="button" class="btn btn-primary" onclick="submeterPedido()">Sim</button>
                 </div>
             </div>
         </div>

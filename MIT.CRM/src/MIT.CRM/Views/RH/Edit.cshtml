@@ -83,12 +83,12 @@
                                     "<td class='txtEstado'>" + value.estado + "</td> " +
                                     "<td style='text-align:center'>" +
                                         "<a onclick='selecionaAprovado(this.parentNode.parentNode.rowIndex)' > " +
-                                            "<span class='btnAprovado glyphicon glyphicon-thumbs-up btn btn-default'  style='font-size: 20px; ' aria-hidden='true'></span>" +
+                                            "<span class='btnAprovado fa fa-thumbs-o-up btn btn-default'  style='font-size: 20px; ' aria-hidden='true'></span>" +
                                          "</a>" +
                                     "</td>" +
                                     "<td style='text-align:center'>" +
                                          "<a onclick='selecionaReprovado(this.parentNode.parentNode.rowIndex)'> " +
-                                            "<span class='btnReprovado glyphicon glyphicon-thumbs-down btn btn-default '  style='font-size: 20px; ' aria-hidden='true'></span>" +
+                                            "<span class='btnReprovado fa fa-thumbs-o-down btn btn-default '  style='font-size: 20px; ' aria-hidden='true'></span>" +
                                          "</a>" +
 
                                     "</td>" +
@@ -121,11 +121,11 @@
 
                 $('#selTodosAprovados').prop('checked', false);
                 //$('.btnReprovado').prop('checked', false);
-                $('.btnReprovado').attr('class', 'btnReprovado glyphicon glyphicon-thumbs-down btn btn-default active');
-                $('.btnAprovado').attr('class', 'btnAprovado glyphicon glyphicon-thumbs-up btn btn-default');
+                $('.btnReprovado').attr('class', 'btnReprovado fa fa-thumbs-o-down btn btn-default active');
+                $('.btnAprovado').attr('class', 'btnAprovado fa fa-thumbs-o-up btn btn-default');
 
             } else {
-                $('.btnReprovado').attr('class', 'btnReprovado glyphicon glyphicon-thumbs-down btn btn-default');
+                $('.btnReprovado').attr('class', 'btnReprovado fa fa-thumbs-o-down btn btn-default');
                 $('.txtEstado').text("Por Aprovar");
 
             }
@@ -137,11 +137,11 @@
                 $('.txtEstado').text("Aprovado");
                 $('#selTodosReprovados').prop('checked', false);
                 //$('.btnReprovado').prop('checked', false);
-                $('.btnAprovado').attr('class', 'btnAprovado glyphicon glyphicon-thumbs-up btn btn-default active');
-                $('.btnReprovado').attr('class', 'btnReprovado glyphicon glyphicon-thumbs-down btn btn-default');
+                $('.btnAprovado').attr('class', 'btnAprovado fa fa-thumbs-o-up btn btn-default active');
+                $('.btnReprovado').attr('class', 'btnReprovado fa fa-thumbs-o-down btn btn-default');
 
             } else {
-                $('.btnAprovado').attr('class', 'btnAprovado glyphicon glyphicon-thumbs-up btn btn-default');
+                $('.btnAprovado').attr('class', 'btnAprovado fa fa-thumbs-o-up btn btn-default');
                 $('.txtEstado').text("Por Aprovar");
             }
         }
@@ -490,14 +490,14 @@
 
 
                         <input id="selTodosAprovados" type="checkbox" style="align-content:center" onchange="selecionarTodosAprovados()">
-                        <span class='glyphicon glyphicon-thumbs-up' style='font-size: 12px; align-content:center ' aria-hidden='true' 
+                        <span class='fa fa-thumbs-o-up' style='font-size: 12px; align-content:center ' aria-hidden='true' 
                               ></span>
                     </th>
                     
                     <th style="text-align:center" data-toggle="tooltip" data-placement="top" title="Reprovar Todos">
                         
                         <input id="selTodosReprovados" type="checkbox" onchange="selecionarTodosReprovados()">
-                        <span class='glyphicon glyphicon-thumbs-down ' style='font-size: 12px; ' aria-hidden='true'></span>
+                        <span class='fa fa-thumbs-o-down ' style='font-size: 12px; ' aria-hidden='true'></span>
                     </th>
                 </tr>
             </thead>
@@ -516,12 +516,12 @@
         
         <button type="button" class="btn btn-success btn-lg " role="button" onclick="aprovarPedidos()"
                 data-toggle="modal" data-target="#myModal">
-            <span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+            <span class="fa fa-save " aria-hidden="true"></span>
             Submeter
         </button>
 
         <a href="@Url.Action("Index", "RH",new { id = Model.id })" class="btn btn-default btn-lg " role="button">
-            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            <span class="fa fa-remove" aria-hidden="true"></span>
             Cancelar
         </a>
     </div>
