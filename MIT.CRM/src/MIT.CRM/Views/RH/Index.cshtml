@@ -155,19 +155,18 @@
 <script>
 
     $(function () { // document ready
-        var mes = $("#cbMes").select(12);
+
+        
+        $("#cbMes").select ('@DateTime.Now.Month');
+        $("#ano").val('@DateTime.Now.Year');
+
         $('#menu_rh_ul').attr('class', 'collapse in');
         $('#menu_rh_index').attr('class', 'active');
 
-        $('#calendar2').fullCalendar({
-            right: 'month,agendaWeek,agendaDay',
-            lang: 'pt',
-            defaultView: 'month',
-            editable: false,
-           }
-        );
 
-	});
+    });
+
+    
 
     function update_tabela_calendar() {
         var mes = $("#cbMes").val();
@@ -310,7 +309,7 @@
 
                             <td>
                                 <div class="table-responsive">
-                                    <select id="cbMes" class="form-control" onchange="update_tabela_calendar()">
+                                    <select id="cbMes" class="form-control" onchange="">
                                         <option value="1">Janeiro</option>
                                         <option value="2">Fevreiro</option>
                                         <option value="3">Março</option>
@@ -326,6 +325,7 @@
                                     </select>
                                 </div>
                             </td>
+                            <td> <button onclick="update_tabela_calendar()"> <span class="fa fa-search"></span> </button> </td>
                         </tr>
                     </table>
 
