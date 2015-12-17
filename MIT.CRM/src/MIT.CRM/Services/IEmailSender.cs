@@ -8,6 +8,6 @@ namespace MIT.CRM.Services
     public interface IEmailSender
     {
         Task SendEmailAsync(string email, string subject, string message);
-        Task SendAsync(string from, string from_name, string to, string cc, string subject, string messag);
+        Task SendAsync(string from, string from_name, string to, string cc, string subject, string messageBody);
     }
 }

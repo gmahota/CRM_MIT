@@ -26,7 +26,8 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
     "Microsoft.AspNet.SignalR.Client": "2.2.0",
-    "Sendgrid": "6.3.0"
+    "MimeKit": "1.3.0-beta1",
+    "MailKit": "1.3.0-beta1"
   },
 
   "commands": {
@@ -35,7 +36,8 @@
   },
 
   "frameworks": {
-    "dnx451": { }
+    "dnx451": { },
+    "dnxcore50":{}
   },
 
   "exclude": [
