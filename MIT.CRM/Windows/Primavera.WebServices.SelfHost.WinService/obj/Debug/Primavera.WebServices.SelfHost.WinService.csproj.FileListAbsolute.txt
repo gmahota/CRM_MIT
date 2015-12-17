@@ -1,0 +1,16 @@
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.WebServices.SelfHost.WinService.exe.config
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.WebServices.SelfHost.WinService.exe
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.WebServices.SelfHost.WinService.pdb
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.WebServices.Services.dll
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.MotoresPrimavera.dll
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.Data.dll
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.WebServices.Services.pdb
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.MotoresPrimavera.pdb
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\bin\Debug\Primavera.Data.pdb
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\obj\Debug\Primavera.WebServices.SelfHost.WinService.csprojResolveAssemblyReference.cache
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\obj\Debug\Primavera.WebServices.SelfHost.WinService.ProjectInstaller.resources
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\obj\Debug\Primavera.WebServices.SelfHost.WinService.Properties.Resources.resources
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\obj\Debug\Primavera.WebServices.SelfHost.WinService.Service1.resources
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\obj\Debug\Primavera.WebServices.SelfHost.WinService.csproj.GenerateResource.Cache
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\obj\Debug\Primavera.WebServices.SelfHost.WinService.exe
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService\obj\Debug\Primavera.WebServices.SelfHost.WinService.pdb

@@ -1,0 +1,104 @@
+@model MIT.CRM.Models.Ferias_Itens
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<form asp-action="Edit">
+    <div class="form-horizontal">
+        <h4>Ferias_Itens</h4>
+        <hr />
+        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="id" />
+        <div class="form-group">
+            <label asp-for="ano" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ano" class="form-control" />
+                <span asp-validation-for="ano" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="dataFeria" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="dataFeria" class="form-control" />
+                <span asp-validation-for="dataFeria" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="estado" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="estado" class="form-control" />
+                <span asp-validation-for="estado" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="estadoGozo" />
+                    <label asp-for="estadoGozo"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="feriasId" class="control-label col-md-2">feriasId</label>
+            <div class="col-md-10">
+                <select asp-for="feriasId" class="form-control" />
+                <span asp-validation-for="feriasId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="funcionarioId" class="control-label col-md-2">funcionarioId</label>
+            <div class="col-md-10">
+                <select asp-for="funcionarioId" class="form-control" />
+                <span asp-validation-for="funcionarioId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="originouFalta" />
+                    <label asp-for="originouFalta"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="originouFaltaSubAlim" />
+                    <label asp-for="originouFaltaSubAlim"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="tipo" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="tipo" class="form-control" />
+                <span asp-validation-for="tipo" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="tipoMarcacao" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="tipoMarcacao" class="form-control" />
+                <span asp-validation-for="tipoMarcacao" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

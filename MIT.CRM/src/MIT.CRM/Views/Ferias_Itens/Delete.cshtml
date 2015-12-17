@@ -1,0 +1,70 @@
+@model MIT.CRM.Models.Ferias_Itens
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Ferias_Itens</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ano)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ano)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.dataFeria)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dataFeria)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.estadoGozo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.estadoGozo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.originouFalta)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.originouFalta)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.originouFaltaSubAlim)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.originouFaltaSubAlim)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.tipo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.tipo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.tipoMarcacao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.tipoMarcacao)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

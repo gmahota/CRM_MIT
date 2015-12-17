@@ -1,0 +1,66 @@
+@model MIT.CRM.Models.Ferias_Itens
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Ferias_Itens</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ano)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ano)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.dataFeria)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dataFeria)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.estadoGozo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.estadoGozo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.originouFalta)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.originouFalta)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.originouFaltaSubAlim)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.originouFaltaSubAlim)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.tipo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.tipo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.tipoMarcacao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.tipoMarcacao)
+        </dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>

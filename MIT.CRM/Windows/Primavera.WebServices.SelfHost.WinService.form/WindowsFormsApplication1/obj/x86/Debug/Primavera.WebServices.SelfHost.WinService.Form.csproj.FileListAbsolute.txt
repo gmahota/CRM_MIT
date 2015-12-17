@@ -1,0 +1,6 @@
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService.form\WindowsFormsApplication1\obj\x86\Debug\Primavera.WebServices.SelfHost.WinService.Form.csprojResolveAssemblyReference.cache
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService.form\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.SelfHostingServiceForm.resources
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService.form\WindowsFormsApplication1\obj\x86\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService.form\WindowsFormsApplication1\obj\x86\Debug\Primavera.WebServices.SelfHost.WinService.Form.csproj.GenerateResource.Cache
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService.form\WindowsFormsApplication1\obj\x86\Debug\SelfServiceFormController.exe
+C:\Users\gmahota\Source\Repos\Primavera_TranscomV1\primavera-erp\Primavera\Primavera.WebServices.SelfHost.WinService.form\WindowsFormsApplication1\obj\x86\Debug\SelfServiceFormController.pdb
