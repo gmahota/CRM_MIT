@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using MIT.CRM.Models;
 using MIT.CRM.Services;
 using MIT.CRM.Models.Helper;
+using System.Globalization;
 
 namespace MIT.CRM
 {
@@ -19,6 +20,14 @@ namespace MIT.CRM
     {
         public Startup(IHostingEnvironment env)
         {
+
+
+            //The culture value determines the results of culture-dependent functions, such as the date, number, and currency (NIS symbol)
+            //System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("pt-PT");
+            //System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo("he-il");
+            CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("pt-PT");
+            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("pt-PT");
+            
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -31,7 +40,9 @@ namespace MIT.CRM
             }
 
             builder.AddEnvironmentVariables();
+            
             Configuration = builder.Build();
+            
         }
 
         public IConfigurationRoot Configuration { get; set; }
@@ -51,11 +62,19 @@ namespace MIT.CRM
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc();
+            services.AddLocalization(options => options.ResourcesPath = "resources");
+
+            services.AddMvc()
+                .AddViewLocalization(options => options.ResourcesPath = "Resources")
+                .AddDataAnnotationsLocalization();
+
+            //services.AddScoped<LanguageActionFilter>();
+
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,6 +111,8 @@ namespace MIT.CRM
             app.UseStaticFiles();
 
             app.UseIdentity();
+
+           
 
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 

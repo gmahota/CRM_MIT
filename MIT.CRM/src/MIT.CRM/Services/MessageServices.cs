@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.OptionsModel;
 using MIT.CRM.Models.Helper;
 using MimeKit;
-
 using MailKit.Net.Smtp;
 using MailKit;
-
+using System.IO;
+using System.Net;
+using System;
 
 namespace MIT.CRM.Services
 {
@@ -29,103 +30,81 @@ namespace MIT.CRM.Services
             return Task.FromResult(0);
         }
 
-        public async Task SendAsync(string from,string from_name, string to,string cc, string subject, string messageBody)
+        public async Task SendAsync(string from,string from_name, string to,string cc, string subject, string messageBody, string host)
         {
+            
+
+            System.Text.Encoding utf_8 = System.Text.Encoding.UTF8;
+
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("gmahota", "gmahota@mit.co.mz"));
-            message.To.Add(new MailboxAddress("Guimaraes", "guimaraesmahota@gmail.com"));
-            message.Subject = "How you doin?";
+            var e_from = new MailboxAddress(from, from_name);
+            e_from.Encoding = System.Text.Encoding.GetEncoding("ISO-8859-1");
+            
+            message.From.Add(e_from);
+
+            var e_to = new MailboxAddress("", to);
+            e_to.Encoding = System.Text.Encoding.GetEncoding("ISO-8859-1");
+
+            message.To.Add(e_to);
+
+            if (cc != null && cc != "" )
+            {
+                message.Cc.Add(new MailboxAddress("", cc));
+            }
+
+            message.Subject = subject;
+          
 
             var builder = new BodyBuilder();
 
-            // Set the plain-text version of the message text
-            builder.TextBody = @"Hey Alice,
+            //Microsoft.Extensions.PlatformAbstractions.IApplicationEnvironment
+            //var app_environment = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Runtime.RuntimePath;//
+            var app_environment = host;
 
-                What are you up to this weekend? Monica is throwing one of her parties on
-                Saturday and I was hoping you could make it.
+            var filename = "http://"+ app_environment + "/templates/Mail/Signature.html";
 
-                Will you be my +1?
-
-                -- Joey
-                ";
-
-            // In order to reference sexy-pose.jpg from the html text, we'll need to add it 
-            // to builder.LinkedResources and then use its Content-Id value in the img src.
-            //MimeEntity image = builder.LinkedResources.Add(@"C:\Users\gmahota\Pictures\frontimageAccSys.jpg");
-
-            // Set the html version of the message text
-            //builder.HtmlBody = string.Format(@"<p>Hey Alice,<br>
-            //    <p>What are you up to this weekend? Monica is throwing one of her parties on
-            //    Saturday and I was hoping you could make it.<br>
-            //    <p>Will you be my +1?<br>
-            //    <p>-- Joey<br>
-            //    <center><img src=""cid:{0}""></center>", image.ContentId);
+            WebClient clients = new WebClient();
+            
+            string mailboy = clients.DownloadString(new Uri(filename));
 
 
-            builder.HtmlBody = string.Format(@"<p>Hey Alice,<br>
-                <p>What are you up to this weekend? Monica is throwing one of her parties on
-                Saturday and I was hoping you could make it.<br>
-                <p>Will you be my +1?<br>
-                <p>-- Joey<br>
-                <center><img src=""cid:{0}""></center>");
+            //var mailboy = System.IO.File.ReadAllText(filename);
+            var image_source = new Uri("http://" + app_environment + "/images/M32G2.png");
 
-            // We may also want to attach a calendar event for Monica's party...
-            //builder.Attachments.Add(@"C:\Users\Joey\Documents\party.ics");
+            
+            var image = builder.LinkedResources.Add("M32G2.png", clients.DownloadData(image_source)) ;
+            
+            image.ContentId = Path.GetFileName("M32G2.png");
 
-            // Now we just need to set the message body and we're done
+
+            //imagepath= app_environment.ApplicationBasePath + 
+
+            mailboy = mailboy.Replace("#imageLogo#", image.ContentId);
+            mailboy = mailboy.Replace("#body#", messageBody);
+            
+            
+            builder.HtmlBody = mailboy;
+            //message.Body.ContentLocation = "pt-PT";
+            //builder.HtmlBody = messageBody;
+
+
+
+            //builder.HtmlBody = string.Format(@"<p>Hey!</p><img src=""cid:{0}"">", image.ContentId);
+           
             message.Body = builder.ToMessageBody();
-
-
+            
             using (var client = new SmtpClient())
             {
-                client.Connect("smtp.friends.com", 587, false);
+               client.Connect("smtp.gmail.com", 587, false);
 
                 // Note: only needed if the SMTP server requires authentication
-                client.Authenticate("joey", "password");
-
+                client.Authenticate("gmahota@mit.co.mz", "Agnes27012015");
+                
                 client.Send(message);
                 client.Disconnect(true);
             }
+            
 
-
-
-
-
-
-
-            // Create the email object first, then add the properties.
-            //var myMessage = new SendGridMessage();
-
-            //// this defines email and name of the sender
-            //myMessage.From = new MailAddress(from, from_name);
-
-            //// set where we are sending the email
-            //myMessage.AddTo(to);
-
-            //if (cc != null && cc != "")
-            //    myMessage.AddCc(cc);
-
-            //myMessage.Subject = subject;
-
-            //// make sure all your messages are formatted as HTML
-            //myMessage.Html = message;
-            //myMessage.Text = message;
-
-
-
-            //myMessage.EnableTemplateEngine("4ea35a49-5415-4d02-81e3-8adc54650b31");
-
-            //// Create credentials, specifying your SendGrid username and password.
-            //var credentials = new NetworkCredential (
-            //    "gmahota",
-            //    "Accsys2011!"
-            //);
-
-            //// Create an Web transport for sending email.
-            //var transportWeb = new Web(credentials);
-
-            //// Send the email.
-            //await transportWeb.DeliverAsync(myMessage);
         }
 
         public Task SendSmsAsync(string number, string message)

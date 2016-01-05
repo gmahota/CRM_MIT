@@ -209,13 +209,12 @@
                     $.ajax({
                         type: "POST",
                         dataType: "json",
-
+                        async: true,
                         url: apiUrl,
                         data: feria,
                         success: function (data) {
 
-                            //window.location = "/RH/Index";
-
+                            
                             if (data.estado == "Aprovado") {
 
                                 data.funcionarioId = '@Model.codigo';
@@ -237,6 +236,9 @@
 
 
             });
+
+            window.location = "/RH/Index";
+
 
             @*if (feriasPrimavera.length > 0) {
                 fazMarcacaoFerias($("#ano").val(), '@Model.empresaId', feriasPrimavera);

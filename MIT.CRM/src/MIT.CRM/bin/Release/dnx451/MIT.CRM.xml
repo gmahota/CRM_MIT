@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MIT.CRM</name>
+    </assembly>
+    <members>
+        <member name="M:MIT.CRM.Controllers.RoleController.Index">
+            <summary>
+            Get All Roles
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MIT.CRM.Controllers.RoleController.Create">
+            <summary>
+            Create  a New role
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:MIT.CRM.Controllers.RoleController.Create(Microsoft.AspNet.Identity.EntityFramework.IdentityRole)">
+            <summary>
+            Create a New Role
+            </summary>
+            <param name="Role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:MIT.CRM.Models.SampleData.CreateAdminUser(System.IServiceProvider)">
+            <summary>
+            Creates a store manager user who can manage the inventory.
+            </summary>
+            <param name="serviceProvider"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

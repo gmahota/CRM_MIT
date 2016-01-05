@@ -2,7 +2,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h4 class="page-header">Dashboard - Pagina Home em Contrução</h4>
+<h4 class="page-header">Pagina Inicial</h4>
 
 @section scripts {
 
@@ -10,7 +10,7 @@
 
         $(function () { // document ready
 
-            $('#menu_dashboard').attr('class', 'active');
+            $('#menu_home').attr('class', 'active');
 
 
 	    });
@@ -18,27 +18,31 @@
     </script>
 }
 
+<div class="row placeholders">
 
-@{
-    List<Empresa> list = ViewBag.empresas;
-    if (list.Count() > 0)
-    {
-        <div class="row placeholders">
-            @{
-                foreach (Empresa item in list)
-                {
-                    <div class="col-xs-6 col-sm-3 placeholder">
-                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive" alt="Generic placeholder thumbnail">
-                        <h4>@item.codigo</h4>
-                        <span class="text-muted">@item.nome</span>
-                    </div>
+    <center>
+        <img src="~/images/cartão-de-natal-m32.jpg" />
+    </center>
+    @*@{
+            List<Empresa> list = ViewBag.empresas;
+            if (list.Count() > 0)
+            {
+                <div class="row placeholders">
+                    @{
+                        foreach (Empresa item in list)
+                        {
+                            <div class="col-xs-6 col-sm-3 placeholder">
+                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive" alt="Generic placeholder thumbnail">
+                                <h4>@item.codigo</h4>
+                                <span class="text-muted">@item.nome</span>
+                            </div>
 
-                }
+                        }
+                    }
+
+
+                </div>
+
             }
-            
-            
-        </div>
-
-    }
-}
-
+        }*@
+</div>

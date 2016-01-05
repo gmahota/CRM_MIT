@@ -99,9 +99,22 @@
                     <ul class="nav navbar-nav side-nav">
                         <li id="menu_dashboard">
                             <a asp-controller="Home" asp-action="Index">
-                                <i class="fa fa-fw fa-dashboard"></i> Dashboard
+                                <i class="fa fa-fw fa-home"></i> Pagina Inicial
                             </a>
                         </li>
+
+                        
+                        @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area")|| User.IsInRole("Cobranças"))
+                        {
+                            <li id="menu_home">
+                                <a asp-controller="Home" asp-action="Dashboard">
+                                    <i class="fa fa-fw fa-dashboard"></i> Dashboard
+                                </a>
+                            </li>
+                        }
+
+
+
 
                         @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
                         {

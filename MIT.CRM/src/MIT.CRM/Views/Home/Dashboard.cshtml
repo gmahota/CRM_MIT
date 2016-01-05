@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h4 class="page-header">Pagina Inicial</h4>
+
+@section scripts {
+
+    <script>
+
+        $(function () { // document ready
+
+            $('#menu_dashboard').attr('class', 'active');
+
+
+	    });
+
+    </script>
+}
+
+*@{
+            List<Empresa> list = ViewBag.empresas;
+            if (list.Count() > 0)
+            {
+        <div class="row placeholders">
+            @{
+                foreach (Empresa item in list)
+                {
+                    <div class="col-xs-6 col-sm-3 placeholder">
+                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive" alt="Generic placeholder thumbnail">
+                        <h4>@item.codigo</h4>
+                        <span class="text-muted">@item.nome</span>
+                    </div>
+
+                }
+            }
+
+
+        </div>
+
+                }
+}

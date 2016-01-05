@@ -58,7 +58,7 @@
                                 "<td class ='DataM'>" + date.format("L") + "</td> " +
                                 "<td>" +  tipoFerias + "</td> " +
                                 "<td>" + "" + "</td> " +
-                                "<td> <a onclick='removeLinhaMarcacaoFerias(this.parentNode.parentNode.rowIndex,tipoFerias)' > " + "<span class='glyphicon glyphicon-remove-circle' aria-hidden='true' style='font-size: 18px; '></span> </a></td>" +
+                                "<td> <a onclick='removeLinhaMarcacaoFerias(this.parentNode.parentNode.rowIndex,tipoFerias)' > " + "<span class='fa fa-remove' aria-hidden='true' style='font-size: 18px; '></span> </a></td>" +
                             "</tr>"
                         );
 
@@ -356,8 +356,10 @@
 
 
 
-                    window.location = "/RH/Details/"+'@Model.id';
+                    
                 }
+
+                window.location = "/RH/Details/" + '@Model.id';
             });
 
 
@@ -503,7 +505,7 @@
                 daListaDepartamentos(empresa)
 
                 $(".listBtSave").empty();
-                $("#btSave" + empresa).append("<a onclick= 'importarDadosEmpresa()'  class='btSave glyphicon glyphicon-floppy-save' style=' color:red'></a>");
+                $("#btSave" + empresa).append("<a onclick='importarDadosEmpresa()' class='btSave fa fa-floppy-o' style='color:red'></a>");
 
 
             }
@@ -537,6 +539,8 @@
 
 
 <h4 class="page-header">Marcação de Ferias : @ViewData["modulo_value"]</h4>
+
+
 
 <div class="row placeholders">
 

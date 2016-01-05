@@ -6,6 +6,9 @@ using MIT.CRM.Models;
 using System;
 using MIT.CRM.Services;
 using System.Threading.Tasks;
+using MIT.CRM.Models.Helper;
+using System.Globalization;
+using System.Text;
 
 namespace MIT.CRM.Controllers
 {
@@ -128,12 +131,16 @@ namespace MIT.CRM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Departamento dep )
         {
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("pt-PT");
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo("pt-PT");
+            
+
             if (ModelState.IsValid)
             {
                 _context.Update(dep);
                 _context.SaveChanges();
 
-                var callbackUrl = "http://192.168.3.16:5000/";
+                var callbackUrl = "http://ferias.mit.co.mz:5000/";
 
                 ApplicationUser user = _context.Users.Include(m => m.funcionario).Single(m => m.Id == dep.responsavelId);
                 Empresa emp = _context.Empresas.Single(m => m.codigo == dep.empresaId);
@@ -143,9 +150,12 @@ namespace MIT.CRM.Controllers
                         "<p>Foi adicionado como responsavel do departamento " + dep.descricao + " da empresa " + emp.nome + " para a gestão das ferias do colobaroados afectos ao respectivo departamento.</p> <br/>" +
                         "<p><b>Aplicação:  </b> <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>";
 
+                    string a =string.Format(CultureInfo.GetCultureInfo("pt-PT"), "Não Responder");
+                    var b =  "Aplicação de Marcação de Ferias -Em Produção / Teste";
 
-                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", user.Email,"", "Aplicação de Marcação de Ferias -Em Produção / Teste",
-                       mensaguem);
+                    var host = HttpContext.Request.Host.Value;
+
+                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", a, user.Email,"", b, mensaguem, host );
                 }
 
 

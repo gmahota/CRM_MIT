@@ -71,7 +71,7 @@ namespace MIT.CRM.Controllers
 
                     funcionario.utilizadorId = user.Id;
 
-                    var callbackUrl = "http://192.168.3.16:5000/";
+                    var callbackUrl = "http://ferias.mit.co.mz:5000/";
 
                     string mensaguem = " <h4>Caro Colaborador " + funcionario.nome + " </h4> <br/>" +
                         "<p>Foi criado com sucesso o seu utilizador para a marcação de ferias Online ainda em fase de Produção/Teste.</p>" +
@@ -80,9 +80,10 @@ namespace MIT.CRM.Controllers
                         "<p><b>Aplicação:  </b> <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>" +
                         "<br/> <p> <b> Faça Login e depois seleciona o menu RH e depois Ferias e em seguida o botão editar. </b></p>";
 
+                    var host = HttpContext.Request.Host.Value;
 
                     await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", funcionario.email,"", "Aplicação de Marcação de Ferias -Em Produção / Teste",
-                       mensaguem);
+                       mensaguem,host);
                 }
                 else
                 {
@@ -128,7 +129,7 @@ namespace MIT.CRM.Controllers
 
                 var user = funcionario.utilizador;
 
-                var callbackUrl = "http://192.168.3.16:5000/RH/Edit/" + funcionarioId;
+                var callbackUrl = "http://ferias.mit.co.mz:5000/RH/Edit/" + funcionarioId;
 
                 string mensaguem1 = " <h4>Caro Responsavel do Departamento " + dep.descricao + " </h4> <br/>" +
                         "<p>O Funcionario " + funcionario.nome + " vem por meio deste email submeter o seu pedido de ferias nas datas abaixo:</p> <br/>" +
@@ -139,11 +140,15 @@ namespace MIT.CRM.Controllers
                 {
                     user = _context.Users.Single(c => c.UserName == User.Identity.Name);
 
-                    await _emailSender.SendAsync("global@mit.co.mz","Não Responder", dep.responsavel.Email, funcionario.email, titulo, mensaguem1);
+                    var host = HttpContext.Request.Host.Value;
+
+                    await _emailSender.SendAsync("global@mit.co.mz","Não Responder", dep.responsavel.Email, funcionario.email, titulo, mensaguem1,host);
                 }
                 else
                 {
-                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder", dep.responsavel.Email,user.Email, titulo, mensaguem1);
+                    var host = HttpContext.Request.Host.Value;
+
+                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder", dep.responsavel.Email,user.Email, titulo, mensaguem1,host);
                 }
             }
             catch { }
@@ -162,7 +167,7 @@ namespace MIT.CRM.Controllers
 
                 var user = funcionario.utilizador;
 
-                var callbackUrl = "http://192.168.3.16:5000/RH/Details/" + funcionarioId;
+                var callbackUrl = "http://ferias.mit.co.mz:5000/RH/Details/" + funcionarioId;
 
                 string mensaguem1 = " <h4>Caro Colaborador " + funcionario.nome + " </h4> <br/>" +
                         "<p>Abaixo a lista de aprovações/repovações do pedido de ferias: </p> <br/>" +
@@ -173,11 +178,15 @@ namespace MIT.CRM.Controllers
                 {
                     user = _context.Users.Single(c => c.UserName == User.Identity.Name);
 
-                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder",funcionario.email, dep.responsavel.Email, titulo, mensaguem1);
+                    var host = HttpContext.Request.Host.Value;
+
+                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder",funcionario.email, dep.responsavel.Email, titulo, mensaguem1,host);
                 }
                 else
                 {
-                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder", funcionario.email, dep.responsavel.Email, titulo, mensaguem1);
+                    var host = HttpContext.Request.Host.Value;
+
+                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder", funcionario.email, dep.responsavel.Email, titulo, mensaguem1,host);
                 }
             }
             catch { }

@@ -14,6 +14,12 @@ namespace MIT.CRM.Controllers
 
         public IActionResult Index()
         {
+            return View();
+        }
+
+        
+        public IActionResult Dashboard()
+        {
             try
             {
                 ViewBag.empresas = _context.Empresas.ToList();
@@ -22,7 +28,7 @@ namespace MIT.CRM.Controllers
             {
                 ViewBag.empresas = new List<Empresa>();
             }
-            
+
             return View();
         }
 

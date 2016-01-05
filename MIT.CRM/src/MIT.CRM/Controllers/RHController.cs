@@ -73,7 +73,7 @@ namespace MIT.CRM.Controllers
             }
             else
             {
-                ViewData["Message"] = String.Format("Não existe nenhum funcionario associado ao Utilizador {0}, por favor contacte o administrador do sistema", User.Identity.Name);
+                ViewData["Message"] = String.Format("Não existe o respectivo funcionario ou não tem permissões de acesso, por favor contacte o administrador do sistema");
                 return View("Error");
             }
 
