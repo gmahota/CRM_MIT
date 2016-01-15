@@ -52,6 +52,8 @@ namespace MIT.Data
         public string telemovel { get; set; }
         public string telefoneAlternativo { get; set; }
 
+        public bool activo { get; set; }
+
         public int departamentoId { get; set; }
         
         public string empresaId { get; set; }
