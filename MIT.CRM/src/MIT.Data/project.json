@@ -18,6 +18,7 @@
     }
   },
   "dependencies": {
-    "EntityFramework.Core": "7.0.0-rc2-16458"
+    "EntityFramework.Core": "7.0.0-rc1-final",
+    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc2-16148"
   }
 }

@@ -66,6 +66,7 @@ namespace MIT.Data
     
     public class Report
     {
+        public int id { get; set; }
         public string empresa { get; set; }
         public string nomeEmpresa { get; set; }
         public string tipoEntidade { get; set; }
