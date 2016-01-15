@@ -3,6 +3,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using MIT.CRM.Models;
+using MIT.Data;
 
 namespace MIT.CRM.Controllers
 {
