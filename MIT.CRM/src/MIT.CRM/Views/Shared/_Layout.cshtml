@@ -10,6 +10,7 @@
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
             <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" />
             <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
+            <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
             
             <link rel="stylesheet" href="~/css/site.css" />
             <link rel="stylesheet" href="~/css/dashboard.css" />
@@ -21,6 +22,7 @@
             
             <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" asp-fallback-test-property="display" asp-fallback-test-value="none" />
             <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
+            <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.min.css" />
             <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
             <link rel="stylesheet" href="~/css/dashboard.css" />
         </environment>
@@ -92,87 +94,93 @@
         </div>
         
 
-        @*<div class="container-fluid">
-            <div class="row">*@
-                <div class="col-sm-3 col-md-2 sidebar">
+        <div id="wrapper">
 
-                    <ul class="nav navbar-nav side-nav">
-                        <li id="menu_dashboard">
-                            <a asp-controller="Home" asp-action="Index">
-                                <i class="fa fa-fw fa-home"></i> Pagina Inicial
-                            </a>
-                        </li>
 
-                        
-                        @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area")|| User.IsInRole("Cobranças"))
-                        {
-                            <li id="menu_home">
-                                <a asp-controller="Home" asp-action="Dashboard">
-                                    <i class="fa fa-fw fa-dashboard"></i> Dashboard
+        
+            <nav class="navbar-default navbar-static-side " role="navigation">
+                    <div class="sidebar-collapse">
+                        <ul class="nav navbar-nav side-nav">
+                            <li id="menu_dashboard">
+                                <a asp-controller="Home" asp-action="Index">
+                                    <i class="fa fa-fw fa-home"></i> Pagina Inicial
                                 </a>
                             </li>
-                        }
+
+
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area") || User.IsInRole("Cobranças"))
+                            {
+                                <li id="menu_home">
+                                    <a asp-controller="Home" asp-action="Dashboard">
+                                        <i class="fa fa-fw fa-dashboard"></i> Dashboard
+                                    </a>
+                                </li>
+                            }
 
 
 
 
-                        @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
-                        {
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
+                            {
 
-                            <li>
-                                <a id="menu_rh" data-toggle="collapse" href="#" data-target="#menu_rh_ul" aria-expanded="true">
+                                <li>
+                                    <a id="menu_rh" data-toggle="collapse" href="#" data-target="#menu_rh_ul" aria-expanded="true">
 
-                                    <i class="fa fa-users"></i>
-                                    RH
-                                    <i class="fa fa-fw fa-caret-down"></i>
-                                </a>
+                                        <i class="fa fa-users"></i>
+                                        RH
+                                        <i class="fa fa-fw fa-caret-down"></i>
+                                    </a>
 
-                                <ul id="menu_rh_ul" class="collapse" aria-expanded="true">
-                                    <li id="menu_rh_index">
-                                        <a asp-controller="RH" asp-action="Index">
-                                            <i class="fa fa-calendar"></i>
-                                            Mapa Ferias
-                                        </a>
-                                    </li>
-                                    <li id="menu_rh_details">
-                                        <a asp-controller="RH" asp-action="Details">
-                                            <i class="fa fa-calendar-check-o"></i>
-                                            Marcação Ferias
-                                        </a>
-                                    </li>
-                                </ul>
-
-
-                            </li>
-                        }
-
-                        @if (User.IsInRole("Administrator"))
-                        {
-                            <li>
-                                <a data-toggle="collapse" href="#" data-target="#menu_gestao_ul" aria-expanded="true">
-                                    <i class="fa fa-bars"></i>
-                                    Gestão
-                                    <i class="fa fa-fw fa-caret-down"></i>
-                                </a>
-
-                                <ul id="menu_gestao_ul" class="collapse" role="menu">
-                                    <li><a id="menu_gestao_index" asp-controller="Gestao" asp-action="Index">Geral</a></li>
-                                    <li><a id="menu_departamento_index" asp-controller="Departamento" asp-action="Index">Departamentos</a></li>
-                                </ul>
+                                    <ul id="menu_rh_ul" class="collapse" aria-expanded="true">
+                                        <li id="menu_rh_index">
+                                            <a asp-controller="RH" asp-action="Index">
+                                                <i class="fa fa-calendar"></i>
+                                                Mapa Ferias
+                                            </a>
+                                        </li>
+                                        <li id="menu_rh_details">
+                                            <a asp-controller="RH" asp-action="Details">
+                                                <i class="fa fa-calendar-check-o"></i>
+                                                Marcação Ferias
+                                            </a>
+                                        </li>
+                                    </ul>
 
 
-                            </li>
-                        }
+                                </li>
+                            }
 
-                        @if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
-                        {
-                            <li><a id="menu_cobrancas_index" asp-controller="Cobrancas" asp-action="Index"> <i class="fa fa-money"></i> Cobranças</a></li>
-                        }
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li>
+                                    <a data-toggle="collapse" href="#" data-target="#menu_gestao_ul" aria-expanded="true">
+                                        <i class="fa fa-bars"></i>
+                                        Gestão
+                                        <i class="fa fa-fw fa-caret-down"></i>
+                                    </a>
+
+                                    <ul id="menu_gestao_ul" class="collapse" role="menu">
+                                        <li><a id="menu_gestao_index" asp-controller="Gestao" asp-action="Index">Geral</a></li>
+                                        <li><a id="menu_departamento_index" asp-controller="Departamento" asp-action="Index">Departamentos</a></li>
+                                    </ul>
 
 
-                    </ul>
-                </div>
-                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                                </li>
+                            }
+
+                            @if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
+                            {
+                                <li><a id="menu_cobrancas_index" asp-controller="Cobrancas" asp-action="Index"> <i class="fa fa-money"></i> Cobranças</a></li>
+                            }
+
+
+                        </ul>
+
+                    </div>
+                </nav>
+
+
+                <div class="main">
                     @RenderBody()
 
                     <hr />
@@ -183,8 +191,8 @@
                     </div>
                         
                 </div>
-            @*</div>
-        </div>*@
+           
+        </div>
       
 
         <environment names="Development">
@@ -194,6 +202,7 @@
             <script src="~/lib/moment/moment.js"></script>
             <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
             <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
+            <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.js"></script>
             
             <script src="~/lib/signalr/jquery.signalR.min.js"></script>
 
@@ -214,7 +223,7 @@
             <script src="~/lib/moment/moment.js"></script>
             <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
             <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
-            
+            <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.min.js"></script>
             <script src="~/lib/signalr/jquery.signalR.min.js"></script>
 
             <!--Reference the autogenerated SignalR hub script. -->
