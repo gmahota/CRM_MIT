@@ -14,6 +14,9 @@ using MIT.CRM.Services;
 using MIT.CRM.Models.Helper;
 using System.Globalization;
 using MIT.Data;
+using System.Threading;
+using Microsoft.AspNet.Localization;
+using Microsoft.Extensions.Localization;
 
 namespace MIT.CRM
 {
@@ -21,14 +24,9 @@ namespace MIT.CRM
     {
         public Startup(IHostingEnvironment env)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("pt-BR");
 
-
-            //The culture value determines the results of culture-dependent functions, such as the date, number, and currency (NIS symbol)
-            //System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("pt-PT");
-            //System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo("he-il");
-            CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("pt-PT");
-            CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("pt-PT");
-            
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -70,7 +68,7 @@ namespace MIT.CRM
                 .AddDataAnnotationsLocalization();
 
             //services.AddScoped<LanguageActionFilter>();
-
+            
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -81,8 +79,35 @@ namespace MIT.CRM
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.MinimumLevel = LogLevel.Information;
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            
+            var requestLocalizationOptions = new RequestLocalizationOptions
+            {
+                
+                SupportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("pt-PT"),
+                    new CultureInfo("en-US"),
+                    new CultureInfo("de-CH"),
+                    new CultureInfo("fr-CH"),
+                    new CultureInfo("it-CH")
+                },
+                SupportedUICultures = new List<CultureInfo>
+                {
+                    new CultureInfo("pt-PT"),
+                    new CultureInfo("en-US"),
+                    new CultureInfo("de-CH"),
+                    new CultureInfo("fr-CH"),
+                    new CultureInfo("it-CH")
+                },
+                
+            };
+
+            app.UseRequestLocalization(requestLocalizationOptions, new RequestCulture (new CultureInfo("pt-PT")));
+
+
 
             if (env.IsDevelopment())
             {

@@ -83,7 +83,7 @@ namespace MIT.CRM.Controllers
 
                     var host = HttpContext.Request.Host.Value;
 
-                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", "Não Responder", funcionario.email,"", "Aplicação de Marcação de Ferias -Em Produção / Teste",
+                    await _emailSender.SendAsync("do-not-reply@meridian32.com", "Não Responder", funcionario.email,"", "Aplicação de Marcação de Ferias -Em Produção / Teste",
                        mensaguem,host);
                 }
                 else
@@ -143,13 +143,13 @@ namespace MIT.CRM.Controllers
 
                     var host = HttpContext.Request.Host.Value;
 
-                    await _emailSender.SendAsync("global@mit.co.mz","Não Responder", dep.responsavel.Email, funcionario.email, titulo, mensaguem1,host);
+                    await _emailSender.SendAsync("do-not-reply@meridian32.com", "Não Responder", dep.responsavel.Email, funcionario.email, titulo, mensaguem1,host);
                 }
                 else
                 {
                     var host = HttpContext.Request.Host.Value;
 
-                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder", dep.responsavel.Email,user.Email, titulo, mensaguem1,host);
+                    await _emailSender.SendAsync("do-not-reply@meridian32.com", "Não Responder", dep.responsavel.Email,user.Email, titulo, mensaguem1,host);
                 }
             }
             catch { }
@@ -181,13 +181,13 @@ namespace MIT.CRM.Controllers
 
                     var host = HttpContext.Request.Host.Value;
 
-                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder",funcionario.email, dep.responsavel.Email, titulo, mensaguem1,host);
+                    await _emailSender.SendAsync("do-not-reply@meridian32.com", "Não Responder",funcionario.email, dep.responsavel.Email, titulo, mensaguem1,host);
                 }
                 else
                 {
                     var host = HttpContext.Request.Host.Value;
 
-                    await _emailSender.SendAsync("global@mit.co.mz", "Não Responder", funcionario.email, dep.responsavel.Email, titulo, mensaguem1,host);
+                    await _emailSender.SendAsync("do-not-reply@meridian32.com", "Não Responder", funcionario.email, dep.responsavel.Email, titulo, mensaguem1,host);
                 }
             }
             catch { }

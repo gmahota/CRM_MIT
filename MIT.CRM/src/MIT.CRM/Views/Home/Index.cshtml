@@ -18,31 +18,20 @@
     </script>
 }
 
-<div class="row placeholders">
+<div class="row-fluid placeholders">
 
-    <center>
-        <img src="~/images/cartão-de-natal-m32.jpg" />
-    </center>
-    @*@{
-            List<Empresa> list = ViewBag.empresas;
-            if (list.Count() > 0)
-            {
-                <div class="row placeholders">
-                    @{
-                        foreach (Empresa item in list)
-                        {
-                            <div class="col-xs-6 col-sm-3 placeholder">
-                                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive" alt="Generic placeholder thumbnail">
-                                <h4>@item.codigo</h4>
-                                <span class="text-muted">@item.nome</span>
-                            </div>
-
-                        }
-                    }
-
-
-                </div>
-
-            }
-        }*@
+    <div class="placeholder" style="text-align:justify">
+        <h1>Gestão de Ferias</h1>
+        
+        <p>
+            Aplicação adicional para marcação e aprovação de ferias.
+        </p>
+        <p>  
+            Esta aplicação permite marcar as ferias e aprovado e enviado todos as operações por email.
+        </p>
+        <p>
+            Somente as ferias aprovadas no sistema são sincronizadas e marcadas no sistema primavera.
+        </p>
+    </div>
+    
 </div>

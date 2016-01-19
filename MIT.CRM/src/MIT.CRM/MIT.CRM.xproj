@@ -13,6 +13,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
+    <ApplicationInsightsResourceId>/subscriptions/a41bd9b3-a3d1-4e34-b511-caab15abb86a/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/MIT.CRM</ApplicationInsightsResourceId>
   </PropertyGroup>
   <ItemGroup>
     <DnxInvisibleContent Include="bower.json" />

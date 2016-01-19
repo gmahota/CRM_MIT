@@ -9,10 +9,172 @@
     @{conexao = "http://localhost:8989/signalr";}
 </environment>
 <environment names="Staging,Production">
-    @{conexao = "http://192.168.3.16:8989/signalr";}
+    @{conexao = "http://ferias.mit.co.mz:8989/signalr";}
 </environment>
 
 @section scripts {
+
+<!-- Variaveis Globais -->
+<script type="text/javascript">
+        var ferias = [];
+        var tipoFerias = "Dia de Férias";
+        var numDiasMarcados = 0;
+
+        var numMeiosDiasMarcados = 0;
+        var numDiasAntecipados = 0;
+        var numMeiosAntecipados = 0;
+</script>
+
+<!-- Boostrap Annual Calendar-->
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var currentYear = new Date().getFullYear();
+
+            $('#calendario').calendar({
+                enableContextMenu: true,
+                dataSource:[],
+                mouseOnDay: function (e) {
+                    if (e.events.length > 0) {
+                        var content = '';
+
+                        for (var i in e.events) {
+                            content += '<div class="event-tooltip-content">'
+                                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                                            + '<div class="event-location">' + e.events[i].location + '</div>'
+                                        + '</div>';
+                        }
+
+                        $(e.element).popover({
+                            trigger: 'manual',
+                            container: 'body',
+                            html: true,
+                            content: content
+                        });
+
+                        $(e.element).popover('show');
+                    }
+                },
+                mouseOutDay: function (e) {
+                    if (e.events.length > 0) {
+                        $(e.element).popover('hide');
+                    }
+                },
+                dayContextMenu: function (e) {
+                    $(e.element).popover('hide');
+                },
+                enableRangeSelection: true,
+
+                selectRange: function (e) {
+
+                }
+            })
+
+            var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+
+                url: apiUrl,
+                data: { funcionarioId: '', ano: '@DateTime.Now.Year' },
+
+                success: function (data) {
+
+                    data.forEach(preencherCalendario);
+
+                    function preencherCalendario(value, index, ar) {
+
+                        var color = "#337ab7";
+
+                        switch (value.estado) {
+                            case "Por Aprovar":
+                                color = "#f0ad4e";
+                                break;
+
+                            case "Aprovado":
+                                color = '#257e4a';
+                                break;
+                            case "Recusado":
+                                color = "#d9534f";
+
+                                break;
+
+                        }
+
+                        var day = moment(value.dataFeria);
+
+                        var currentYear = new Date().getFullYear();
+                        console.log(value.dataFeria)
+                        var evento = {
+                            id: 0,
+                            name: value.tipo,
+                            location: value.estado,
+                            startDate: day.toDate(),
+                            endDate: day.toDate(),
+                            color: color
+                        }
+
+                        saveEvent(evento)
+
+                        if (value.estado == "Por Aprovar") {
+
+
+
+
+                        }
+
+
+
+                    }
+                },
+                error: function (error) {
+                    var x = error; //break here for debugging.
+                }
+            });
+        })
+
+
+        function saveEvent(evento) {
+
+            var dataSource = $('#calendario').data('calendar').getDataSource();
+
+            var newId = 0;
+
+            for (var i in dataSource) {
+                if (dataSource[i].id > newId) {
+                    newId = dataSource[i].id;
+                }
+            }
+
+            newId++;
+            evento.id = newId;
+
+            dataSource.push(evento);
+
+            console.log(dataSource)
+
+            $('#calendario').data('calendar').setDataSource(dataSource);
+
+        }
+
+        function existeData(events,evento) {
+
+            for(i = 0 ; i < events.length; i++){
+                if (events[i].dataFeria == evento.dataFeria) {
+
+                    alert("O sistema não permite marcar duas vezes a mesma data")
+                    return true
+
+                }
+
+            }
+            return false;
+        }
+
+        
+</script>
 
 <script>
 
@@ -23,7 +185,7 @@
 	        var eventos = [];
 
 
-            $.get('/RH/ListaFuncionarios', function(result) {
+            $.get('/RH/ListaFuncionarios/', function(result) {
                 var funcionarios = result;
 
                 $.each(funcionarios, function () {
@@ -108,15 +270,18 @@
 
                         }
 
+                        var day = moment(value.dataFeria);
 
                         var evento = {
-                            //id: value.funcionarioId,
-                            title: value.tipo,// 'Pedido Ferias',
-                            start: value.dataFeria, //'2014-06-09T16:00:00'
-                            end: value.dataFeria,
-                            allDay: true,
+                            id: 0,
+                            name: value.funcionario.nome ,
+                            location: value.tipo +" - " + value.estado,
+                            startDate: day.toDate(),
+                            endDate: day.toDate(),
                             color: color
                         }
+
+                        saveEvent(evento)
 
                         $('#calendar').fullCalendar('renderEvent', evento, true);
 
@@ -187,8 +352,6 @@
             "<tr >" + linha +
             "</tr>"
         );
-
-      
 
         $.get(location.origin + '/Funcionario/listaFuncionarios/', { empresa:"" ,departamento:"" }, function (result) {
 
@@ -265,105 +428,111 @@
 <h4 class="page-header">Detalhes de Ferias : @ViewData["modulo_value"]</h4>
 
 <div class="row placeholders">
+    <div class="placeholder">
 
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs" role="tablist">
-        
-        
-        <li role="presentation" class="active">
-            <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
-                <span class="fa fa-calendar"></span>
-                Calendario
-            </a>
-        </li>
+        <div class="col-md-10">
 
-        <li role="presentation">
-            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
-                <span class="fa fa-calendar-o"></span>
-                Mensal
-            </a>
-        </li>
-                
-        <li role="presentation">
-                    
-            <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">
-                <span class="fa fa-tasks"></span>
-            Propriedades</a>
-        </li>
-    </ul>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
 
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane" id="profile">
 
-            <div class="col-md-10 placeholder">
+                <li role="presentation" class="active">
+                    <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                        <span class="fa fa-calendar"></span>
+                        Calendario
+                    </a>
+                </li>
 
-                <div class="row">
+                <li role="presentation">
+                    <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
+                        <span class="fa fa-calendar-o"></span>
+                        Mensal
+                    </a>
+                </li>
 
-                    <table>
-                        <tr>
-                            <td> Ano de Férias:</td>
-                            <td id="anoFerias" style="padding-right:10px">
-                                <input type="number" id="ano" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" />
-                            </td>
+            </ul>
 
-                            <td>
-                                <div class="table-responsive">
-                                    <select id="cbMes" class="form-control" onchange="">
-                                        <option value="1">Janeiro</option>
-                                        <option value="2">Fevreiro</option>
-                                        <option value="3">Março</option>
-                                        <option value="4">Abril</option>
-                                        <option value="5">Maio</option>
-                                        <option value="6">Junho</option>
-                                        <option value="7">Julho</option>
-                                        <option value="8">Agosto</option>
-                                        <option value="9">Setembro</option>
-                                        <option value="10">Outubro</option>
-                                        <option value="11">Novembro</option>
-                                        <option value="12">Dezembro</option>
-                                    </select>
-                                </div>
-                            </td>
-                            <td> <button onclick="update_tabela_calendar()"> <span class="fa fa-search"></span> </button> </td>
-                        </tr>
-                    </table>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane" id="profile">
+
+
+                        <div class="row">
+
+                            <table>
+                                <tr>
+                                    <td> Ano de Férias:</td>
+                                    <td id="anoFerias" style="padding-right:10px">
+                                        <input type="number" id="ano" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" />
+                                    </td>
+
+                                    <td>
+                                        <div class="table-responsive">
+                                            <select id="cbMes" class="form-control" onchange="">
+                                                <option value="1">Janeiro</option>
+                                                <option value="2">Fevreiro</option>
+                                                <option value="3">Março</option>
+                                                <option value="4">Abril</option>
+                                                <option value="5">Maio</option>
+                                                <option value="6">Junho</option>
+                                                <option value="7">Julho</option>
+                                                <option value="8">Agosto</option>
+                                                <option value="9">Setembro</option>
+                                                <option value="10">Outubro</option>
+                                                <option value="11">Novembro</option>
+                                                <option value="12">Dezembro</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td> <button onclick="update_tabela_calendar()"> <span class="fa fa-search"></span> </button> </td>
+                                </tr>
+                            </table>
 
 
 
 
-                    
+
+                        </div>
+
+                        <div class="row">
+                            <div class="container">
+                                <div id="table_calendar" class="table table-bordered"></div>
+                            </div>
+
+                        </div>
+
+
+
                 </div>
 
-                <div class="row">
-                    <div class="container">
-                        <div id="table_calendar" class="table table-bordered"></div>
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div id="calendario"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-2 ">
+            <div class="panel panel-default">
+                <div class="panel-heading">Restrições</div>
+                <div class="panel-body">
+                    <div class="row">
+                        Empresa: <input type="text" value="@ViewBag.empresa" disabled="disabled" />
+                        Departamento: <input type="text" value="@ViewBag.departamento" disabled="disabled" />
+                    </div>
+                    
+                    <div class="row">
+                        <div id="table_funcionarios" class="table table-bordered">
+
+                        </div>
                     </div>
 
                 </div>
-
-
-            </div>
-
-
-        </div>
-
-        <div role="tabpanel" class="tab-pane active" id="home">
-            <div class="row placeholders">
-                <div class="col-md-9 placeholder">
-
-                    <div id="calendar"></div>
-                </div>
-
             </div>
         </div>
 
-        
-                
-                
-        <div role="tabpanel" class="tab-pane" id="settings"></div>
     </div>
 
+    
 </div>
-  
-

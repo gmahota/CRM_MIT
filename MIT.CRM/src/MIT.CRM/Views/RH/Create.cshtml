@@ -1,5 +1,4 @@
-﻿@model Funcionario
-
+﻿@model MIT.Data.Funcionario
 
 @{
     var conexao = "";
@@ -9,21 +8,313 @@
     @{conexao = "http://localhost:8989/signalr";}
 </environment>
 <environment names="Staging,Production">
-    @{conexao = "http://192.168.3.16:8989/signalr";}
+    @{conexao = "http://ferias.mit.co.mz:8989/signalr";}
 </environment>
 
 
 @section scripts {
-    <!--Full Calendar -->
+    <!-- Variaveis Globais -->
+
     <script type="text/javascript">
+        var ferias = [];
         var tipoFerias = "Dia de Férias";
         var numDiasMarcados = 0;
 
-        var numMeiosDiasMarcados =0;
+        var numMeiosDiasMarcados = 0;
         var numDiasAntecipados = 0;
-        var numMeiosAntecipados =0;
+        var numMeiosAntecipados = 0;
+    </script>
+
+    <!-- Boostrap Annual Calendar-->
+
+    <script type="text/javascript">
 
         $(document).ready(function () {
+
+            var currentYear = new Date().getFullYear();
+
+            $('#calendario').calendar({
+                enableContextMenu: true,
+                dataSource:[],
+                mouseOnDay: function (e) {
+                    if (e.events.length > 0) {
+                        var content = '';
+
+                        for (var i in e.events) {
+                            content += '<div class="event-tooltip-content">'
+                                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                                            + '<div class="event-location">' + e.events[i].location + '</div>'
+                                        + '</div>';
+                        }
+
+                        $(e.element).popover({
+                            trigger: 'manual',
+                            container: 'body',
+                            html: true,
+                            content: content
+                        });
+
+                        $(e.element).popover('show');
+                    }
+                },
+                mouseOutDay: function (e) {
+                    if (e.events.length > 0) {
+                        $(e.element).popover('hide');
+                    }
+                },
+                dayContextMenu: function (e) {
+                    $(e.element).popover('hide');
+                },
+                enableRangeSelection: true,
+                
+                selectRange: function (e) {
+                    
+                },
+
+                clickDay: function (e) {
+                    var day = moment(e.date);
+
+                    var evento = {
+                        //id: value.funcionarioId,
+                        title: tipoFerias,// 'Pedido Ferias',
+                        start: day.format("DD/MM/YYYY") , //'2014-06-09T16:00:00'
+                        //end: date,
+                        allDay: true,
+                        color: '#eea236'
+                    }
+
+                    var feria = {
+                        ano: day.format("YYYY"),
+                        dataFeria: day.format("DD/MM/YYYY"),
+                        funcionarioId: '@Model.id',
+                        tipo:tipoFerias,
+                        estado: "",
+                        tipoMarcacaos:1
+                    };
+
+                    if (tipoFerias == "Desmarcar") {
+
+
+                    } else {
+
+                        if (existeData(ferias, feria) == false) {
+                            switch (tipoFerias) {
+                                case 'Dia de Férias':
+                                    evento.color = '#eea236';
+                                    //$(this).css('background-color', '#eea236');
+                                    numDiasMarcados++;
+
+                                    $("#txtDiasMarcados").val(numDiasMarcados);
+
+                                    break;
+
+                                case 'Meio Dia de Férias':
+                                    //$(this).css('background-color', '#d43f3a');
+                                    evento.color = '#d43f3a';
+                                    numMeiosDiasMarcados++;
+                                    $("#txtMeiosDiasMarcados").val(numMeiosDiasMarcados);
+                                    break;
+
+                                case 'Dia Antecipado':
+                                    numDiasAntecipados++;
+
+                                    $("#txtDiasAntecipados").val(numDiasAntecipados);
+
+                                    break;
+                                case 'Meio Dia Antecipado':
+                                    numMeiosAntecipados++;
+
+                                    $("#txtMeiosDiasAntecipados").val(numMeiosAntecipados);
+
+                                    break;
+
+                            }
+
+                            ferias.push(feria)
+
+                            $(e.element).css('background-color', evento.color);
+                            $(e.element).css('color', 'white');
+                            $(e.element).css('border-radius', '15px');
+
+                        }
+                    }
+                }
+            })
+
+            var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                
+                url: apiUrl,
+                data: { funcionarioId: '@Model.id', ano: '@DateTime.Now.Year' },
+
+                success: function (data) {
+
+                    data.forEach(preencherCalendario);
+
+                    function preencherCalendario(value, index, ar) {
+
+                        var color = "#337ab7";
+
+                        switch (value.estado) {
+                            case "Por Aprovar":
+                                color = "#f0ad4e";
+                                break;
+
+                            case "Aprovado":
+                                color = '#257e4a';
+                                break;
+                            case "Recusado":
+                                color = "#d9534f";
+
+                                break;
+
+                        }
+
+                        var day = moment(value.dataFeria);
+
+                        var currentYear = new Date().getFullYear();
+                        console.log(value.dataFeria)
+                        var evento = {
+                            id: 0,
+                            name: value.tipo,
+                            location: value.estado,
+                            startDate: day.toDate(),
+                            endDate: day.toDate(),
+                            color: color
+                        }
+
+                        saveEvent(evento)
+                        
+                        if (value.estado == "Por Aprovar") {
+
+                            
+
+
+                        }
+
+
+
+                    }
+                },
+                error: function (error) {
+                    var x = error; //break here for debugging.
+                }
+            });
+        })
+
+
+        function saveEvent(evento) {
+            
+            var dataSource = $('#calendario').data('calendar').getDataSource();
+
+            var newId = 0;
+
+            for (var i in dataSource) {
+                if (dataSource[i].id > newId) {
+                    newId = dataSource[i].id;
+                }
+            }
+
+            newId++;
+            evento.id = newId;
+
+            dataSource.push(evento);
+
+            console.log(dataSource)
+
+            $('#calendario').data('calendar').setDataSource(dataSource);
+            
+        }
+
+        function existeData(events,evento) {
+
+            for(i = 0 ; i < events.length; i++){
+                if (events[i].dataFeria == evento.dataFeria) {
+
+                    alert("O sistema não permite marcar duas vezes a mesma data")
+                    return true
+
+                }
+
+            }
+            return false;
+        }
+
+        function submeterPedido() {
+
+            for(i=0;i<ferias.length;i++){
+                var feria = ferias[i];
+
+                if(feria.estado ==""){
+                    feria.estado = "Por Aprovar";
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        dataType: "json",
+                        url: location.origin + "/RH/MarcacaoFerias",
+                        data: feria,
+                        success: function (data) {
+
+                            //window.location = "/RH/Index";
+
+                        },
+                        error: function (error) {
+                            var x = error; //break here for debugging.
+                        }
+                    });
+                }
+
+            }
+
+
+            var mensaguem = "";
+            mensaguem = "<table>"
+            mensaguem += "<tr>" +
+                "<th>Data</th>" +
+                "<th>Tipo</th>" +
+                "<th>Estado</th> </tr>";
+
+            for( j = 0; j < ferias.length; j++ ){
+                mensaguem += "<tr>" +
+                "<td>" +ferias[j].dataFeria +"</td>" +
+                "<td>" + ferias[j].tipo + "</td>" +
+                "<td>" + ferias[j].estado + "</td> </tr>";
+
+            }
+
+            mensaguem += "</table>";
+
+            var apiUrl = location.origin + "/Funcionario/sendEmailCriacaoFerias";
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                async: true,
+                url: apiUrl,
+                data: { funcionarioId: '@Model.id', 'mensaguem':mensaguem, titulo:"Pedido de Ferias do Funcionario @Model.nome.First()" },
+                success: function () {
+
+                    //window.location = "/RH/Index";
+
+                },
+                error: function (error) {
+                    var x = error; //break here for debugging.
+                }
+            });
+
+            window.location = "/RH/Details/" + '@Model.id';
+
+        }
+</script>
+
+    <!--Full Calendar -->
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').focus()
             })
@@ -268,7 +559,7 @@
 
         }
 
-        function submeterPedido() {
+        function submeterPedido_old() {
             var ferias = [];
 
             var row = document.getElementById("tabelaMarcacaoFerias").rows.length;
@@ -538,35 +829,8 @@
 }
 
 
-<h4 class="page-header">Marcação de Ferias : @ViewData["modulo_value"]</h4>
+<h4 class="page-header"> RH - Marcação de Ferias : @ViewData["modulo_value"]</h4>
 
-
-
-<div class="row placeholders">
-
-    <div id="calendar" class="calendario col-md-6 placeholder"></div>
-
-    <div class="col-md-6 placeholder ">
-
-        <table id="tabelaMarcacaoFerias" class="table">
-
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Tipo</th>
-                    <th>Estado</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-
-        </table>
-
-
-    </div>
-
-
-</div>
 
 <div class="row placeholders">
 
@@ -578,84 +842,85 @@
             <div class="col-md-8 placeholder">
                 <table>
                     <tr>
-                        <td> Ano de Férias:</td>
-                        <td id="anoFerias" style="padding-right:10px"> 
-                            <input type="number" id="ano" class="form-control" min="2015" max="2016" value="@DateTime.Now.Year" /> 
-                        </td>
-
                         <td>Dias Marcados: </td>
-                        <td style="padding-right:10px"> <text id="txtDiasMarcados">0,0</text> </td>
+                        <td style="padding-right:10px"> <input type="number" id="txtDiasMarcados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px"> </td>
 
                         <td>Meios Dias: </td>
-                        <td style="padding-right:10px"> <text id="txtMeiosDiasMarcados">0,0</text> </td>
+                        <td style="padding-right:10px"> <input type="number" id="txtMeiosDiasMarcados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">  </td>
 
                         <td>Dias Antecipados: </td>
-                        <td style="padding-right:10px"> <text id="txtDiasAntecipados">0,0</text> </td>
+                        <td style="padding-right:10px"> <input type="number" id="txtDiasAntecipados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">  </td>
 
                         <td>Meios Dias Antecipados: </td>
-                        <td style="padding-right:10px"> <text id="txtMeiosDiasAntecipados">0,0</text> </td>
+                        <td style="padding-right:10px"> <input type="number" id="txtMeiosDiasAntecipados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px"> </td>
                     </tr>
                 </table>
             </div>
 
             <div class="col-md-offset-8 placeholder">
-                <b>Dados da Ficha do Funcionario</b>
+
+
+
+
+                <b>Direito de Ferias</b>
 
                 <table>
                     <tr>
                         <td>Máximo de dias Férias: </td>
-                        <td style="padding-right:10px"> <text id="txtMaximoDiaFerias">0,0</text> </td>
+                        <td style="padding-right:10px">
+                            <input type="number" id="txtMaximoDiaFerias" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">
+                        </td>
 
-                    </tr>
-                    <tr>
+
                         <td>Gozados: </td>
-                        <td style="padding-right:10px"> <text id="txtGozados">0,0</text> </td>
+                        <td style="padding-right:10px">
+                            <input type="number" id="txtGozados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">
+                        </td>
 
                         <td>Por Gozar: </td>
-                        <td style="padding-right:10px"> <text id="txtPorGozar">0,0</text> </td>
-
+                        <td style="padding-right:10px">
+                            <input type="number" id="txtPorGozar" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">
+                        </td>
                     </tr>
+
                 </table>
             </div>
 
-            <div class="col-md-8 placeholder" style="padding-bottom:20px">
-                <!-- Split button -->
-                <div class="btn-group">
-                    <button type="button" class="btn btn-warning btn-sm" onclick="tipoFerias = 'Dia de Férias'">Dias de Férias</button>
-                    <button type="button" class="btn btn-warning btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
 
-                    <button type="button" class="btn btn-danger btn-sm" onclick="tipoFerias = 'Meio Dia de Férias'">Meios Dias de Ferias</button>
-                    <button type="button" class="btn btn-danger btn-sm dropdown-toggle " onclick="tipoFerias = 'Meio Dia de Férias'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-
-                    @*<button type="button" class="btn btn-info btn-sm" onclick="tipoFerias = 'Dia Antecipado'">Dias Antecipados </button>
-                    <button type="button" class="btn btn-info btn-sm dropdown-toggle" onclick="tipoFerias = 'Dia Antecipado'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>
-
-                    <button type="button" class="btn btn-default btn-sm" onclick="tipoFerias = 'Meio Dia Antecipado'">Meios Dias Antecipados </button>
-                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" onclick="tipoFerias = 'Meio Dia Antecipado'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        <span class="sr-only">Toggle Dropdown</span>
-                    </button>*@
-
-                </div>
-            </div>
         </div>
     </div>
 
 
-            
+
+</div>
+
+<div class="row placeholders" >
+    <div class="col-md-8 placeholder">
+
+        <label class="radio-inline" >
+            <input type="radio" style="opacity: 0;" name="optradio" onclick="tipoFerias = 'Dia de Férias'" checked="checked">
+                Dias de Férias
+        
+        </label>
+        <label class="radio-inline" ><input type="radio" name="optradio" onclick="tipoFerias = 'Meio Dia de Férias'">Meios Dias de Ferias</label>
+        <label class="radio-inline" ><input type="radio" name="optradio" onclick="tipoFerias = 'Dia Antecipado'">Dias Antecipados</label>
+        <label class="radio-inline" ><input type="radio" name="optradio" onclick="tipoFerias = 'Meio Dia Antecipado'">Meios Dias Antecipados</label>
+        <label class="radio-inline" ><input type="radio" name="optradio" onclick="tipoFerias = 'Desmarcar'">Desmarcar</label>
+
+    </div>
+
 </div>
 
 <div class="row placeholders">
-    <div class="col-md-5 placeholder">
+
+    
+
+    <div id="calendario" class="calendario placeholder"></div>
+
+</div>
+
+<div class="row placeholders">
+    <div class="placeholder">
         <button type="button" class="btn btn-success btn-sm " role="button"
                 data-toggle="modal" data-target="#myModal">
             <span class="fa fa-save" aria-hidden="true"></span>

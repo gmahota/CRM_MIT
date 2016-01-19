@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.OptionsModel;
 using System.Collections.Generic;
+using MIT.Data;
 
 namespace MIT.CRM.Models
 {
@@ -46,20 +47,21 @@ namespace MIT.CRM.Models
                 }
             }
 
-            var user = await userManager.FindByNameAsync("gmahota@mit.co.mz");
+          
+            //var user = await userManager.FindByNameAsync("gmahota@mit.co.mz");
 
-            if (user == null)
-            {
-                user = new ApplicationUser { UserName = "gmahota@mit.co.mz" };
-                await userManager.CreateAsync(user, "Accsys2011!");
-                await userManager.AddToRoleAsync(user, adminRole);
-                await userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed"));
-            }
-            else
-            {
-                //await userManager.AddToRoleAsync(user, adminRole);
-                //await userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed"));
-            }
+            //if (user == null)
+            //{
+            //    user = new ApplicationUser { UserName = "gmahota@mit.co.mz" };
+            //    await userManager.CreateAsync(user, "Accsys2011!");
+            //    await userManager.AddToRoleAsync(user, adminRole);
+            //    await userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed"));
+            //}
+            //else
+            //{
+            //    //await userManager.AddToRoleAsync(user, adminRole);
+            //    //await userManager.AddClaimAsync(user, new Claim("ManageStore", "Allowed"));
+            //}
         }
     }
 }

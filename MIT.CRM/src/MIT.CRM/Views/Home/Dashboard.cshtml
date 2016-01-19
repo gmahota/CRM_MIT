@@ -18,13 +18,13 @@
     </script>
 }
 
-*@{
-            List<Empresa> list = ViewBag.empresas;
+@{
+            List<MIT.Data.Empresa> list = ViewBag.empresas;
             if (list.Count() > 0)
             {
         <div class="row placeholders">
             @{
-                foreach (Empresa item in list)
+                foreach (MIT.Data.Empresa item in list)
                 {
                     <div class="col-xs-6 col-sm-3 placeholder">
                         <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive" alt="Generic placeholder thumbnail">

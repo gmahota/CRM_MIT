@@ -10,6 +10,7 @@ using MIT.CRM.Models.Helper;
 using System.Globalization;
 using System.Text;
 using MIT.Data;
+using System.Threading;
 
 namespace MIT.CRM.Controllers
 {
@@ -17,6 +18,8 @@ namespace MIT.CRM.Controllers
     {
         private ApplicationDbContext _context;
         private readonly IEmailSender _emailSender;
+
+
 
         public DepartamentoController(ApplicationDbContext context,IEmailSender emailSender)
         {
@@ -31,7 +34,7 @@ namespace MIT.CRM.Controllers
 
             for(int i = 0; i < applicationDbContext.Count(); i++)
             {
-                applicationDbContext.ElementAt(i).departamento = _context.Departamentos.Include(e => e.responsavel).Where(e => e.empresaId == applicationDbContext.ElementAt(i).codigo).ToList();
+                applicationDbContext.ElementAt(i).departamentosList = _context.Departamentos.Include(e => e.responsavel).Where(e => e.empresaId == applicationDbContext.ElementAt(i).codigo).ToList();
             }
            
             return View(applicationDbContext.ToList());
@@ -132,9 +135,8 @@ namespace MIT.CRM.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Departamento dep )
         {
-            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = new System.Globalization.CultureInfo("pt-PT");
-            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = new System.Globalization.CultureInfo("pt-PT");
-            
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("pt-BR");
 
             if (ModelState.IsValid)
             {
@@ -152,11 +154,12 @@ namespace MIT.CRM.Controllers
                         "<p><b>Aplicação:  </b> <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>";
 
                     string a =string.Format(CultureInfo.GetCultureInfo("pt-PT"), "Não Responder");
-                    var b =  "Aplicação de Marcação de Ferias -Em Produção / Teste";
 
+                    var b = @"Aplicação de Marcação de Ferias -Em Produção / Teste";
+                    
                     var host = HttpContext.Request.Host.Value;
 
-                    await _emailSender.SendAsync("GLOBAL@MIT.CO.MZ", a, user.Email,"", b, mensaguem, host );
+                    await _emailSender.SendAsync("do-not-reply@meridian32.com", a, user.Email,"", b, mensaguem, host );
                 }
 
 

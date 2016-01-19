@@ -98,7 +98,7 @@ namespace MIT.CRM.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.ApplicationUser", b =>
+            modelBuilder.Entity("MIT.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -146,7 +146,63 @@ namespace MIT.CRM.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Departamento", b =>
+            modelBuilder.Entity("MIT.Data.Contact", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("celphone");
+
+                    b.Property<string>("email");
+
+                    b.Property<string>("emailAlt");
+
+                    b.Property<string>("firstName");
+
+                    b.Property<string>("lastName");
+
+                    b.Property<string>("name");
+
+                    b.Property<string>("telphone");
+
+                    b.Property<string>("title");
+
+                    b.Property<string>("type");
+
+                    b.HasKey("id");
+                });
+
+            modelBuilder.Entity("MIT.Data.Contact_Entity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("name");
+
+                    b.Property<string>("type");
+
+                    b.Property<string>("value");
+
+                    b.HasKey("id");
+                });
+
+            modelBuilder.Entity("MIT.Data.Contact_Item", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("contactId");
+
+                    b.Property<string>("name");
+
+                    b.Property<string>("type");
+
+                    b.Property<string>("value");
+
+                    b.HasKey("id");
+                });
+
+            modelBuilder.Entity("MIT.Data.Departamento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -166,7 +222,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Empresa", b =>
+            modelBuilder.Entity("MIT.Data.Empresa", b =>
                 {
                     b.Property<string>("codigo");
 
@@ -217,7 +273,41 @@ namespace MIT.CRM.Migrations
                     b.HasKey("codigo");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Ferias", b =>
+            modelBuilder.Entity("MIT.Data.Entity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("entidade");
+
+                    b.Property<bool>("enviaCobranca");
+
+                    b.Property<string>("fac_Local");
+
+                    b.Property<string>("fac_Mor");
+
+                    b.Property<string>("fac_Tel");
+
+                    b.Property<string>("moeda");
+
+                    b.Property<string>("nome");
+
+                    b.Property<string>("numContrib");
+
+                    b.Property<string>("pais");
+
+                    b.Property<string>("type");
+
+                    b.Property<double>("valorCreditoTotal");
+
+                    b.Property<double>("valorDebitoTotal");
+
+                    b.Property<double>("valorPendente");
+
+                    b.HasKey("id");
+                });
+
+            modelBuilder.Entity("MIT.Data.Ferias", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -231,7 +321,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Ferias_Itens", b =>
+            modelBuilder.Entity("MIT.Data.Ferias_Itens", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -259,7 +349,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.FuncFerias", b =>
+            modelBuilder.Entity("MIT.Data.FuncFerias", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -281,7 +371,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.FuncInfFerias", b =>
+            modelBuilder.Entity("MIT.Data.FuncInfFerias", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -311,10 +401,12 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Funcionario", b =>
+            modelBuilder.Entity("MIT.Data.Funcionario", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("activo");
 
                     b.Property<string>("categoria");
 
@@ -367,7 +459,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Historio_Ferias_Item", b =>
+            modelBuilder.Entity("MIT.Data.Historio_Ferias_Item", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -383,6 +475,28 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
+            modelBuilder.Entity("MIT.Data.Report", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("caminho");
+
+                    b.Property<string>("cc");
+
+                    b.Property<string>("empresa");
+
+                    b.Property<string>("entidade");
+
+                    b.Property<string>("nomeEmpresa");
+
+                    b.Property<string>("tipoEntidade");
+
+                    b.Property<string>("to");
+
+                    b.HasKey("id");
+                });
+
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNet.Identity.EntityFramework.IdentityRole")
@@ -392,14 +506,14 @@ namespace MIT.CRM.Migrations
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.ApplicationUser")
+                    b.HasOne("MIT.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.ApplicationUser")
+                    b.HasOne("MIT.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
@@ -410,76 +524,83 @@ namespace MIT.CRM.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId");
 
-                    b.HasOne("MIT.CRM.Models.ApplicationUser")
+                    b.HasOne("MIT.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Departamento", b =>
+            modelBuilder.Entity("MIT.Data.Contact_Item", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.Empresa")
+                    b.HasOne("MIT.Data.Contact")
+                        .WithMany()
+                        .HasForeignKey("contactId");
+                });
+
+            modelBuilder.Entity("MIT.Data.Departamento", b =>
+                {
+                    b.HasOne("MIT.Data.Empresa")
                         .WithMany()
                         .HasForeignKey("empresaId");
 
-                    b.HasOne("MIT.CRM.Models.ApplicationUser")
+                    b.HasOne("MIT.Data.ApplicationUser")
                         .WithOne()
-                        .HasForeignKey("MIT.CRM.Models.Departamento", "responsavelId");
+                        .HasForeignKey("MIT.Data.Departamento", "responsavelId");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Ferias", b =>
+            modelBuilder.Entity("MIT.Data.Ferias", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.Funcionario")
+                    b.HasOne("MIT.Data.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Ferias_Itens", b =>
+            modelBuilder.Entity("MIT.Data.Ferias_Itens", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.Ferias")
+                    b.HasOne("MIT.Data.Ferias")
                         .WithMany()
                         .HasForeignKey("feriasId");
 
-                    b.HasOne("MIT.CRM.Models.Funcionario")
+                    b.HasOne("MIT.Data.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.FuncFerias", b =>
+            modelBuilder.Entity("MIT.Data.FuncFerias", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.Funcionario")
+                    b.HasOne("MIT.Data.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.FuncInfFerias", b =>
+            modelBuilder.Entity("MIT.Data.FuncInfFerias", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.Funcionario")
+                    b.HasOne("MIT.Data.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Funcionario", b =>
+            modelBuilder.Entity("MIT.Data.Funcionario", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.Departamento")
+                    b.HasOne("MIT.Data.Departamento")
                         .WithMany()
                         .HasForeignKey("departamentoId");
 
-                    b.HasOne("MIT.CRM.Models.Empresa")
+                    b.HasOne("MIT.Data.Empresa")
                         .WithMany()
                         .HasForeignKey("empresaId");
 
-                    b.HasOne("MIT.CRM.Models.ApplicationUser")
+                    b.HasOne("MIT.Data.ApplicationUser")
                         .WithOne()
-                        .HasForeignKey("MIT.CRM.Models.Funcionario", "utilizadorId");
+                        .HasForeignKey("MIT.Data.Funcionario", "utilizadorId");
                 });
 
-            modelBuilder.Entity("MIT.CRM.Models.Historio_Ferias_Item", b =>
+            modelBuilder.Entity("MIT.Data.Historio_Ferias_Item", b =>
                 {
-                    b.HasOne("MIT.CRM.Models.Ferias_Itens")
+                    b.HasOne("MIT.Data.Ferias_Itens")
                         .WithMany()
                         .HasForeignKey("ferias_item_id");
 
-                    b.HasOne("MIT.CRM.Models.ApplicationUser")
+                    b.HasOne("MIT.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("utilizadorId");
                 });

@@ -17,7 +17,7 @@ using MIT.Data;
 
 namespace MIT.CRM.Controllers
 {
-
+    [Authorize]
     public class RHController : Controller
     {
         [FromServices]
@@ -33,16 +33,32 @@ namespace MIT.CRM.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            ApplicationUser user = _context.Users.Include(m => m.departamento)
-                .Include(m => m.funcionario)
-                .Single(c => c.UserName == User.Identity.Name);
-
-            if (user != null && user.departamento != null)
+            try
             {
-                //ViewData["ResponsaveId"] = user;
-                ViewBag.departamento = user.departamento.descricao;
+                Funcionario funcionario = _context.Funcionarios
+                    .Include(m => m.utilizador)
+                    .Include(m => m.departamento)
+                    .Include(m => m.empresa)
+                    .Single( m=> m.utilizador.UserName == User.Identity.Name);
+                //ApplicationUser user = _context.Users.Include(m => m.funcionario)
+                //.Include(m => m.funcionario)
+                //.Single(c => c.UserName == User.Identity.Name);
+
+                //user.departamento = _context.Departamentos.Single(m => m.departamento==);
+
+                 
+
+                if (funcionario != null)
+                {
+                    //ViewData["ResponsaveId"] = user;
+                    ViewBag.departamento = funcionario.departamento.descricao;
+                    ViewBag.empresa = funcionario.empresa.codigo;
+                }
+                else { ViewBag.departamento = ""; }
+
             }
-            else { ViewBag.departamento = ""; }
+            catch { ViewBag.departamento = ""; }
+
 
             return View();
         }
@@ -82,6 +98,7 @@ namespace MIT.CRM.Controllers
 
         public IActionResult Edit(int id)
         {
+            
             ApplicationUser user = _context.Users.First(c => c.UserName == User.Identity.Name);
 
             Funcionario funcionario = _context.Funcionarios.Include(f => f.departamento).Single(f => f.id == id);
@@ -178,7 +195,8 @@ namespace MIT.CRM.Controllers
         public JsonResult ListaMarcacaoFerias(int funcionarioId, short ano)
         {
             var listaFerias = _context.Ferias_Itens.Include(f=> f.funcionario)
-                .Where(f => f.funcionarioId == funcionarioId).OrderBy(x => x.dataFeria);
+                .Where(f => f.funcionarioId == funcionarioId && f.ano == ano && f.estado != "Recusado").OrderBy(x => x.dataFeria);
+
             return Json(listaFerias,new JsonSerializerSettings()
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -188,7 +206,9 @@ namespace MIT.CRM.Controllers
         [HttpPost]
         public JsonResult listaFuncionarios(string empresa, string departamento)
         {
-            var listaFuncionarios = _context.Funcionarios.OrderBy(m => m.nome);
+            var listaFuncionarios = _context.Funcionarios.Include(m=> m.departamento)
+                .Where(f=> f.empresaId == empresa && f.departamento.departamento== departamento)
+                .OrderBy(m => m.nome);
 
             return Json(listaFuncionarios, new JsonSerializerSettings()
             {

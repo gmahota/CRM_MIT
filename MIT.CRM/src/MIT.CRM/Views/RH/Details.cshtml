@@ -10,11 +10,239 @@
     @{conexao = "http://localhost:8989/signalr";}
 </environment>
 <environment names="Staging,Production">
-    @{conexao = "http://192.168.3.16:8989/signalr";}
+    @{conexao = "http://ferias.mit.co.mz:8989/signalr";}
 </environment>
 
 @section scripts {
 
+<!-- Variaveis Globais -->
+
+<script type="text/javascript">
+        var ferias = [];
+        var tipoFerias = "Dia de Férias";
+        var numDiasMarcados = 0;
+
+        var numMeiosDiasMarcados = 0;
+        var numDiasAntecipados = 0;
+        var numMeiosAntecipados = 0;
+</script>
+
+<!-- Boostrap Annual Calendar-->
+<script type="text/javascript">
+
+        $(document).ready(function () {
+
+            var currentYear = new Date().getFullYear();
+
+            $('#calendario').calendar({
+                enableContextMenu: true,
+                dataSource:[],
+                mouseOnDay: function (e) {
+                    if (e.events.length > 0) {
+                        var content = '';
+
+                        for (var i in e.events) {
+                            content += '<div class="event-tooltip-content">'
+                                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                                            + '<div class="event-location">' + e.events[i].location + '</div>'
+                                        + '</div>';
+                        }
+
+                        $(e.element).popover({
+                            trigger: 'manual',
+                            container: 'body',
+                            html: true,
+                            content: content
+                        });
+
+                        $(e.element).popover('show');
+                    }
+                },
+                mouseOutDay: function (e) {
+                    if (e.events.length > 0) {
+                        $(e.element).popover('hide');
+                    }
+                },
+                dayContextMenu: function (e) {
+                    $(e.element).popover('hide');
+                },
+                enableRangeSelection: true,
+
+                selectRange: function (e) {
+
+                }
+            })
+
+            var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+
+                url: apiUrl,
+                data: { funcionarioId: '@Model.id', ano: '@DateTime.Now.Year' },
+
+                success: function (data) {
+
+                    data.forEach(preencherCalendario);
+
+                    function preencherCalendario(value, index, ar) {
+
+                        var color = "#337ab7";
+
+                        switch (value.estado) {
+                            case "Por Aprovar":
+                                color = "#f0ad4e";
+                                break;
+
+                            case "Aprovado":
+                                color = '#257e4a';
+                                break;
+                            case "Recusado":
+                                color = "#d9534f";
+
+                                break;
+
+                        }
+
+                        var day = moment(value.dataFeria);
+
+                        var currentYear = new Date().getFullYear();
+                        console.log(value.dataFeria)
+                        var evento = {
+                            id: 0,
+                            name: value.tipo,
+                            location: value.estado,
+                            startDate: day.toDate(),
+                            endDate: day.toDate(),
+                            color: color
+                        }
+
+                        saveEvent(evento)
+
+                        if (value.estado == "Por Aprovar") {
+
+
+
+
+                        }
+
+
+
+                    }
+                },
+                error: function (error) {
+                    var x = error; //break here for debugging.
+                }
+            });
+        })
+
+
+        function saveEvent(evento) {
+
+            var dataSource = $('#calendario').data('calendar').getDataSource();
+
+            var newId = 0;
+
+            for (var i in dataSource) {
+                if (dataSource[i].id > newId) {
+                    newId = dataSource[i].id;
+                }
+            }
+
+            newId++;
+            evento.id = newId;
+
+            dataSource.push(evento);
+
+            console.log(dataSource)
+
+            $('#calendario').data('calendar').setDataSource(dataSource);
+
+        }
+
+        function existeData(events,evento) {
+
+            for(i = 0 ; i < events.length; i++){
+                if (events[i].dataFeria == evento.dataFeria) {
+
+                    alert("O sistema não permite marcar duas vezes a mesma data")
+                    return true
+
+                }
+
+            }
+            return false;
+        }
+
+        function submeterPedido() {
+
+            for(i=0;i<ferias.length;i++){
+                var feria = ferias[i];
+
+                if(feria.estado ==""){
+                    feria.estado = "Por Aprovar";
+                    $.ajax({
+                        type: "POST",
+                        async: true,
+                        dataType: "json",
+                        url: location.origin + "/RH/MarcacaoFerias",
+                        data: feria,
+                        success: function (data) {
+
+                            //window.location = "/RH/Index";
+
+                        },
+                        error: function (error) {
+                            var x = error; //break here for debugging.
+                        }
+                    });
+                }
+
+            }
+
+
+            var mensaguem = "";
+            mensaguem = "<table>"
+            mensaguem += "<tr>" +
+                "<th>Data</th>" +
+                "<th>Tipo</th>" +
+                "<th>Estado</th> </tr>";
+
+            for( j = 0; j < ferias.length; j++ ){
+                mensaguem += "<tr>" +
+                "<td>" +ferias[j].dataFeria +"</td>" +
+                "<td>" + ferias[j].tipo + "</td>" +
+                "<td>" + ferias[j].estado + "</td> </tr>";
+
+            }
+
+            mensaguem += "</table>";
+
+            var apiUrl = location.origin + "/Funcionario/sendEmailCriacaoFerias";
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                async: true,
+                url: apiUrl,
+                data: { funcionarioId: '@Model.id', 'mensaguem':mensaguem, titulo:"Pedido de Ferias do Funcionario @Model.nome.First()" },
+                success: function () {
+
+                    //window.location = "/RH/Index";
+
+                },
+                error: function (error) {
+                    var x = error; //break here for debugging.
+                }
+            });
+
+            window.location = "/RH/Details/" + '@Model.id';
+
+        }
+</script>
+
+<!-- Full Calendar-->
 <script>
     $(document).ready(function () {
         $('#menu_rh_ul').attr('class', 'collapse in');
@@ -283,52 +511,36 @@
 
 <h4 class="page-header">Detalhes de Ferias : @ViewData["modulo_value"]</h4>
 
-<div class="row placeholders">
-    <div class="col-md-6 placeholder">
-        <div id="calendar"></div>
+
+<div class="row placeholders " >
+    <div class="placeholder">
+        <div id="calendario"></div>
     </div>
-
-    <div class="col-md-4 placeholder">
-
-        <table id="tabelaMarcacaoFerias" class="table">
-
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Tipo</th>
-                    <th>Estado</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-
-        </table>
-
-
-    </div>
-
 </div>
 
 <div class="row placeholders">
-    <div class="col-md-5 placeholder" >
-        <a href="@Url.Action("Create", "RH",new { id = Model.id })" type="button" class="btn btn-primary btn-sm " role="button">
-            <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
-            Editar
-        </a>
+    <div class="placeholder">
+        
+            <a href="@Url.Action("Create", "RH",new { id = Model.id })" type="button" class="btn btn-primary btn-sm " role="button">
+                <span class="fa fa-pencil-square-o" aria-hidden="true"></span>
+                Editar
+            </a>
 
-        @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
-        {
-        <a href="@Url.Action("Edit", "RH", new { id = Model.id })" type="button" class="btn btn-success btn-sm " role="button">
-            <span class="fa fa-check-square-o" aria-hidden="true"></span>
-            Aprovação
-        </a>
+            @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
+            {
+                <a href="@Url.Action("Edit", "RH", new { id = Model.id })" type="button" class="btn btn-success btn-sm " role="button">
+                    <span class="fa fa-check-square-o" aria-hidden="true"></span>
+                    Aprovação
+                </a>
 
 
-        }
-        <a asp-controller="RH" asp-action="Index" class="btn btn-default btn-sm " role="button">
-            <span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
-            Voltar
-        </a>
+            }
+            <a asp-controller="RH" asp-action="Index" class="btn btn-default btn-sm " role="button">
+                <span class="fa fa-arrow-circle-left" aria-hidden="true"></span>
+                Voltar
+            </a>
+        
     </div>
+    
 </div>
 

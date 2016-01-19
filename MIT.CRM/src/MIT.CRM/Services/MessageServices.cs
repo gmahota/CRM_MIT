@@ -98,7 +98,7 @@ namespace MIT.CRM.Services
                client.Connect("smtp.gmail.com", 587, false);
 
                 // Note: only needed if the SMTP server requires authentication
-                client.Authenticate("gmahota@mit.co.mz", "Agnes27012015");
+                client.Authenticate("do-not-reply@meridian32.com", "Meridian321");
                 
                 client.Send(message);
                 client.Disconnect(true);

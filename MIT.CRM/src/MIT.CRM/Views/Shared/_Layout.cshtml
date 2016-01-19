@@ -12,18 +12,14 @@
             <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
             <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
             
-            <link rel="stylesheet" href="~/css/site.css" />
             <link rel="stylesheet" href="~/css/dashboard.css" />
         </environment>
         <environment names="Staging,Production">
-            <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
-                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-            
-            <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" asp-fallback-test-property="display" asp-fallback-test-value="none" />
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+            <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" />
             <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
-            <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.min.css" />
-            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+            <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
+
             <link rel="stylesheet" href="~/css/dashboard.css" />
         </environment>
     </head>
@@ -42,38 +38,7 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a asp-controller="Home" asp-action="Index"> <i class="fa fa-home"></i> Home</a></li>
-                        
-
-                        @*@if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
-                        {
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" href="#">  <i class="fa fa-users"></i> RH</a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a asp-controller="RH" asp-action="Index">Funcionario</a></li>
-                                    <li><a asp-controller="RH" asp-action="Details">Ferias</a></li>
-                                </ul>
-
-
-                            </li>
-                        }*@
-
-                        @*@if (User.IsInRole("Administrator"))
-                        {
-                            <li class="dropdown">
-                                <a data-toggle="dropdown" href="#">  <i class="fa fa-bars"></i> Gestão</a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a asp-controller="Gestao" asp-action="Index">Geral</a></li>
-                                    <li><a asp-controller="Departamento" asp-action="Index">Departamentos</a></li>
-                                </ul>
-
-
-                            </li>
-                        }*@
-
-                        @*@if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
-                        {
-                            <li><a asp-controller="Cobrancas" asp-action="Index"> <i class="fa fa-money"></i> Cobranças</a></li>
-                        }*@ 
+                       
                         <li>
                             
                             <a asp-controller="Home" asp-action="About"> 
@@ -140,10 +105,19 @@
                                         </li>
                                         <li id="menu_rh_details">
                                             <a asp-controller="RH" asp-action="Details">
-                                                <i class="fa fa-calendar-check-o"></i>
+                                                <i class="fa fa-calendar-plus-o"></i>
                                                 Marcação Ferias
                                             </a>
                                         </li>
+                                        @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
+                                        {
+                                            <li id="menu_rh_aprovacao">
+                                                <a asp-controller="RH" asp-action="Aprovacao">
+                                                    <i class="fa fa-calendar-check-o"></i>
+                                                    Aprovação Ferias
+                                                </a>
+                                            </li>
+                                        }
                                     </ul>
 
 
@@ -180,17 +154,17 @@
                 </nav>
 
 
-                <div class="main">
-                    @RenderBody()
+            <div class="main">
+                @RenderBody()
 
-                    <hr />
-                    <div class="row placeholders">
-                        <footer>
-                            <p>&copy; 2015 - MIT</p>
-                        </footer>
-                    </div>
-                        
+                <hr />
+                <div class="row placeholders">
+                    <footer>
+                        <p>&copy; 2015 - MIT</p>
+                    </footer>
                 </div>
+                        
+            </div>
            
         </div>
       
@@ -227,7 +201,7 @@
             <script src="~/lib/signalr/jquery.signalR.min.js"></script>
 
             <!--Reference the autogenerated SignalR hub script. -->
-            <script src="http://192.168.3.16:8989/signalr/hubs"></script>
+            <script src="http://ferias.mit.co.mz:8989/signalr/hubs"></script>
         </environment>
 
         @RenderSection("scripts", required: false)

@@ -29,6 +29,7 @@ namespace MIT.CRM.Models
 
         #region General 
         public DbSet<Empresa> Empresas { get; set; }
+        public DbSet<Module> Module { get; set; }
         public DbSet<Report> Report { get; set; }
         #endregion
 
