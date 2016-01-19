@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MIT.Data
 {
     public class Entity
     {
+        [Key]
         public int id { get; set; }
+
         public string type { get; set; }
         public string entidade { get; set; }
         public string nome { get; set; }
@@ -24,6 +27,7 @@ namespace MIT.Data
 
     public class Contact
     {
+        [Key]
         public int id { get; set; }
         public string name { get; set; }
         public string firstName { get; set; }
@@ -35,15 +39,17 @@ namespace MIT.Data
         public string celphone { get; set; }
         public string telphone { get; set; }
 
+
         public List<Contact_Item> contact_Itens { get; set; }
 
     }
 
     public class Contact_Item
     {
+        [Key]
         public int id { get; set; }
 
-        public string contactId { get; set; }
+        public int contactId { get; set; }
 
         public string type { get; set; }
         public string name { get; set; }
@@ -55,6 +61,7 @@ namespace MIT.Data
 
     public class Contact_Entity
     {
+        [Key]
         public int id { get; set; }
 
         public string type { get; set; }
@@ -66,6 +73,7 @@ namespace MIT.Data
     
     public class Report
     {
+        [Key]
         public int id { get; set; }
         public string empresa { get; set; }
         public string nomeEmpresa { get; set; }
