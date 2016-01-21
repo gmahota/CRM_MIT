@@ -1,0 +1,255 @@
+using System;
+using System.Collections.Generic;
+using Microsoft.Data.Entity.Migrations;
+using Microsoft.Data.Entity.Metadata;
+
+namespace MIT.CRM.Migrations
+{
+    public partial class add_table_modules : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId", table: "AspNetRoleClaims");
+            migrationBuilder.DropForeignKey(name: "FK_IdentityUserClaim<string>_ApplicationUser_UserId", table: "AspNetUserClaims");
+            migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
+            migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
+            migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
+            migrationBuilder.DropForeignKey(name: "FK_Contact_Item_Contact_contactId", table: "Contact_Item");
+            migrationBuilder.DropForeignKey(name: "FK_Ferias_Funcionario_funcionarioId", table: "Ferias");
+            migrationBuilder.DropForeignKey(name: "FK_Ferias_Itens_Funcionario_funcionarioId", table: "Ferias_Itens");
+            migrationBuilder.DropForeignKey(name: "FK_FuncFerias_Funcionario_funcionarioId", table: "FuncFerias");
+            migrationBuilder.DropForeignKey(name: "FK_FuncInfFerias_Funcionario_funcionarioId", table: "FuncInfFerias");
+            migrationBuilder.DropForeignKey(name: "FK_Funcionario_Departamento_departamentoId", table: "Funcionario");
+            migrationBuilder.DropForeignKey(name: "FK_Historio_Ferias_Item_Ferias_Itens_ferias_item_id", table: "Historio_Ferias_Item");
+            migrationBuilder.CreateTable(
+                name: "Module",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    description = table.Column<string>(nullable: false),
+                    parentId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Module", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Module_Module_parentId",
+                        column: x => x.parentId,
+                        principalTable: "Module",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+            migrationBuilder.CreateTable(
+                name: "CompanyModule",
+                columns: table => new
+                {
+                    companyId = table.Column<int>(nullable: false),
+                    moduleId = table.Column<int>(nullable: false),
+                    companycodigo = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CompanyModule", x => new { x.companyId, x.moduleId });
+                    table.ForeignKey(
+                        name: "FK_CompanyModule_Empresa_companycodigo",
+                        column: x => x.companycodigo,
+                        principalTable: "Empresa",
+                        principalColumn: "codigo",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CompanyModule_Module_moduleId",
+                        column: x => x.moduleId,
+                        principalTable: "Module",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId",
+                principalTable: "AspNetRoles",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityUserClaim<string>_ApplicationUser_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityUserRole<string>_IdentityRole_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId",
+                principalTable: "AspNetRoles",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityUserRole<string>_ApplicationUser_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Contact_Item_Contact_contactId",
+                table: "Contact_Item",
+                column: "contactId",
+                principalTable: "Contact",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Ferias_Funcionario_funcionarioId",
+                table: "Ferias",
+                column: "funcionarioId",
+                principalTable: "Funcionario",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Ferias_Itens_Funcionario_funcionarioId",
+                table: "Ferias_Itens",
+                column: "funcionarioId",
+                principalTable: "Funcionario",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_FuncFerias_Funcionario_funcionarioId",
+                table: "FuncFerias",
+                column: "funcionarioId",
+                principalTable: "Funcionario",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_FuncInfFerias_Funcionario_funcionarioId",
+                table: "FuncInfFerias",
+                column: "funcionarioId",
+                principalTable: "Funcionario",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Funcionario_Departamento_departamentoId",
+                table: "Funcionario",
+                column: "departamentoId",
+                principalTable: "Departamento",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Historio_Ferias_Item_Ferias_Itens_ferias_item_id",
+                table: "Historio_Ferias_Item",
+                column: "ferias_item_id",
+                principalTable: "Ferias_Itens",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Cascade);
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropForeignKey(name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId", table: "AspNetRoleClaims");
+            migrationBuilder.DropForeignKey(name: "FK_IdentityUserClaim<string>_ApplicationUser_UserId", table: "AspNetUserClaims");
+            migrationBuilder.DropForeignKey(name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId", table: "AspNetUserLogins");
+            migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_IdentityRole_RoleId", table: "AspNetUserRoles");
+            migrationBuilder.DropForeignKey(name: "FK_IdentityUserRole<string>_ApplicationUser_UserId", table: "AspNetUserRoles");
+            migrationBuilder.DropForeignKey(name: "FK_Contact_Item_Contact_contactId", table: "Contact_Item");
+            migrationBuilder.DropForeignKey(name: "FK_Ferias_Funcionario_funcionarioId", table: "Ferias");
+            migrationBuilder.DropForeignKey(name: "FK_Ferias_Itens_Funcionario_funcionarioId", table: "Ferias_Itens");
+            migrationBuilder.DropForeignKey(name: "FK_FuncFerias_Funcionario_funcionarioId", table: "FuncFerias");
+            migrationBuilder.DropForeignKey(name: "FK_FuncInfFerias_Funcionario_funcionarioId", table: "FuncInfFerias");
+            migrationBuilder.DropForeignKey(name: "FK_Funcionario_Departamento_departamentoId", table: "Funcionario");
+            migrationBuilder.DropForeignKey(name: "FK_Historio_Ferias_Item_Ferias_Itens_ferias_item_id", table: "Historio_Ferias_Item");
+            migrationBuilder.DropTable("CompanyModule");
+            migrationBuilder.DropTable("Module");
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId",
+                principalTable: "AspNetRoles",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityUserClaim<string>_ApplicationUser_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityUserLogin<string>_ApplicationUser_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityUserRole<string>_IdentityRole_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId",
+                principalTable: "AspNetRoles",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_IdentityUserRole<string>_ApplicationUser_UserId",
+                table: "AspNetUserRoles",
+                column: "UserId",
+                principalTable: "AspNetUsers",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Contact_Item_Contact_contactId",
+                table: "Contact_Item",
+                column: "contactId",
+                principalTable: "Contact",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Ferias_Funcionario_funcionarioId",
+                table: "Ferias",
+                column: "funcionarioId",
+                principalTable: "Funcionario",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Ferias_Itens_Funcionario_funcionarioId",
+                table: "Ferias_Itens",
+                column: "funcionarioId",
+                principalTable: "Funcionario",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_FuncFerias_Funcionario_funcionarioId",
+                table: "FuncFerias",
+                column: "funcionarioId",
+                principalTable: "Funcionario",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_FuncInfFerias_Funcionario_funcionarioId",
+                table: "FuncInfFerias",
+                column: "funcionarioId",
+                principalTable: "Funcionario",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Funcionario_Departamento_departamentoId",
+                table: "Funcionario",
+                column: "departamentoId",
+                principalTable: "Departamento",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+            migrationBuilder.AddForeignKey(
+                name: "FK_Historio_Ferias_Item_Ferias_Itens_ferias_item_id",
+                table: "Historio_Ferias_Item",
+                column: "ferias_item_id",
+                principalTable: "Ferias_Itens",
+                principalColumn: "id",
+                onDelete: ReferentialAction.Restrict);
+        }
+    }
+}

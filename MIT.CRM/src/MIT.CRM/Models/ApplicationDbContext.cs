@@ -30,12 +30,16 @@ namespace MIT.CRM.Models
         #region General 
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Module> Module { get; set; }
+        public DbSet<CompanyModule> CompanyModule { get; set; }
         public DbSet<Report> Report { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<CompanyModule>().HasKey(x => new { x.companyId, x.moduleId });
+
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);

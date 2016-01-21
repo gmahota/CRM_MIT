@@ -146,6 +146,17 @@ namespace MIT.CRM.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
+            modelBuilder.Entity("MIT.Data.CompanyModule", b =>
+                {
+                    b.Property<int>("companyId");
+
+                    b.Property<int>("moduleId");
+
+                    b.Property<string>("companycodigo");
+
+                    b.HasKey("companyId", "moduleId");
+                });
+
             modelBuilder.Entity("MIT.Data.Contact", b =>
                 {
                     b.Property<int>("id")
@@ -475,6 +486,20 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
+            modelBuilder.Entity("MIT.Data.Module", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("description")
+                        .IsRequired()
+                        .HasAnnotation("MaxLength", 25);
+
+                    b.Property<int?>("parentId");
+
+                    b.HasKey("id");
+                });
+
             modelBuilder.Entity("MIT.Data.Report", b =>
                 {
                     b.Property<int>("id")
@@ -527,6 +552,17 @@ namespace MIT.CRM.Migrations
                     b.HasOne("MIT.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("MIT.Data.CompanyModule", b =>
+                {
+                    b.HasOne("MIT.Data.Empresa")
+                        .WithMany()
+                        .HasForeignKey("companycodigo");
+
+                    b.HasOne("MIT.Data.Module")
+                        .WithMany()
+                        .HasForeignKey("moduleId");
                 });
 
             modelBuilder.Entity("MIT.Data.Contact_Item", b =>
@@ -603,6 +639,13 @@ namespace MIT.CRM.Migrations
                     b.HasOne("MIT.Data.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("utilizadorId");
+                });
+
+            modelBuilder.Entity("MIT.Data.Module", b =>
+                {
+                    b.HasOne("MIT.Data.Module")
+                        .WithMany()
+                        .HasForeignKey("parentId");
                 });
         }
     }

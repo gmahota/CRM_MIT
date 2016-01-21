@@ -37,8 +37,8 @@ namespace MIT.Data
         public string host { get; set; }
         public string email { get; set; }
 
-        public virtual List <Departamento> departamentosList { get; set; }
-        public virtual List <Module> modulosList { get; set; }
+        public ICollection<Departamento> departamentosList { get; set; }
+        public ICollection<CompanyModule> companyModules { get; set; }
     }
 
     public class Moeda
@@ -79,9 +79,18 @@ namespace MIT.Data
         public int? parentId { get; set; }
         
         public Module parent { get; set; }
-        public List<Module> childList { get; set; }
+        public ICollection<Module> childList { get; set; }
 
-        public virtual List <Empresa> empresasList { get; set; } 
+        public ICollection<CompanyModule> companyModules { get; set; } 
          
+    }
+
+    public class CompanyModule
+    {
+        public int moduleId { get; set; }
+        public Module module { get; set; }
+
+        public int companyId { get; set; }
+        public Empresa company { get; set; }
     }
 }
