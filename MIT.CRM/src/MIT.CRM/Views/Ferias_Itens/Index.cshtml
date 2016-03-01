@@ -1,74 +1,443 @@
-@model IEnumerable<MIT.CRM.Models.Ferias_Itens>
+@model IEnumerable<MIT.Data.Funcionario>
 
 @{
     ViewData["Title"] = "Index";
+    string a = "Aprovação";
 }
 
-<h2>Index</h2>
+<!--Page Header -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-7">
+            <h1 class="h2"><span class="ng-binding ng-isolate-scope" ncy-breadcrumb-last="">Ferias</span></h1>
+            <div class="text-muted ng-binding"> Ferias Por Aprovar - @ViewData["modulo_value"] </div>
+        </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ano)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.dataFeria)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.estado)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.estadoGozo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.originouFalta)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.originouFaltaSubAlim)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.tipo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.tipoMarcacao)
-        </th>
-        <th></th>
-    </tr>
-    
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ano)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.dataFeria)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.estado)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.estadoGozo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.originouFalta)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.originouFaltaSubAlim)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.tipo)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.tipoMarcacao)
-        </td>
-        <td>
-            <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-            <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-            <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
-        </td>
-    </tr>
-}
-</table>
+    </div>
+</div>
+
+<!--Page Breadcrumb -->
+<ol class="breadcrumb" breadcrumb="">
+    <li><span>RH</span></li>
+    <li><span>Ferias</span></li>
+
+
+    @await Html.PartialAsync("_BreadcrumbMenu")
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn ng-scope">
+        <div class="row">
+            <div class="card card-full ng-scope">
+                <div class="card-block">
+
+                    <table class="table table-hover table-outline hidden-sm-down">
+                        <thead class="thead-default">
+                            <tr>
+                                <th class="text-xs-center"><i class="icon-people"></i></th>
+                                <th>User</th>
+                                <th class="text-xs-center">Country</th>
+                                <th>Usage</th>
+                                <th class="text-xs-center">Payment Method</th>
+                                <th>Activity</th>
+                                <th class="text-xs-center">Satisfaction</th>
+                                <th class="text-xs-center"><i class="icon-settings"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody class="ng-scope">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-xs-center"><i class="icon-people"></i></td>
+                                <td>
+                                    <div class="ng-binding">@item.nome</div>
+                                    <div class="small text-muted ng-binding">
+                                        <span class="ng-scope" ng-if="user.new == true">@item.departamento.descricao</span>
+                                        
+                                        | @item.cargo
+                                    </div>
+                                    
+                                </td>
+                                <td class="text-xs-center">Country</td>
+                                <td>Usage</td>
+                                <td class="text-xs-center">Payment Method</td>
+                                <td>Activity</td>
+                                <td class="text-xs-center">Satisfaction</td>
+                                <td class="text-xs-center"><i class="icon-settings"></i></td>
+                            </tr>
+                                
+                        }
+                        </tbody>
+                    </table>
+                    
+                    <table class="table table-hover table-outline hidden-sm-down">
+                        <thead class="thead-default">
+                            <tr>
+                                <th class="text-xs-center"><i class="icon-people"></i></th>
+                                <th>User</th>
+                                <th class="text-xs-center">Country</th>
+                                <th>Usage</th>
+                                <th class="text-xs-center">Payment Method</th>
+                                <th>Activity</th>
+                                <th class="text-xs-center">Satisfaction</th>
+                                <th class="text-xs-center"><i class="icon-settings"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody class="ng-scope" ng-controller="usersTableCtrl">
+                            <!-- ngRepeat: user in users -->
+                            <tr class="ng-scope" ng-repeat="user in users">
+                                <td class="text-xs-center">
+                                    <div class="avatar">
+                                        <img src="dist/img/avatars/1.jpg" ng-src="dist/img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status label-success" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ng-binding">Yiorgos Avraamu</div>
+                                    <div class="small text-muted ng-binding">
+                                        <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                        <!-- ngIf: user.new == false -->
+                                        | Registered: Jan 1, 2015
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <img src="dist/img/flags/USA.png" ng-src="dist/img/flags/USA.png" alt="USA" style="height:24px;">
+                                </td>
+                                <td>
+                                    <div class="clearfix">
+                                        <div class="pull-left">
+                                            <strong class="ng-binding">50%</strong>
+                                        </div>
+                                        <div class="pull-right">
+                                            <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                        </div>
+                                    </div>
+                                    <progress class="progress progress-xs ng-binding progress-success" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="50" max="100" style="margin:5px 0 0 0;">50%</progress>
+                                </td>
+                                <td class="text-xs-center">
+                                    <i class="fa fa-cc-mastercard" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                </td>
+                                <td>
+                                    <div class="small text-muted">Last login</div>
+                                    <strong class="ng-binding">10 sec ago</strong>
+                                </td>
+                                <td class="text-xs-center">
+                                    <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                        <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                        <span class="value ng-binding">48%</span>
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                </td>
+                            </tr><!-- end ngRepeat: user in users -->
+                            <tr class="ng-scope" ng-repeat="user in users">
+                                <td class="text-xs-center">
+                                    <div class="avatar">
+                                        <img src="dist/img/avatars/2.jpg" ng-src="dist/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status label-danger" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ng-binding">Avram Tarasios</div>
+                                    <div class="small text-muted ng-binding">
+                                        <!-- ngIf: user.new == true -->
+                                        <!-- ngIf: user.new == false --><span class="ng-scope" ng-if="user.new == false">Recurring</span><!-- end ngIf: user.new == false -->
+                                        | Registered: Jan 1, 2015
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <img src="dist/img/flags/Brazil.png" ng-src="dist/img/flags/Brazil.png" alt="Brazil" style="height:24px;">
+                                </td>
+                                <td>
+                                    <div class="clearfix">
+                                        <div class="pull-left">
+                                            <strong class="ng-binding">10%</strong>
+                                        </div>
+                                        <div class="pull-right">
+                                            <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                        </div>
+                                    </div>
+                                    <progress class="progress progress-xs ng-binding progress-info" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="10" max="100" style="margin:5px 0 0 0;">10%</progress>
+                                </td>
+                                <td class="text-xs-center">
+                                    <i class="fa fa-cc-visa" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                </td>
+                                <td>
+                                    <div class="small text-muted">Last login</div>
+                                    <strong class="ng-binding">5 minutes ago</strong>
+                                </td>
+                                <td class="text-xs-center">
+                                    <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                        <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                        <span class="value ng-binding">61%</span>
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                </td>
+                            </tr><!-- end ngRepeat: user in users -->
+                            <tr class="ng-scope" ng-repeat="user in users">
+                                <td class="text-xs-center">
+                                    <div class="avatar">
+                                        <img src="dist/img/avatars/3.jpg" ng-src="dist/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status label-warning" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ng-binding">Quintin Ed</div>
+                                    <div class="small text-muted ng-binding">
+                                        <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                        <!-- ngIf: user.new == false -->
+                                        | Registered: Jan 1, 2015
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <img src="dist/img/flags/India.png" ng-src="dist/img/flags/India.png" alt="India" style="height:24px;">
+                                </td>
+                                <td>
+                                    <div class="clearfix">
+                                        <div class="pull-left">
+                                            <strong class="ng-binding">74%</strong>
+                                        </div>
+                                        <div class="pull-right">
+                                            <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                        </div>
+                                    </div>
+                                    <progress class="progress progress-xs ng-binding progress-warning" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="74" max="100" style="margin:5px 0 0 0;">74%</progress>
+                                </td>
+                                <td class="text-xs-center">
+                                    <i class="fa fa-cc-stripe" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                </td>
+                                <td>
+                                    <div class="small text-muted">Last login</div>
+                                    <strong class="ng-binding">1 hour ago</strong>
+                                </td>
+                                <td class="text-xs-center">
+                                    <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                        <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                        <span class="value ng-binding">33%</span>
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                </td>
+                            </tr><!-- end ngRepeat: user in users -->
+                            <tr class="ng-scope" ng-repeat="user in users">
+                                <td class="text-xs-center">
+                                    <div class="avatar">
+                                        <img src="dist/img/avatars/4.jpg" ng-src="dist/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status label-default" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ng-binding">Enéas Kwadwo</div>
+                                    <div class="small text-muted ng-binding">
+                                        <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                        <!-- ngIf: user.new == false -->
+                                        | Registered: Jan 1, 2015
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <img src="dist/img/flags/France.png" ng-src="dist/img/flags/France.png" alt="France" style="height:24px;">
+                                </td>
+                                <td>
+                                    <div class="clearfix">
+                                        <div class="pull-left">
+                                            <strong class="ng-binding">98%</strong>
+                                        </div>
+                                        <div class="pull-right">
+                                            <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                        </div>
+                                    </div>
+                                    <progress class="progress progress-xs ng-binding progress-danger" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="98" max="100" style="margin:5px 0 0 0;">98%</progress>
+                                </td>
+                                <td class="text-xs-center">
+                                    <i class="fa fa-paypal" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                </td>
+                                <td>
+                                    <div class="small text-muted">Last login</div>
+                                    <strong class="ng-binding">Last month</strong>
+                                </td>
+                                <td class="text-xs-center">
+                                    <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                        <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                        <span class="value ng-binding">23%</span>
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                </td>
+                            </tr><!-- end ngRepeat: user in users -->
+                            <tr class="ng-scope" ng-repeat="user in users">
+                                <td class="text-xs-center">
+                                    <div class="avatar">
+                                        <img src="dist/img/avatars/5.jpg" ng-src="dist/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status label-success" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ng-binding">Agapetus Tadeáš</div>
+                                    <div class="small text-muted ng-binding">
+                                        <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                        <!-- ngIf: user.new == false -->
+                                        | Registered: Jan 1, 2015
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <img src="dist/img/flags/Spain.png" ng-src="dist/img/flags/Spain.png" alt="Spain" style="height:24px;">
+                                </td>
+                                <td>
+                                    <div class="clearfix">
+                                        <div class="pull-left">
+                                            <strong class="ng-binding">22%</strong>
+                                        </div>
+                                        <div class="pull-right">
+                                            <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                        </div>
+                                    </div>
+                                    <progress class="progress progress-xs ng-binding progress-info" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="22" max="100" style="margin:5px 0 0 0;">22%</progress>
+                                </td>
+                                <td class="text-xs-center">
+                                    <i class="fa fa-google-wallet" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                </td>
+                                <td>
+                                    <div class="small text-muted">Last login</div>
+                                    <strong class="ng-binding">Last week</strong>
+                                </td>
+                                <td class="text-xs-center">
+                                    <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                        <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                        <span class="value ng-binding">78%</span>
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                </td>
+                            </tr><!-- end ngRepeat: user in users -->
+                            <tr class="ng-scope" ng-repeat="user in users">
+                                <td class="text-xs-center">
+                                    <div class="avatar">
+                                        <img src="dist/img/avatars/6.jpg" ng-src="dist/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                        <span class="avatar-status label-danger" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="ng-binding">Friderik Dávid</div>
+                                    <div class="small text-muted ng-binding">
+                                        <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                        <!-- ngIf: user.new == false -->
+                                        | Registered: Jan 1, 2015
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <img src="dist/img/flags/Poland.png" ng-src="dist/img/flags/Poland.png" alt="Poland" style="height:24px;">
+                                </td>
+                                <td>
+                                    <div class="clearfix">
+                                        <div class="pull-left">
+                                            <strong class="ng-binding">43%</strong>
+                                        </div>
+                                        <div class="pull-right">
+                                            <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                        </div>
+                                    </div>
+                                    <progress class="progress progress-xs ng-binding progress-success" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="43" max="100" style="margin:5px 0 0 0;">43%</progress>
+                                </td>
+                                <td class="text-xs-center">
+                                    <i class="fa fa-cc-amex" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                </td>
+                                <td>
+                                    <div class="small text-muted">Last login</div>
+                                    <strong class="ng-binding">Yesterday</strong>
+                                </td>
+                                <td class="text-xs-center">
+                                    <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                        <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                        <span class="value ng-binding">11%</span>
+                                    </div>
+                                </td>
+                                <td class="text-xs-center">
+                                    <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                </td>
+                            </tr><!-- end ngRepeat: user in users -->
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

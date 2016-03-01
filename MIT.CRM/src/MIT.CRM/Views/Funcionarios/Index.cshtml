@@ -1,0 +1,113 @@
+@model IEnumerable<MIT.Data.Funcionario>
+
+@inject MIT.CRM.Services.AppServices AppSettings
+
+@{
+    ViewData["Title"] = "Index";
+    
+}
+
+<!--Page Header -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-7">
+            <h1 class="h2"><span class="ng-binding ng-isolate-scope" ncy-breadcrumb-last="">Ferias</span></h1>
+            <div class="text-muted ng-binding"> Ferias Por Aprovar - @ViewBag.empresaNome </div>
+        </div>
+
+    </div>
+</div>
+
+<!--Page Breadcrumb -->
+<ol class="breadcrumb" breadcrumb="">
+    <li><span>RH</span></li>
+    <li><span>Ferias</span></li>
+
+
+    @await Html.PartialAsync("_BreadcrumbMenu")
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn ng-scope">
+        <div class="row">
+            <div class="card card-full ng-scope">
+                <div class="card-block">
+
+                    <table class="table table-hover table-outline hidden-sm-down">
+                        <thead class="thead-default">
+                            <tr>
+                                <th class="text-xs-center"><i class="icon-people"></i></th>
+                                <th>Funcionario</th>
+                                <th>Ferias</th>
+                                <th class="text-xs-center">Direito Ferias</th>
+                                
+                                <th class="text-xs-center"><i class="icon-settings"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody class="ng-scope">
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-xs-center">
+
+                                        <div class="avatar">
+                                            <img src="@await AppSettings.getCurrentAvatar(item.utilizador.UserName)" class="img-avatar"> @*alt="@item.utilizador.Email"*@
+                                            @*<span class="avatar-status label-success" ng-class="{ 'label-success' : user.status == 'active',
+                                                'label-warning' : user.status == 'away',
+                                                'label-danger'  : user.status == 'busy',
+                                                'label-default' : user.status == 'offline' }"></span>*@
+                                        </div>
+
+                                    </td>
+                                    <td>
+                                        <div class="ng-binding">@item.nome</div>
+                                        <div class="small text-muted ng-binding">
+                                            @item.empresa.codigo|
+                                            <span class="ng-scope" ng-if="user.new == true">@item.departamento.descricao</span>
+
+                                            | @item.cargo
+                                        </div>
+
+                                    </td>
+
+                                    <td>
+                                       
+                                        <a asp-controller="RH" asp-action="Edit" asp-route-id="@item.id">
+                                                    
+                                            @{
+                                                string[] lista = { "Aprovado", "Por Aprovar" };
+                                            }
+
+                                            @await AppSettings.getferias_item(item.id, DateTime.Now.Year, lista)
+                                        </a>
+                                    </td>
+
+                                    <td class="text-xs-center">
+                                        @{
+                                            var funF = item.funcInfFerias.Where(f => f.ano == DateTime.Now.Year);
+
+                                            if (funF != null && funF.Count() > 0 )
+                                            {
+                                                @funF.First().diasDireito
+
+                                            }
+                                        } 
+                                    </td>
+
+                                    <td class="text-xs-center">
+                                        <a asp-action="Edit" asp-route-id="@item.id">
+                                            <i class="icon-settings"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+
+                                        }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

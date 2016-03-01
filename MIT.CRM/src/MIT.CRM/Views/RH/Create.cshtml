@@ -1,37 +1,31 @@
 ﻿@model MIT.Data.Funcionario
+@inject MIT.CRM.Services.AppServices AppSettings
+
 
 @{
-    var conexao = "";
+    var conexao = ViewBag.conexao;
+    var url = ViewBag.url;
 }
 
-<environment names="Development">
-    @{conexao = "http://localhost:8989/signalr";}
-</environment>
-<environment names="Staging,Production">
-    @{conexao = "http://ferias.mit.co.mz:8989/signalr";}
-</environment>
-
-
 @section scripts {
-    <!-- Variaveis Globais -->
 
-    <script type="text/javascript">
-        var ferias = [];
-        var tipoFerias = "Dia de Férias";
-        var numDiasMarcados = 0;
+<!-- Variaveis Globais -->
 
-        var numMeiosDiasMarcados = 0;
-        var numDiasAntecipados = 0;
-        var numMeiosAntecipados = 0;
-    </script>
+<script type="text/javascript">
+    var ferias = [];
+    var tipoFerias = "Dia de Férias";
+    var numDiasMarcados = 0;
 
-    <!-- Boostrap Annual Calendar-->
+    var numMeiosDiasMarcados = 0;
+    var numDiasAntecipados = 0;
+    var numMeiosAntecipados = 0;
+</script>
 
-    <script type="text/javascript">
+<!-- Boostrap Annual Calendar-->
+<script type="text/javascript">
 
-        $(document).ready(function () {
-
-            var currentYear = new Date().getFullYear();
+    $(document).ready(function () {
+        var currentYear = new Date().getFullYear();
 
             $('#calendario').calendar({
                 enableContextMenu: true,
@@ -66,26 +60,27 @@
                     $(e.element).popover('hide');
                 },
                 enableRangeSelection: true,
-                
+
                 selectRange: function (e) {
-                    
+
                 },
 
                 clickDay: function (e) {
+                    
+                    tipoFerias = $("input[name='options']:checked").val();
+
                     var day = moment(e.date);
 
                     var evento = {
-                        //id: value.funcionarioId,
-                        title: tipoFerias,// 'Pedido Ferias',
-                        start: day.format("DD/MM/YYYY") , //'2014-06-09T16:00:00'
-                        //end: date,
+                        title: tipoFerias,
+                        start: day.format("DD/MM/YYYY") ,
                         allDay: true,
                         color: '#eea236'
                     }
 
                     var feria = {
                         ano: day.format("YYYY"),
-                        dataFeria: day.format("DD/MM/YYYY"),
+                        dataFeria: e.date,
                         funcionarioId: '@Model.id',
                         tipo:tipoFerias,
                         estado: "",
@@ -146,7 +141,7 @@
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                
+
                 url: apiUrl,
                 data: { funcionarioId: '@Model.id', ano: '@DateTime.Now.Year' },
 
@@ -168,6 +163,35 @@
                                 break;
                             case "Recusado":
                                 color = "#d9534f";
+
+                                break;
+
+                        }
+
+                        switch (value.tipo) {
+                            case 'Dia de Férias':
+
+                                numDiasMarcados++;
+
+                                $("#txtDiasMarcados").val(numDiasMarcados);
+
+                                break;
+
+                            case 'Meio Dia de Férias':
+                                numMeiosDiasMarcados++;
+                                $("#txtMeiosDiasMarcados").val(numMeiosDiasMarcados);
+                                break;
+
+                            case 'Dia Antecipado':
+                                numDiasAntecipados++;
+
+                                $("#txtDiasAntecipados").val(numDiasAntecipados);
+
+                                break;
+                            case 'Meio Dia Antecipado':
+                                numMeiosAntecipados++;
+
+                                $("#txtMeiosDiasAntecipados").val(numMeiosAntecipados);
 
                                 break;
 
@@ -186,17 +210,20 @@
                             color: color
                         }
 
+
+
                         saveEvent(evento)
-                        
-                        if (value.estado == "Por Aprovar") {
 
-                            
+                        var feria = {
+                            ano: value.ano,
+                            dataFeria: day.toDate(),
+                            funcionarioId: '@Model.id',
+                            tipo: value.tipo,
+                            estado: value.estado,
+                            tipoMarcacaos: 1
+                        };
 
-
-                        }
-
-
-
+                        ferias.push(feria);
                     }
                 },
                 error: function (error) {
@@ -207,7 +234,7 @@
 
 
         function saveEvent(evento) {
-            
+
             var dataSource = $('#calendario').data('calendar').getDataSource();
 
             var newId = 0;
@@ -223,458 +250,209 @@
 
             dataSource.push(evento);
 
-            console.log(dataSource)
 
             $('#calendario').data('calendar').setDataSource(dataSource);
-            
+
         }
 
         function existeData(events,evento) {
 
-            for(i = 0 ; i < events.length; i++){
-                if (events[i].dataFeria == evento.dataFeria) {
+            for (i = 0 ; i < events.length; i++) {
+                
+                if (events[i].dataFeria.toString("DDMMYYY") == evento.dataFeria.toString("DDMMYYY")) {
 
                     alert("O sistema não permite marcar duas vezes a mesma data")
                     return true
 
-                }
+                } 
 
             }
             return false;
         }
 
-        function submeterPedido() {
-
-            for(i=0;i<ferias.length;i++){
-                var feria = ferias[i];
-
-                if(feria.estado ==""){
-                    feria.estado = "Por Aprovar";
-                    $.ajax({
-                        type: "POST",
-                        async: true,
-                        dataType: "json",
-                        url: location.origin + "/RH/MarcacaoFerias",
-                        data: feria,
-                        success: function (data) {
-
-                            //window.location = "/RH/Index";
-
-                        },
-                        error: function (error) {
-                            var x = error; //break here for debugging.
-                        }
-                    });
-                }
-
-            }
-
-
-            var mensaguem = "";
-            mensaguem = "<table>"
-            mensaguem += "<tr>" +
-                "<th>Data</th>" +
-                "<th>Tipo</th>" +
-                "<th>Estado</th> </tr>";
-
-            for( j = 0; j < ferias.length; j++ ){
-                mensaguem += "<tr>" +
-                "<td>" +ferias[j].dataFeria +"</td>" +
-                "<td>" + ferias[j].tipo + "</td>" +
-                "<td>" + ferias[j].estado + "</td> </tr>";
-
-            }
-
-            mensaguem += "</table>";
-
-            var apiUrl = location.origin + "/Funcionario/sendEmailCriacaoFerias";
-
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                async: true,
-                url: apiUrl,
-                data: { funcionarioId: '@Model.id', 'mensaguem':mensaguem, titulo:"Pedido de Ferias do Funcionario @Model.nome.First()" },
-                success: function () {
-
-                    //window.location = "/RH/Index";
-
-                },
-                error: function (error) {
-                    var x = error; //break here for debugging.
-                }
-            });
-
-            window.location = "/RH/Details/" + '@Model.id';
-
-        }
-</script>
-
-    <!--Full Calendar -->
-    <script type="text/javascript">
         
-        $(document).ready(function () {
-
-            $('#myModal').on('shown.bs.modal', function () {
-                $('#myInput').focus()
-            })
-
-            var calendar = $('#calendar').fullCalendar({
-                lang: 'pt',
-                dayClick: function (date, jsEvent, view) {
-                    var existe = false;
-
-                    var row = document.getElementById("tabelaMarcacaoFerias").rows.length;
-
-                    $('#tabelaMarcacaoFerias tr').find(".DataM").each(function (i, row) {
-
-                        var row = $(this);
-
-                        if (date.format("L") == $(row).text()) {
-                            existe = true;
-
-                        }
-                    });
-
-                    if (existe == true)
-                    {
-                        alert("O dia " + date.format("L") + " já foi selecionado já existe na lista de férias por submeter");
-
-                    } else
-                    {
-                        var rows = document.getElementById('tabelaMarcacaoFerias').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-
-                        $("#tabelaMarcacaoFerias").append(
-                            "<tr>" +
-                                "<td class ='DataM'>" + date.format("L") + "</td> " +
-                                "<td>" +  tipoFerias + "</td> " +
-                                "<td>" + "" + "</td> " +
-                                "<td> <a onclick='removeLinhaMarcacaoFerias(this.parentNode.parentNode.rowIndex,tipoFerias)' > " + "<span class='fa fa-remove' aria-hidden='true' style='font-size: 18px; '></span> </a></td>" +
-                            "</tr>"
-                        );
-
-
-                        var evento = {
-                            //id: value.funcionarioId,
-                            title: tipoFerias,// 'Pedido Ferias',
-                            start: date, //'2014-06-09T16:00:00'
-                            end: date,
-                            allDay: true,
-                            color: '#eea236'
-                        }
-
-                        switch (tipoFerias) {
-                            case 'Dia de Férias':
-                                evento.color = '#eea236';
-                                //$(this).css('background-color', '#eea236');
-                                numDiasMarcados++;
-
-                                $("#txtDiasMarcados").text(numDiasMarcados);
-
-                                break;
-
-                            case 'Meio Dia de Férias':
-                                //$(this).css('background-color', '#d43f3a');
-                                evento.color = '#d43f3a';
-                                numMeiosDiasMarcados++;
-                                $("#txtMeiosDiasMarcados").text(numMeiosDiasMarcados);
-                                break;
-
-                            case 'Dia Antecipado': $(this).css('background-color', '#46b8da');
-                                numDiasAntecipados++;
-
-                                $("#txtDiasAntecipados").text(numDiasAntecipados);
-
-                                break;
-                            case 'Meio Dia Antecipado': $(this).css('background-color', '#cccccc');
-                                numMeiosAntecipados++;
-
-                                $("#txtMeiosDiasAntecipados").text(numMeiosAntecipados);
-
-                                break;
-
-                        }
-
-                        $('#calendar').fullCalendar('renderEvent', evento, true);
-
-                    }
-
-                },
-
-
-                header: {
-                    center: 'month' // buttons for switching between views
-                },
-                views: {
-
-                }
-            });
-
-            var apiUrl = location.origin + "/RH/ListaMarcacaoFerias";
-
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-
-                url: apiUrl,
-                data: { funcionarioId: '@Model.id', ano: '@DateTime.Now.Year' },
-                success: function (data) {
-
-                    data.forEach(preencherCalendario);
-
-                    function preencherCalendario(value, index, ar) {
-
-                        var color = "#337ab7";
-
-                        switch (value.estado) {
-                            case "Por Aprovar":
-                                color = "#f0ad4e";
-                                break;
-
-                            case "Aprovado":
-                                color = '#257e4a';
-                                break;
-                            case "Recusado":
-                                color = "#d9534f";
-
-                                break;
-
-                        }
-
-
-                        var evento = {
-                            //id: value.funcionarioId,
-                            title: value.tipo,// 'Pedido Ferias',
-                            start: value.dataFeria, //'2014-06-09T16:00:00'
-                            end: value.dataFeria,
-                            allDay: true,
-                            color: color
-                        }
-
-                        $('#calendar').fullCalendar('renderEvent', evento, true);
-
-                        var tipo = "'+" + value.tipo + "'";
-
-                        var day = moment(value.dataFeria);
-
-                        var d = new Date(value.dataFeria);
-
-                        if (value.estado == "Por Aprovar") {
-
-                            $("#tabelaMarcacaoFerias").append(
-                                "<tr>" +
-                                    "<td class ='DataM'>" + day.format("DD/MM/YYYY") + "</td> " +
-                                    "<td>" + value.tipo + "</td> " +
-                                    "<td>" + value.estado + "</td> " +
-                                    "<td > <a id = 'a_" + value.id + "'  > " +
-                                        "<span class='glyphicon glyphicon-remove-circle' aria-hidden='true' style='font-size: 18px; '></span> </a></td>" +
-                                "</tr>"
-                            );
-
-                            $("#a_" + value.id).click(function () {
-                                alert(this.parentNode.parentNode.rowIndex);
-                                deleteMarcacaoFerias( value.id , this.parentNode.parentNode.rowIndex , "'" + value.tipo + "'")
-                            });
-                                
-                            //    .click {  css({
-                            //    'background-color': 'red',
-                            //    'onclick': 
-                            //});
-
-
-                        }
-
-
-
-                    }
-                },
-                error: function (error) {
-                    var x = error; //break here for debugging.
-                }
-            });
-
-        });
-
-        function removeLinhaMarcacaoFerias(numero,tipoferias) {
-
-            var row = $('#tabelaMarcacaoFerias').get(0).rows.item(numero)
-            var row = $(row);
-
-            $('#calendar').fullCalendar('removeEvents', function (event) {
-                if (event.start.format("L") === row.children('td').eq(0).text())
-                    return true;
-            });
-
-            document.getElementById('tabelaMarcacaoFerias').deleteRow(numero);
-
-            switch (tipoFerias) {
-                case 'Dia de Férias':
-                    numDiasMarcados--;
-
-                    $("#txtDiasMarcados").text(numDiasMarcados);
-
-                    break;
-
-                case 'Meio Dia de Férias':
-                    numMeiosDiasMarcados--;
-                    $("#txtMeiosDiasMarcados").text(numMeiosDiasMarcados);
-                    break;
-                case 'Dia Antecipado':
-
-                    numDiasAntecipados--;
-
-                    $("#txtDiasAntecipados").text(numDiasAntecipados);
-
-                    break;
-                case 'Meio Dia Antecipado':
-
-                    numMeiosAntecipados--;
-
-                    $("#txtMeiosDiasAntecipados").text(numMeiosAntecipados);
-
-                    break;
-
-            }
-
-
-        }
-
-        function deleteMarcacaoFerias(id,linhaActual,tipoFerias) {
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-
-                url: location.origin + "/RH/Delete_Ferias",
-                data: { id: id },
-                success: function () {
-
-                    
-                },
-                error: function (error) {
-                    var x = error; //break here for debugging.
-                }
-            });
-
-            removeLinhaMarcacaoFerias(linhaActual, tipoFerias);
-
-        }
-
-        function submeterPedido_old() {
-            var ferias = [];
-
-            var row = document.getElementById("tabelaMarcacaoFerias").rows.length;
-
-            $('#tabelaMarcacaoFerias tr').each(function (i, row) {
-                var row = $(this);
-                if (i != 0) {
-
-                    var td = row.children('td');
-                    
-
-                    var feria = {
-                        ano: $("#ano").val(),
-                        dataFeria: td.eq(0).text(),
-                        funcionarioId: '@Model.id',
-                        tipo: td.eq(1).text(),
-                        estado: td.eq(2).text(),
-                        tipoMarcacaos:1
-                    };
-                    console.log(feria);
-
-                    if(feria.estado ==""){
-                        feria.estado = "Por Aprovar";
-                        $.ajax({
-                            type: "POST",
-                            async: true,
-                            dataType: "json",
-                            url: location.origin + "/RH/MarcacaoFerias",
-                            data: feria,
-                            success: function (data) {
-
-                                    //window.location = "/RH/Index";
-
-                            },
-                            error: function (error) {
-                                var x = error; //break here for debugging.
-                            }
-                        });
-                    }
-                    ferias.push(feria);
-
-                    var perc = (document.getElementById("tabelaMarcacaoFerias").rows.length / i) * 100;
-                    $('#progressbar').width(perc + '%');
-                    console.log(perc + '%');
-
-                }
-
-
-                if (i == document.getElementById("tabelaMarcacaoFerias").rows.length-1) {
-
-                    var mensaguem = "";
-                    mensaguem = "<table>"
-                    mensaguem += "<tr>" +
-                        "<th>Data</th>" +
-                        "<th>Tipo</th>" +
-                        "<th>Estado</th> </tr>";
-
-                    for( j = 0; j < ferias.length; j++ ){
-                        mensaguem += "<tr>" +
-                        "<td>" +ferias[j].dataFeria +"</td>" +
-                        "<td>" + ferias[j].tipo + "</td>" +
-                        "<td>" + ferias[j].estado + "</td> </tr>";
-
-                    }
-
-                    mensaguem += "</table>";
-
-                    var apiUrl = location.origin + "/Funcionario/sendEmailCriacaoFerias";
-
-                    $.ajax({
-                        type: "POST",
-                        dataType: "json",
-                        async: true,
-                        url: apiUrl,
-                        data: { funcionarioId: '@Model.id', 'mensaguem':mensaguem, titulo:"Pedido de Ferias do Funcionario @Model.nome.First()" },
-                        success: function () {
-
-                            //window.location = "/RH/Index";
-
-                        },
-                        error: function (error) {
-                            var x = error; //break here for debugging.
-                        }
-                    });
-
-
-
-                    
-                }
-
-                window.location = "/RH/Details/" + '@Model.id';
-            });
-
-
-        }
-
     </script>
 
-    <!--SignalR script to update the chat page and send messages.-->
-    <script>
+<!--Metods Create, Update, Read MarcacaoFerias -->
+<script type="text/javascript">
+
+    function submeterPedido() {
+
+        for (i = 0; i < ferias.length; i++) {
+            
+            var fe = ferias[i]
+            var day = moment(fe.dataFeria);
+
+            var feri = { 
+                ano:fe.ano, 
+                dataFeria: day.format("YYYY-MM-DD"),
+                funcionarioId: fe.funcionarioId, 
+                tipo: fe.tipo,
+                estado: fe.estado,
+                tipoMarcacao: fe.tipoMarcacao
+            }
+            
+            
+
+            if (feri.estado == "") {
+                feri.estado = "Por Aprovar";
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    dataType: "json",
+                    url: location.origin + "/RH/MarcacaoFerias",
+                    data: feri ,
+                    success: function (data) {
+
+                        //window.location = "/RH/Index";
+
+                    },
+                    error: function (error) {
+                        var x = error; //break here for debugging.
+                    }
+                });
+            }
+
+        }
+
+
+        var mensaguem = "";
+        mensaguem = "<table>"
+        mensaguem += "<tr>" +
+            "<th>Data</th>" +
+            "<th>Tipo</th>" +
+            "<th>Estado</th> </tr>";
+
+        for (j = 0; j < ferias.length; j++) {
+            var day = moment(ferias[j].dataFeria)
+
+            mensaguem += "<tr>" +
+            "<td>" +  day.format("YYYY-MM-DD") + "</td>" +
+            "<td>" + ferias[j].tipo + "</td>" +
+            "<td>" + ferias[j].estado + "</td> </tr>";
+
+        }
+
+        mensaguem += "</table>";
+
+        var apiUrl = location.origin + "/Funcionario/sendEmailCriacaoFerias";
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            async: false,
+            url: apiUrl,
+            data: { funcionarioId: '@Model.id', 'mensaguem': mensaguem, titulo: "Pedido de Ferias do Funcionario @Model.nome.First()" },
+            success: function () {
+
+                //window.location = "/RH/Index";
+
+            },
+            error: function (error) {
+                var x = error; //break here for debugging.
+            }
+        });
+
+        window.location = "/RH/Details/" + '@Model.id';
+
+    }
+
+
+
+    function removeLinhaMarcacaoFerias(numero,tipoferias) {
+
+        var row = $('#tabelaMarcacaoFerias').get(0).rows.item(numero)
+        var row = $(row);
+
+        $('#calendar').fullCalendar('removeEvents', function (event) {
+            if (event.start.format("L") === row.children('td').eq(0).text())
+                return true;
+        });
+
+        document.getElementById('tabelaMarcacaoFerias').deleteRow(numero);
+
+        switch (tipoFerias) {
+            case 'Dia de Férias':
+                numDiasMarcados--;
+
+                $("#txtDiasMarcados").text(numDiasMarcados);
+
+                break;
+
+            case 'Meio Dia de Férias':
+                numMeiosDiasMarcados--;
+                $("#txtMeiosDiasMarcados").text(numMeiosDiasMarcados);
+                break;
+            case 'Dia Antecipado':
+
+                numDiasAntecipados--;
+
+                $("#txtDiasAntecipados").text(numDiasAntecipados);
+
+                break;
+            case 'Meio Dia Antecipado':
+
+                numMeiosAntecipados--;
+
+                $("#txtMeiosDiasAntecipados").text(numMeiosAntecipados);
+
+                break;
+
+        }
+
+
+    }
+
+    function deleteMarcacaoFerias(id,linhaActual,tipoFerias) {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+
+            url: location.origin + "/RH/Delete_Ferias",
+            data: { id: id },
+            success: function () {
+
+
+            },
+            error: function (error) {
+                var x = error; //break here for debugging.
+            }
+        });
+
+        removeLinhaMarcacaoFerias(linhaActual, tipoFerias);
+
+    }
+
+</script>
+
+<!--Reference the autogenerated SignalR hub script. -->
+<script src="@url"></script>
+<!--SignalR script to update the chat page and send messages.-->
+<script>
         $.connection.hub.url = "@conexao";
 
             var rhHub = $.connection.rhHub;
 
             $(function () {
 
-
-
                 rhHub.client.daInfFeriasFuncionario = function (val) {
-                    console.log(val);
-                    console.log("Connection started! Client - daInfFeriasFuncionario ");
-
+                    
                     $("#txtGozados").text(val.diasJaGozados);
                     $("#txtPorGozar").text(val.diasPorGozar);
-                    $("#txtMaximoDiaFerias").text(val.diasDireito);
+                    $("#txtdiasDireito").text(val.diasDireito);
+                    $("#txtdiasAdicionais").text(val.diasAdicionais);
+                    $("#txtdiasAnoAnterior").text(val.diasAnoAnterior);
+
+                    $("#txttotalDias").text(val.totalDias);
+                    $("#txtdiasPorGozar").text(val.diasPorGozar);
+                    $("#txtdiasJaGozados").text(val.diasJaGozados);
+
+                    $("#txtdiasPorMarcar").text(val.diasPorMarcar);
+                    $("#txtdiasJaGozados").text(val.diasJaGozados);
+
+                    $("#txtAnoPrimavera").text(val.ano);
+                    
+
                 };
 
                 rhHub.client.daListaEmpresas = function (val) {
@@ -775,7 +553,7 @@
                 $.connection.hub.start().done(function () {
                     console.log("connection started! server");
 
-                    getFuncInfFerias(2015, '@Model.empresaId', '@Model.codigo');
+                    getFuncInfFerias(new Date().getFullYear(), '@Model.empresaId', '@Model.codigo');
                 });
             });
 
@@ -828,137 +606,121 @@
     </script>
 }
 
+<!--Page Breadcrumb -->
+<ol class="breadcrumb" breadcrumb="">
+    @*<li><span>RH</span></li>
+        <li><span>Funcionario</span></li>*@
+    <li><span>Ferias</span></li>
 
-<h4 class="page-header"> RH - Marcação de Ferias : @ViewData["modulo_value"]</h4>
-
-
-<div class="row placeholders">
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Dados Funcionario</h3>
-        </div>
-        <div class="panel-body">
-            <div class="col-md-8 placeholder">
-                <table>
-                    <tr>
-                        <td>Dias Marcados: </td>
-                        <td style="padding-right:10px"> <input type="number" id="txtDiasMarcados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px"> </td>
-
-                        <td>Meios Dias: </td>
-                        <td style="padding-right:10px"> <input type="number" id="txtMeiosDiasMarcados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">  </td>
-
-                        <td>Dias Antecipados: </td>
-                        <td style="padding-right:10px"> <input type="number" id="txtDiasAntecipados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">  </td>
-
-                        <td>Meios Dias Antecipados: </td>
-                        <td style="padding-right:10px"> <input type="number" id="txtMeiosDiasAntecipados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px"> </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="col-md-offset-8 placeholder">
+    <li><span>@ViewData["modulo_value"]</span></li>
 
 
+    @*@await Html.PartialAsync("_BreadcrumbMenu")*@
 
-
-                <b>Direito de Ferias</b>
-
-                <table>
-                    <tr>
-                        <td>Máximo de dias Férias: </td>
-                        <td style="padding-right:10px">
-                            <input type="number" id="txtMaximoDiaFerias" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">
-                        </td>
-
-
-                        <td>Gozados: </td>
-                        <td style="padding-right:10px">
-                            <input type="number" id="txtGozados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">
-                        </td>
-
-                        <td>Por Gozar: </td>
-                        <td style="padding-right:10px">
-                            <input type="number" id="txtPorGozar" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">
-                        </td>
-                    </tr>
-
-                </table>
-            </div>
-
-
+    <div class="breadcrumb-menu">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <center>
+                <button type="button" class="btn btn-success btn-sm " role="button" onclick="submeterPedido()"> @*data-toggle="modal" data-target="#myModal"*@
+                    <span class="fa fa-save" aria-hidden="true"></span>
+                    Submeter
+                </button>
+                <a href="@Url.Action("Index", "RH",new { id = Model.id })" class="btn btn-default btn-sm " role="button">
+                    <span class="fa fa-remove" aria-hidden="true"></span>
+                    Cancelar
+                </a>
+            </center>
         </div>
     </div>
 
+</ol>
 
+<div class="container-fluid">
+    <div class="animated fadeIn ng-scope">
+        <div class="row">
+            <div class="card card-full">
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <h4 class="card-title">Dados Funcionario</h4>
 
-</div>
+                            @*<div class="small text-muted" style="margin-top:-10px;">November 2015</div>*@
+                        </div>
 
-<div class="row placeholders" >
-    <div class="col-md-8 placeholder">
+                    </div>
+                    <hr class="m-a-0">
 
-        <label class="radio-inline" >
-            <input type="radio" style="opacity: 0;" name="optradio" onclick="tipoFerias = 'Dia de Férias'" checked="checked">
-                Dias de Férias
-        
-        </label>
-        <label class="radio-inline" ><input type="radio" name="optradio" onclick="tipoFerias = 'Meio Dia de Férias'">Meios Dias de Ferias</label>
-        <label class="radio-inline" ><input type="radio" name="optradio" onclick="tipoFerias = 'Dia Antecipado'">Dias Antecipados</label>
-        <label class="radio-inline" ><input type="radio" name="optradio" onclick="tipoFerias = 'Meio Dia Antecipado'">Meios Dias Antecipados</label>
-        <label class="radio-inline" ><input type="radio" name="optradio" onclick="tipoFerias = 'Desmarcar'">Desmarcar</label>
+                    <div class="row">
+                        
+                        @Component.Invoke("Funcionario_Inf_Ferias", Model.id, DateTime.Now.Year)
 
-    </div>
+                        <div class="card">
+                            <div class="btn-toolbar pull-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group" data-toggle="buttons" aria-label="First group">
+                                    <label class="btn btn-sm btn-secondary-outline active">
+                                        <input name="options" id="option1" type="radio" value="Dia de Férias" checked="checked"> Dia
+                                    </label>
+                                    <label class="btn btn-sm btn-secondary-outline ">
+                                        <input name="options" id="option2" type="radio" value="Meio Dia de Férias"> Meio Dia
+                                    </label>
+                                    <label class="btn btn-sm btn-secondary-outline">
+                                        <input name="options" id="option3" type="radio" value="Dia Antecipado"> Dia Antecipado
+                                    </label>
 
-</div>
+                                    <label class="btn btn-sm btn-secondary-outline">
+                                        <input name="options" id="option4" type="radio" value="Meio Dia Antecipado"> Meio Dia Antecipado
+                                    </label>
+                                </div>
+                                <div class="btn-group hidden-sm-down" role="group" aria-label="Second group">
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="tipoFerias = 'Desmarcar'"><i class="glyphicon-remove"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-<div class="row placeholders">
+                    <div class="row">
 
-    
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-block">
+                                    <div id="calendario" class="calendario placeholder"></div>
+                                </div>
+                            </div>
+                        </div>
 
-    <div id="calendario" class="calendario placeholder"></div>
+                    </div>
+                </div>
 
-</div>
-
-<div class="row placeholders">
-    <div class="placeholder">
-        <button type="button" class="btn btn-success btn-sm " role="button"
-                data-toggle="modal" data-target="#myModal">
-            <span class="fa fa-save" aria-hidden="true"></span>
-            Submeter
-        </button>
-        <a href="@Url.Action("Index", "RH",new { id = Model.id })" class="btn btn-default btn-sm " role="button">
-            <span class="fa fa-remove" aria-hidden="true"></span>
-            Cancelar
-        </a>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">Validação do Pedido</h4>
-                </div>
-                <div class="modal-body">
-                    Deseja Submeter as Ferias para os respectivos dias?
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Validação do Pedido</h4>
+            </div>
+            <div class="modal-body">
+                Deseja Submeter as Ferias para os respectivos dias?
 
-                    <div id="progressBar">
-                        <div class="progress">
-                            <div id="progressbar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-                                 aria-valuemax="100" style="width:0%">
-                                <span class="sr-only">0% Complete</span>
-                            </div>
+                <div id="progressBar">
+                    <div class="progress">
+                        <div id="progressbar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+                                aria-valuemax="100" style="width:0%">
+                            <span class="sr-only">0% Complete</span>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                    <button type="button" class="btn btn-primary" onclick="submeterPedido()">Sim</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+                <button type="button" class="btn btn-primary" onclick="submeterPedido()">Sim</button>
             </div>
         </div>
     </div>
+</div>
 
 

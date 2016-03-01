@@ -2,36 +2,1082 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h4 class="page-header">Pagina Inicial</h4>
-
 @section scripts {
 
     <script>
 
         $(function () { // document ready
 
-            $('#menu_home').attr('class', 'active');
+            $('#menu_dashboard').attr('class', 'active');
 
 
 	    });
 
     </script>
+
+    <script>
+		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+		var lineChartData = {
+			labels : ["January","February","March","April","May","June","July"],
+			datasets : [
+				{
+					label: "My First dataset",
+					fillColor : "rgba(220,220,220,0.2)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(220,220,220,1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				},
+				{
+					label: "My Second dataset",
+					fillColor : "rgba(151,187,205,0.2)",
+					strokeColor : "rgba(151,187,205,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(151,187,205,1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				}
+			]
+
+		}
+
+	window.onload = function(){
+		var ctx = document.getElementById("canvas").getContext("2d");
+		window.myLine = new Chart(ctx).Line(lineChartData, {
+			responsive: true
+		});
+	}
+
+
+    </script>
 }
 
-<div class="row-fluid placeholders">
 
-    <div class="placeholder" style="text-align:justify">
-        <h1>Gestão de Ferias</h1>
-        
-        <p>
-            Aplicação adicional para marcação e aprovação de ferias.
-        </p>
-        <p>  
-            Esta aplicação permite marcar as ferias e aprovado e enviado todos as operações por email.
-        </p>
-        <p>
-            Somente as ferias aprovadas no sistema são sincronizadas e marcadas no sistema primavera.
-        </p>
+<!--Page Header -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-7">
+            <h1 class="h2"><span class="ng-binding ng-isolate-scope" ncy-breadcrumb-last="">Pagina Inicial</span></h1>
+            <div class="text-muted ng-binding"> Welcome to MIT CRM </div>
+        </div>
+        <div class="col-md-5 charts">
+            <div class="row ng-scope" ng-controller="chartsCtrl">
+                @*<div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-container"><canvas style="width: 140px; height: 31px;" width="140" class="chart chart-bar ng-isolate-scope" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="false" chart-options="options" chart-colours="colours" height="31"></canvas></div>
+                        </div>
+                        <div class="text-xs-center title"><span class="text-muted">Income: </span><strong>$189.128</strong></div>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-4">
+                        <div class="chart-wrapper">
+                            <div class="chart-container"><canvas style="width: 123px; height: 27px;" width="123" class="chart chart-bar ng-isolate-scope" chart-data="data1" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="colours" height="27"></canvas></div>
+                        </div>
+                        <div class="text-xs-center title"><span class="text-muted">New clients: </span><strong class="text-danger">1.128</strong></div>
+                    </div>*@
+                <div class="col-xs-6 col-sm-4 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-container"><canvas style="width: 123px; height: 27px;" width="123" class="chart chart-bar ng-isolate-scope" chart-data="data2" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="colours" height="27"></canvas></div>
+                    </div>
+                    <div class="text-xs-center title"><span class="text-muted">Funcionarios: </span><strong class="text-success">@ViewBag.totalFuncionarios</strong></div>
+                </div>
+            </div>
+        </div>
     </div>
-    
+</div>
+
+
+<!--Page Breadcrumb -->
+<ol class="breadcrumb" breadcrumb="">
+    <li><span>Root</span></li>
+    <!-- ngRepeat: step in steps -->
+    <li class="ng-scope active" ng-repeat="step in steps" ng-class="{active: $last}" ng-switch="$last || !!step.abstract"><!-- ngSwitchWhen: false --><!-- ngSwitchWhen: true --><span class="ng-binding ng-scope" ng-switch-when="true">Home</span><!-- end ngSwitchWhen: --></li><!-- end ngRepeat: step in steps -->
+    <!-- Breadcrumb Menu-->
+
+    @await Html.PartialAsync("_BreadcrumbMenu")
+
+
+</ol>
+
+<div class="container-fluid">
+
+    <div class="animated fadeIn ng-scope">
+        <div class="card card-full ng-scope" ng-controller="trafficDemoCtrl">
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-xs-5">
+                        <h4 class="card-title">Traffic</h4>
+                        <div class="small text-muted" style="margin-top:-10px;">November 2015</div>
+                    </div>
+                    <div class="col-xs-7">
+                        <div class="btn-toolbar pull-right" role="toolbar" aria-label="Toolbar with button groups">
+                            <div class="btn-group" data-toggle="buttons" aria-label="First group">
+                                <label class="btn btn-sm btn-secondary-outline">
+                                    <input name="options" id="option1" autocomplete="off" checked="" type="radio"> Day
+                                </label>
+                                <label class="btn btn-sm btn-secondary-outline active">
+                                    <input name="options" id="option2" autocomplete="off" type="radio"> Month
+                                </label>
+                                <label class="btn btn-sm btn-secondary-outline">
+                                    <input name="options" id="option3" autocomplete="off" type="radio"> Year
+                                </label>
+                            </div>
+                            <div class="btn-group hidden-sm-down" role="group" aria-label="Second group">
+                                <button type="button" class="btn btn-sm btn-primary"><i class="icon-cloud-download"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-wrapper" style="height:300px;margin-top:40px;">
+                    <div class="chart-container">
+                        <div style="width:30%">
+                            <div>
+                                <canvas style="width: 360px; height: 270px;" id="canvas" height="270" width="360"></canvas>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <ul>
+                    <li>
+                        <div class="text-muted">Visits</div>
+                        <strong>29.703 Users (40%)</strong>
+                        <progress class="progress progress-xs progress-success" value="40" max="100">40%</progress>
+                    </li>
+                    <li>
+                        <div class="text-muted">Unique</div>
+                        <strong>24.093 Unique Users (20%)</strong>
+                        <progress class="progress progress-xs progress-info" value="20" max="100">20%</progress>
+                    </li>
+                    <li class="hidden-sm-down">
+                        <div class="text-muted">Pageviews</div>
+                        <strong>78.706 Views (60%)</strong>
+                        <progress class="progress progress-xs progress-warning" value="60" max="100">60%</progress>
+                    </li>
+                    <li class="hidden-sm-down">
+                        <div class="text-muted">New Users</div>
+                        <strong>22.123 Users (80%)</strong>
+                        <progress class="progress progress-xs progress-danger" value="80" max="100">80%</progress>
+                    </li>
+                    <li class="hidden-sm-down">
+                        <div class="text-muted">Bounce Rate</div>
+                        <strong>40.15%</strong>
+                        <progress class="progress progress-xs progress-primary" value="40" max="100">40%</progress>
+                    </li>
+                </ul>
+            </div>
+        </div><!--/.card-->
+        <div class="row row-equal ng-scope" ng-controller="socialBoxCtrl">
+            <div class="col-md-3 col-sm-6">
+                <div class="social-box facebook">
+                    <i class="fa fa-facebook"></i>
+                    <div class="chart-wrapper">
+                        <div class="chart-container"><canvas style="width: 188px; height: 87px;" class="chart chart-line ng-isolate-scope" chart-data="data1" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="colours" width="188" height="87"></canvas></div>
+                    </div>
+                    <ul>
+                        <li>
+                            <strong>89k</strong>
+                            <span>friends</span>
+                        </li>
+                        <li>
+                            <strong>459</strong>
+                            <span>feeds</span>
+                        </li>
+                    </ul>
+                </div><!--/.social-box-->
+            </div><!--/.col-->
+            <div class="col-md-3 col-sm-6">
+                <div class="social-box twitter">
+                    <i class="fa fa-twitter"></i>
+                    <div class="chart-wrapper">
+                        <div class="chart-container"><canvas style="width: 188px; height: 87px;" class="chart chart-line ng-isolate-scope" chart-data="data2" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="colours" width="188" height="87"></canvas></div>
+                    </div>
+                    <ul>
+                        <li>
+                            <strong>973k</strong>
+                            <span>followers</span>
+                        </li>
+                        <li>
+                            <strong>1.792</strong>
+                            <span>tweets</span>
+                        </li>
+                    </ul>
+                </div><!--/.social-box-->
+            </div><!--/.col-->
+            <div class="col-md-3 col-sm-6">
+                <div class="social-box linkedin">
+                    <i class="fa fa-linkedin"></i>
+                    <div class="chart-wrapper">
+                        <div class="chart-container"><canvas style="width: 188px; height: 87px;" class="chart chart-line ng-isolate-scope" chart-data="data3" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="colours" width="188" height="87"></canvas></div>
+                    </div>
+                    <ul>
+                        <li>
+                            <strong>500+</strong>
+                            <span>contacts</span>
+                        </li>
+                        <li>
+                            <strong>292</strong>
+                            <span>feeds</span>
+                        </li>
+                    </ul>
+                </div><!--/.social-box-->
+            </div><!--/.col-->
+            <div class="col-md-3 col-sm-6">
+                <div class="social-box google-plus">
+                    <i class="fa fa-google-plus"></i>
+                    <div class="chart-wrapper">
+                        <div class="chart-container"><canvas style="width: 188px; height: 87px;" class="chart chart-line ng-isolate-scope" chart-data="data4" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="colours" width="188" height="87"></canvas></div>
+                    </div>
+                    <ul>
+                        <li>
+                            <strong>894</strong>
+                            <span>followers</span>
+                        </li>
+                        <li>
+                            <strong>92</strong>
+                            <span>circles</span>
+                        </li>
+                    </ul>
+                </div><!--/.social-box-->
+            </div><!--/.col-->
+        </div><!--/.row-->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-block">
+                        <h3 class="card-title clearfix m-b-0">
+                            Traffic &amp; Sales
+                            <button type="button" class="btn btn-sm btn-primary-outline pull-right hidden-sm-down"><i class="icon-cloud-download"></i> &nbsp; Download</button>
+                            <fieldset class="form-group pull-right hidden-sm-down col-sm-6 ng-scope" ng-controller="dateRangeCtrl">
+                                <div class="input-group input-group-sm pull-right" style="width:230px;">
+                                    <span class="input-group-addon r-0"><i class="fa fa-calendar"></i></span>
+                                    <input date-range-picker="" class="form-control date-picker ng-pristine ng-untouched ng-valid ng-isolate-scope" ng-model="date" options="opts" type="text">
+                                </div>
+                            </fieldset>
+                        </h3>
+                        <hr class="m-a-0">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="callout callout-info">
+                                            <small class="text-muted">New Clients</small><br>
+                                            <strong class="h4">9,123</strong>
+                                            <div class="chart-wrapper ng-scope" ng-controller="sparklineChartCtrl">
+                                                <div class="chart-container"><canvas style="width: 100px; height: 30px;" class="chart chart-line ng-isolate-scope" chart-data="data4" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="primary" width="100" height="30"></canvas></div>
+                                            </div>
+                                        </div>
+                                    </div><!--/.col-->
+                                    <div class="col-sm-6">
+                                        <div class="callout callout-danger">
+                                            <small class="text-muted">Recuring Clients</small><br>
+                                            <strong class="h4">22,643</strong>
+                                            <div class="chart-wrapper ng-scope" ng-controller="sparklineChartCtrl">
+                                                <div class="chart-container"><canvas style="width: 100px; height: 30px;" class="chart chart-line ng-isolate-scope" chart-data="data3" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="danger" width="100" height="30"></canvas></div>
+                                            </div>
+                                        </div>
+                                    </div><!--/.col-->
+                                </div><!--/.row-->
+                                <hr class="m-t-0">
+                                <ul class="horizontal-bars ng-scope" ng-controller="horizontalBarsCtrl">
+                                    <!-- ngRepeat: row in data -->
+                                    <li class="ng-scope" ng-repeat="row in data">
+                                        <div class="title ng-binding">
+                                            Monday
+                                        </div>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-info ng-binding" value="34" max="100" style="margin-bottom: 2px;">34%</progress>
+                                            <progress class="progress progress-xs progress-danger m-a-0 ng-binding" value="78" max="100">78%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in data -->
+                                    <li class="ng-scope" ng-repeat="row in data">
+                                        <div class="title ng-binding">
+                                            Tuesday
+                                        </div>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-info ng-binding" value="56" max="100" style="margin-bottom: 2px;">56%</progress>
+                                            <progress class="progress progress-xs progress-danger m-a-0 ng-binding" value="94" max="100">94%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in data -->
+                                    <li class="ng-scope" ng-repeat="row in data">
+                                        <div class="title ng-binding">
+                                            Wednesday
+                                        </div>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-info ng-binding" value="12" max="100" style="margin-bottom: 2px;">12%</progress>
+                                            <progress class="progress progress-xs progress-danger m-a-0 ng-binding" value="67" max="100">67%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in data -->
+                                    <li class="ng-scope" ng-repeat="row in data">
+                                        <div class="title ng-binding">
+                                            Thursday
+                                        </div>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-info ng-binding" value="43" max="100" style="margin-bottom: 2px;">43%</progress>
+                                            <progress class="progress progress-xs progress-danger m-a-0 ng-binding" value="91" max="100">91%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in data -->
+                                    <li class="ng-scope" ng-repeat="row in data">
+                                        <div class="title ng-binding">
+                                            Friday
+                                        </div>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-info ng-binding" value="22" max="100" style="margin-bottom: 2px;">22%</progress>
+                                            <progress class="progress progress-xs progress-danger m-a-0 ng-binding" value="73" max="100">73%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in data -->
+                                    <li class="ng-scope" ng-repeat="row in data">
+                                        <div class="title ng-binding">
+                                            Saturday
+                                        </div>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-info ng-binding" value="53" max="100" style="margin-bottom: 2px;">53%</progress>
+                                            <progress class="progress progress-xs progress-danger m-a-0 ng-binding" value="82" max="100">82%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in data -->
+                                    <li class="ng-scope" ng-repeat="row in data">
+                                        <div class="title ng-binding">
+                                            Sunday
+                                        </div>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-info ng-binding" value="9" max="100" style="margin-bottom: 2px;">9%</progress>
+                                            <progress class="progress progress-xs progress-danger m-a-0 ng-binding" value="69" max="100">69%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in data -->
+                                    <li class="legend">
+                                        <span class="label label-pill label-info"></span> <small>New clients</small> &nbsp; <span class="label label-pill label-danger"></span> <small>Recurring clients</small>
+                                    </li>
+                                </ul>
+                            </div><!--/.col-->
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="callout callout-warning">
+                                            <small class="text-muted">Pageviews</small><br>
+                                            <strong class="h4">78,623</strong>
+                                            <div class="chart-wrapper ng-scope" ng-controller="sparklineChartCtrl">
+                                                <div class="chart-container"><canvas style="width: 100px; height: 30px;" class="chart chart-line ng-isolate-scope" chart-data="data4" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="warning" width="100" height="30"></canvas></div>
+                                            </div>
+                                        </div>
+                                    </div><!--/.col-->
+                                    <div class="col-sm-6">
+                                        <div class="callout callout-success">
+                                            <small class="text-muted">Organic</small><br>
+                                            <strong class="h4">49,123</strong>
+                                            <div class="chart-wrapper ng-scope" ng-controller="sparklineChartCtrl">
+                                                <div class="chart-container"><canvas style="width: 100px; height: 30px;" class="chart chart-line ng-isolate-scope" chart-data="data3" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="success" width="100" height="30"></canvas></div>
+                                            </div>
+                                        </div>
+                                    </div><!--/.col-->
+                                </div><!--/.row-->
+                                <hr class="m-t-0">
+                                <ul class="horizontal-bars type-2 ng-scope" ng-controller="horizontalBarsType2Ctrl">
+                                    <!-- ngRepeat: row in gender -->
+                                    <li class="ng-scope" ng-repeat="row in gender">
+                                        <i class="icon-user" ng-class="row.icon"></i>
+                                        <span class="title ng-binding">Male</span>
+                                        <span class="value ng-binding">43%</span>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-warning m-a-0 ng-binding" value="43" max="100">43%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in gender -->
+                                    <li class="ng-scope" ng-repeat="row in gender">
+                                        <i class="icon-user-female" ng-class="row.icon"></i>
+                                        <span class="title ng-binding">Female</span>
+                                        <span class="value ng-binding">37%</span>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-warning m-a-0 ng-binding" value="37" max="100">37%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in gender -->
+                                    <li class="divider"></li>
+                                    <!-- ngRepeat: row in source -->
+                                    <li class="ng-scope" ng-repeat="row in source">
+                                        <i class="icon-globe" ng-class="row.icon"></i>
+                                        <span class="title ng-binding">Organic Search</span>
+                                        <span class="value ng-binding">191,235 <span class="text-muted small ng-binding">(56%)</span></span>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-success m-a-0 ng-binding" value="56" max="100">56%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in source -->
+                                    <li class="ng-scope" ng-repeat="row in source">
+                                        <i class="icon-social-facebook" ng-class="row.icon"></i>
+                                        <span class="title ng-binding">Facebook</span>
+                                        <span class="value ng-binding">51,223 <span class="text-muted small ng-binding">(15%)</span></span>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-success m-a-0 ng-binding" value="15" max="100">15%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in source -->
+                                    <li class="ng-scope" ng-repeat="row in source">
+                                        <i class="icon-social-twitter" ng-class="row.icon"></i>
+                                        <span class="title ng-binding">Twitter</span>
+                                        <span class="value ng-binding">37,564 <span class="text-muted small ng-binding">(11%)</span></span>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-success m-a-0 ng-binding" value="11" max="100">11%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in source -->
+                                    <li class="ng-scope" ng-repeat="row in source">
+                                        <i class="icon-social-linkedin" ng-class="row.icon"></i>
+                                        <span class="title ng-binding">LinkedIn</span>
+                                        <span class="value ng-binding">27,319 <span class="text-muted small ng-binding">(8%)</span></span>
+                                        <div class="bars">
+                                            <progress class="progress progress-xs progress-success m-a-0 ng-binding" value="8" max="100">8%</progress>
+                                        </div>
+                                    </li><!-- end ngRepeat: row in source -->
+                                    <li class="divider text-xs-center">
+                                        <button data-original-title="show more" class="btn btn-sm btn-link text-muted" data-toggle="tooltip" data-placement="top" title=""><i class="icon-options"></i></button>
+                                    </li>
+                                </ul>
+                            </div><!--/.col-->
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="callout">
+                                            <small class="text-muted">CTR</small><br>
+                                            <strong class="h4">23%</strong>
+                                            <div class="chart-wrapper ng-scope" ng-controller="sparklineChartCtrl">
+                                                <div class="chart-container"><canvas style="width: 100px; height: 30px;" class="chart chart-line ng-isolate-scope" chart-data="data4" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="default" width="100" height="30"></canvas></div>
+                                            </div>
+                                        </div>
+                                    </div><!--/.col-->
+                                    <div class="col-sm-6">
+                                        <div class="callout callout-primary">
+                                            <small class="text-muted">Bounce Rate</small><br>
+                                            <strong class="h4">5%</strong>
+                                            <div class="chart-wrapper ng-scope" ng-controller="sparklineChartCtrl">
+                                                <div class="chart-container"><canvas style="width: 100px; height: 30px;" class="chart chart-line ng-isolate-scope" chart-data="data3" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="primary" width="100" height="30"></canvas></div>
+                                            </div>
+                                        </div>
+                                    </div><!--/.col-->
+                                </div><!--/.row-->
+                                <hr class="m-t-0">
+                                <ul class="icons-list">
+                                    <li>
+                                        <i class="icon-screen-desktop bg-primary"></i>
+                                        <div class="desc">
+                                            <div class="title">iMac 4k</div>
+                                            <small>Lorem ipsum dolor sit amet</small>
+                                        </div>
+                                        <div class="value">
+                                            <div class="small text-muted">Sold this week</div>
+                                            <strong>1.924</strong>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="icon-screen-smartphone bg-info"></i>
+                                        <div class="desc">
+                                            <div class="title">Samsung Galaxy Edge</div>
+                                            <small>Lorem ipsum dolor sit amet</small>
+                                        </div>
+                                        <div class="value">
+                                            <div class="small text-muted">Sold this week</div>
+                                            <strong>1.224</strong>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="icon-screen-smartphone bg-warning"></i>
+                                        <div class="desc">
+                                            <div class="title">iPhone 6S</div>
+                                            <small>Lorem ipsum dolor sit amet</small>
+                                        </div>
+                                        <div class="value">
+                                            <div class="small text-muted">Sold this week</div>
+                                            <strong>1.163</strong>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="icon-user bg-danger"></i>
+                                        <div class="desc">
+                                            <div class="title">Premium accounts</div>
+                                            <small>Lorem ipsum dolor sit amet</small>
+                                        </div>
+                                        <div class="value">
+                                            <div class="small text-muted">Sold this week</div>
+                                            <strong>928</strong>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="icon-social-spotify bg-success"></i>
+                                        <div class="desc">
+                                            <div class="title">Spotify Subscriptions</div>
+                                            <small>Lorem ipsum dolor sit amet</small>
+                                        </div>
+                                        <div class="value">
+                                            <div class="small text-muted">Sold this week</div>
+                                            <strong>893</strong>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="icon-cloud-download bg-danger"></i>
+                                        <div class="desc">
+                                            <div class="title">Ebook</div>
+                                            <small>Lorem ipsum dolor sit amet</small>
+                                        </div>
+                                        <div class="value">
+                                            <div class="small text-muted">Downloads</div>
+                                            <strong>121.924</strong>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <i class="icon-camera bg-warning"></i>
+                                        <div class="desc">
+                                            <div class="title">Photos</div>
+                                            <small>Lorem ipsum dolor sit amet</small>
+                                        </div>
+                                        <div class="value">
+                                            <div class="small text-muted">Uploaded</div>
+                                            <strong>12.125</strong>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                        </div>
+                                    </li>
+                                    <li class="divider text-xs-center">
+                                        <button data-original-title="show more" class="btn btn-sm btn-link text-muted" data-toggle="tooltip" data-placement="top" title=""><i class="icon-options"></i></button>
+                                    </li>
+                                </ul>
+                            </div><!--/.col-->
+                        </div><!--/.row-->
+                        <br>
+                        <table class="table table-hover table-outline hidden-sm-down">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th class="text-xs-center"><i class="icon-people"></i></th>
+                                    <th>User</th>
+                                    <th class="text-xs-center">Country</th>
+                                    <th>Usage</th>
+                                    <th class="text-xs-center">Payment Method</th>
+                                    <th>Activity</th>
+                                    <th class="text-xs-center">Satisfaction</th>
+                                    <th class="text-xs-center"><i class="icon-settings"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody class="ng-scope" ng-controller="usersTableCtrl">
+                                <!-- ngRepeat: user in users -->
+                                <tr class="ng-scope" ng-repeat="user in users">
+                                    <td class="text-xs-center">
+                                        <div class="avatar">
+                                            <img src="dist/img/avatars/1.jpg" ng-src="dist/img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                            <span class="avatar-status label-success" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ng-binding">Yiorgos Avraamu</div>
+                                        <div class="small text-muted ng-binding">
+                                            <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                            <!-- ngIf: user.new == false -->
+                                            | Registered: Jan 1, 2015
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <img src="dist/img/flags/USA.png" ng-src="dist/img/flags/USA.png" alt="USA" style="height:24px;">
+                                    </td>
+                                    <td>
+                                        <div class="clearfix">
+                                            <div class="pull-left">
+                                                <strong class="ng-binding">50%</strong>
+                                            </div>
+                                            <div class="pull-right">
+                                                <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                            </div>
+                                        </div>
+                                        <progress class="progress progress-xs ng-binding progress-success" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="50" max="100" style="margin:5px 0 0 0;">50%</progress>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <i class="fa fa-cc-mastercard" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Last login</div>
+                                        <strong class="ng-binding">10 sec ago</strong>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                            <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                            <span class="value ng-binding">48%</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                    </td>
+                                </tr><!-- end ngRepeat: user in users -->
+                                <tr class="ng-scope" ng-repeat="user in users">
+                                    <td class="text-xs-center">
+                                        <div class="avatar">
+                                            <img src="dist/img/avatars/2.jpg" ng-src="dist/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                            <span class="avatar-status label-danger" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ng-binding">Avram Tarasios</div>
+                                        <div class="small text-muted ng-binding">
+                                            <!-- ngIf: user.new == true -->
+                                            <!-- ngIf: user.new == false --><span class="ng-scope" ng-if="user.new == false">Recurring</span><!-- end ngIf: user.new == false -->
+                                            | Registered: Jan 1, 2015
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <img src="dist/img/flags/Brazil.png" ng-src="dist/img/flags/Brazil.png" alt="Brazil" style="height:24px;">
+                                    </td>
+                                    <td>
+                                        <div class="clearfix">
+                                            <div class="pull-left">
+                                                <strong class="ng-binding">10%</strong>
+                                            </div>
+                                            <div class="pull-right">
+                                                <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                            </div>
+                                        </div>
+                                        <progress class="progress progress-xs ng-binding progress-info" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="10" max="100" style="margin:5px 0 0 0;">10%</progress>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <i class="fa fa-cc-visa" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Last login</div>
+                                        <strong class="ng-binding">5 minutes ago</strong>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                            <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                            <span class="value ng-binding">61%</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                    </td>
+                                </tr><!-- end ngRepeat: user in users -->
+                                <tr class="ng-scope" ng-repeat="user in users">
+                                    <td class="text-xs-center">
+                                        <div class="avatar">
+                                            <img src="dist/img/avatars/3.jpg" ng-src="dist/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                            <span class="avatar-status label-warning" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ng-binding">Quintin Ed</div>
+                                        <div class="small text-muted ng-binding">
+                                            <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                            <!-- ngIf: user.new == false -->
+                                            | Registered: Jan 1, 2015
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <img src="dist/img/flags/India.png" ng-src="dist/img/flags/India.png" alt="India" style="height:24px;">
+                                    </td>
+                                    <td>
+                                        <div class="clearfix">
+                                            <div class="pull-left">
+                                                <strong class="ng-binding">74%</strong>
+                                            </div>
+                                            <div class="pull-right">
+                                                <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                            </div>
+                                        </div>
+                                        <progress class="progress progress-xs ng-binding progress-warning" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="74" max="100" style="margin:5px 0 0 0;">74%</progress>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <i class="fa fa-cc-stripe" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Last login</div>
+                                        <strong class="ng-binding">1 hour ago</strong>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                            <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                            <span class="value ng-binding">33%</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                    </td>
+                                </tr><!-- end ngRepeat: user in users -->
+                                <tr class="ng-scope" ng-repeat="user in users">
+                                    <td class="text-xs-center">
+                                        <div class="avatar">
+                                            <img src="dist/img/avatars/4.jpg" ng-src="dist/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                            <span class="avatar-status label-default" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ng-binding">Enéas Kwadwo</div>
+                                        <div class="small text-muted ng-binding">
+                                            <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                            <!-- ngIf: user.new == false -->
+                                            | Registered: Jan 1, 2015
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <img src="dist/img/flags/France.png" ng-src="dist/img/flags/France.png" alt="France" style="height:24px;">
+                                    </td>
+                                    <td>
+                                        <div class="clearfix">
+                                            <div class="pull-left">
+                                                <strong class="ng-binding">98%</strong>
+                                            </div>
+                                            <div class="pull-right">
+                                                <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                            </div>
+                                        </div>
+                                        <progress class="progress progress-xs ng-binding progress-danger" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="98" max="100" style="margin:5px 0 0 0;">98%</progress>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <i class="fa fa-paypal" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Last login</div>
+                                        <strong class="ng-binding">Last month</strong>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                            <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                            <span class="value ng-binding">23%</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                    </td>
+                                </tr><!-- end ngRepeat: user in users -->
+                                <tr class="ng-scope" ng-repeat="user in users">
+                                    <td class="text-xs-center">
+                                        <div class="avatar">
+                                            <img src="dist/img/avatars/5.jpg" ng-src="dist/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                            <span class="avatar-status label-success" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ng-binding">Agapetus Tadeáš</div>
+                                        <div class="small text-muted ng-binding">
+                                            <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                            <!-- ngIf: user.new == false -->
+                                            | Registered: Jan 1, 2015
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <img src="dist/img/flags/Spain.png" ng-src="dist/img/flags/Spain.png" alt="Spain" style="height:24px;">
+                                    </td>
+                                    <td>
+                                        <div class="clearfix">
+                                            <div class="pull-left">
+                                                <strong class="ng-binding">22%</strong>
+                                            </div>
+                                            <div class="pull-right">
+                                                <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                            </div>
+                                        </div>
+                                        <progress class="progress progress-xs ng-binding progress-info" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="22" max="100" style="margin:5px 0 0 0;">22%</progress>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <i class="fa fa-google-wallet" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Last login</div>
+                                        <strong class="ng-binding">Last week</strong>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                            <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                            <span class="value ng-binding">78%</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                    </td>
+                                </tr><!-- end ngRepeat: user in users -->
+                                <tr class="ng-scope" ng-repeat="user in users">
+                                    <td class="text-xs-center">
+                                        <div class="avatar">
+                                            <img src="dist/img/avatars/6.jpg" ng-src="dist/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                            <span class="avatar-status label-danger" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                'label-warning' : user.status == 'away',
+                                                                                'label-danger'  : user.status == 'busy',
+                                                                                'label-default' : user.status == 'offline' }"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="ng-binding">Friderik Dávid</div>
+                                        <div class="small text-muted ng-binding">
+                                            <!-- ngIf: user.new == true --><span class="ng-scope" ng-if="user.new == true">New</span><!-- end ngIf: user.new == true -->
+                                            <!-- ngIf: user.new == false -->
+                                            | Registered: Jan 1, 2015
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <img src="dist/img/flags/Poland.png" ng-src="dist/img/flags/Poland.png" alt="Poland" style="height:24px;">
+                                    </td>
+                                    <td>
+                                        <div class="clearfix">
+                                            <div class="pull-left">
+                                                <strong class="ng-binding">43%</strong>
+                                            </div>
+                                            <div class="pull-right">
+                                                <small class="text-muted ng-binding">Jun 11, 2015 - Jul 10, 2015</small>
+                                            </div>
+                                        </div>
+                                        <progress class="progress progress-xs ng-binding progress-success" ng-class="{ 'progress-info'    : user.usage <= 25,
+                                                          'progress-success' : user.usage > 25 &amp;&amp; user.usage <= 50,
+                                                          'progress-warning' : user.usage > 50 &amp;&amp; user.usage <= 75,
+                                                          'progress-danger'  : user.usage > 75 &amp;&amp; user.usage <= 100 }" value="43" max="100" style="margin:5px 0 0 0;">43%</progress>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <i class="fa fa-cc-amex" ng-class="{ 'fa-cc-mastercard' : user.payment == 'mastercard',
+                                                   'fa-cc-visa' : user.payment == 'visa',
+                                                   'fa-cc-amex' : user.payment == 'amex',
+                                                   'fa-cc-diners-club' : user.payment == 'diners',
+                                                   'fa-cc-stripe' : user.payment == 'stripe',
+                                                   'fa-paypal' : user.payment == 'paypal',
+                                                   'fa-google-wallet' : user.payment == 'google' }" style="font-size:24px"></i>
+                                    </td>
+                                    <td>
+                                        <div class="small text-muted">Last login</div>
+                                        <strong class="ng-binding">Yesterday</strong>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <div class="gaugejs-wrap sparkline" style="width:34px;height:34px">
+                                            <canvas class="ng-pristine ng-untouched ng-valid ng-isolate-scope gaugejs" gaugejs="" ng-model="gauge" gauge-type="gauge.gaugeType" options="gauge.options" value="user.satisfaction" max-value="100" animation-time="gauge.animationTime" width="34" height="34"></canvas>
+                                            <span class="value ng-binding">11%</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-xs-center">
+                                        <button type="button" class="btn btn-link text-muted"><i class="icon-settings"></i></button>
+                                    </td>
+                                </tr><!-- end ngRepeat: user in users -->
+                            </tbody>
+                        </table>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h4>Best clients</h4>
+                                <table class="table table-hover table-striped table-align-middle table-clear m-b-0">
+                                    <tbody class="ng-scope" ng-controller="clientsTableCtrl">
+                                        <!-- ngRepeat: user in users -->
+                                        <tr class="ng-scope" ng-repeat="user in users">
+                                            <td class="text-xs-center">
+                                                <div class="avatar m-a-0">
+                                                    <img src="dist/img/avatars/1.jpg" ng-src="dist/img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                                    <span class="avatar-status label-success" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                        'label-warning' : user.status == 'away',
+                                                                                        'label-danger'  : user.status == 'busy',
+                                                                                        'label-default' : user.status == 'offline' }"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ng-binding">Yiorgos Avraamu</div>
+                                                <div class="small text-muted ng-binding">
+                                                    Registered: Jan 1, 2015
+                                                </div>
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-basket-loaded text-danger"></i>&nbsp; 189
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-speech text-muted"></i>&nbsp; 72
+                                            </td>
+                                        </tr><!-- end ngRepeat: user in users -->
+                                        <tr class="ng-scope" ng-repeat="user in users">
+                                            <td class="text-xs-center">
+                                                <div class="avatar m-a-0">
+                                                    <img src="dist/img/avatars/2.jpg" ng-src="dist/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                                    <span class="avatar-status label-danger" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                        'label-warning' : user.status == 'away',
+                                                                                        'label-danger'  : user.status == 'busy',
+                                                                                        'label-default' : user.status == 'offline' }"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ng-binding">Avram Tarasios</div>
+                                                <div class="small text-muted ng-binding">
+                                                    Registered: Jan 1, 2015
+                                                </div>
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-basket-loaded text-danger"></i>&nbsp; 156
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-speech text-muted"></i>&nbsp; 76
+                                            </td>
+                                        </tr><!-- end ngRepeat: user in users -->
+                                        <tr class="ng-scope" ng-repeat="user in users">
+                                            <td class="text-xs-center">
+                                                <div class="avatar m-a-0">
+                                                    <img src="dist/img/avatars/3.jpg" ng-src="dist/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                                    <span class="avatar-status label-warning" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                        'label-warning' : user.status == 'away',
+                                                                                        'label-danger'  : user.status == 'busy',
+                                                                                        'label-default' : user.status == 'offline' }"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ng-binding">Quintin Ed</div>
+                                                <div class="small text-muted ng-binding">
+                                                    Registered: Jan 1, 2015
+                                                </div>
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-basket-loaded text-danger"></i>&nbsp; 189
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-speech text-muted"></i>&nbsp; 72
+                                            </td>
+                                        </tr><!-- end ngRepeat: user in users -->
+                                        <tr class="ng-scope" ng-repeat="user in users">
+                                            <td class="text-xs-center">
+                                                <div class="avatar m-a-0">
+                                                    <img src="dist/img/avatars/4.jpg" ng-src="dist/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                                    <span class="avatar-status label-default" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                        'label-warning' : user.status == 'away',
+                                                                                        'label-danger'  : user.status == 'busy',
+                                                                                        'label-default' : user.status == 'offline' }"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ng-binding">Enéas Kwadwo</div>
+                                                <div class="small text-muted ng-binding">
+                                                    Registered: Jan 1, 2015
+                                                </div>
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-basket-loaded text-danger"></i>&nbsp; 189
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-speech text-muted"></i>&nbsp; 72
+                                            </td>
+                                        </tr><!-- end ngRepeat: user in users -->
+                                        <tr class="ng-scope" ng-repeat="user in users">
+                                            <td class="text-xs-center">
+                                                <div class="avatar m-a-0">
+                                                    <img src="dist/img/avatars/5.jpg" ng-src="dist/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                                    <span class="avatar-status label-success" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                        'label-warning' : user.status == 'away',
+                                                                                        'label-danger'  : user.status == 'busy',
+                                                                                        'label-default' : user.status == 'offline' }"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ng-binding">Agapetus Tadeáš</div>
+                                                <div class="small text-muted ng-binding">
+                                                    Registered: Jan 1, 2015
+                                                </div>
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-basket-loaded text-danger"></i>&nbsp; 189
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-speech text-muted"></i>&nbsp; 72
+                                            </td>
+                                        </tr><!-- end ngRepeat: user in users -->
+                                        <tr class="ng-scope" ng-repeat="user in users">
+                                            <td class="text-xs-center">
+                                                <div class="avatar m-a-0">
+                                                    <img src="dist/img/avatars/6.jpg" ng-src="dist/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                                    <span class="avatar-status label-danger" ng-class="{ 'label-success' : user.status == 'active',
+                                                                                        'label-warning' : user.status == 'away',
+                                                                                        'label-danger'  : user.status == 'busy',
+                                                                                        'label-default' : user.status == 'offline' }"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="ng-binding">Friderik Dávid</div>
+                                                <div class="small text-muted ng-binding">
+                                                    Registered: Jan 1, 2015
+                                                </div>
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-basket-loaded text-danger"></i>&nbsp; 189
+                                            </td>
+                                            <td class="text-xs-center h6 ng-binding">
+                                                <i class="icon-speech text-muted"></i>&nbsp; 72
+                                            </td>
+                                        </tr><!-- end ngRepeat: user in users -->
+                                    </tbody>
+                                </table>
+                            </div><!--/.col-->
+                        </div><!--/.row-->
+                    </div>
+                </div>
+            </div><!--/.col-->
+        </div><!--/.row-->
+    </div>
+    <div class="ng-scope" ng-controller="toastrWelcome"></div>
+
 </div>

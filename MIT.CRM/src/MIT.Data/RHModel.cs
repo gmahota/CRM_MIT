@@ -15,6 +15,10 @@ namespace MIT.Data
 
         public string nome { get; set; }
 
+        [StringLength(25)]
+        [Display(Name = "Alcunha")]
+        public string nomeAbreviado { get; set; }
+
         public string localidade { get; set; }
 
         public string naturalidade { get; set; }
@@ -55,8 +59,13 @@ namespace MIT.Data
         public bool activo { get; set; }
 
         public int departamentoId { get; set; }
-        
+
         public string empresaId { get; set; }
+
+        public int? avatarId { get; set; }
+
+        [StringLength(25)]
+        public string cargo { get; set; }
 
         public string utilizadorId { get; set; }
 
@@ -74,6 +83,9 @@ namespace MIT.Data
 
         [ForeignKey("utilizadorId")]
         public virtual ApplicationUser utilizador { get; set; }
+
+        [ForeignKey("avatarId")]
+        public virtual FileDescription avatar { get; set; }
 
     }
 
@@ -105,6 +117,9 @@ namespace MIT.Data
 
         [ForeignKey("funcionarioId")]
         public virtual Funcionario funcionario { get; set; }
+
+        public virtual List<Ferias_Itens> ferias_Itens { get; set; }
+        
     }
 
     public class FuncFerias
@@ -177,8 +192,7 @@ namespace MIT.Data
 
         public int? feriasId { get; set; }
 
-        [ForeignKey("feriasId")]
-        public Ferias ferias { get; set; }
+        public int? feriasInfFeriasId { get; set; }
 
         [Required]
         public DateTime dataFeria { get; set; }
@@ -191,15 +205,21 @@ namespace MIT.Data
         public string estado { get; set; }
         public string tipo { get; set; }
 
+        [ForeignKey("feriasId")]
+        public Ferias ferias { get; set; }
+
         [ForeignKey("funcionarioId")]
         public virtual Funcionario funcionario { get; set; }
+
+        [ForeignKey("feriasInfFeriasId")]
+        public virtual FuncInfFerias funcInfFerias { get; set; }
+
+        public virtual List<Historio_Ferias_Item> historio_Ferias_Itens { get; set; }
 
         public string daString_Data_Feria()
         {
             return dataFeria.ToString("dd/MM/yyyy");
         }
-
-        public virtual List<Historio_Ferias_Item> historio_Ferias_Itens { get; set; }
     }
 
     public class Historio_Ferias_Item

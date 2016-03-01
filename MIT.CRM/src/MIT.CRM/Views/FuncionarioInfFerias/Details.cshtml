@@ -1,0 +1,79 @@
+@model MIT.Data.FuncInfFerias
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>FuncInfFerias</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ano)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ano)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.diasAdicionais)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.diasAdicionais)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.diasAnoAnterior)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.diasAnoAnterior)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.diasDireito)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.diasDireito)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.diasFeriasJaPagas)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.diasFeriasJaPagas)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.diasJaGozados)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.diasJaGozados)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.diasPorGozar)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.diasPorGozar)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.diasPorMarcar)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.diasPorMarcar)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.funcSemFerias)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.funcSemFerias)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.totalDias)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.totalDias)
+        </dd>
+    </dl>
+</div>
+<p>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</p>

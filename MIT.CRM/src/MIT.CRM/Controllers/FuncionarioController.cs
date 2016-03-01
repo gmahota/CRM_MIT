@@ -11,6 +11,11 @@ using MIT.CRM.Models;
 using MIT.CRM.Services;
 using Newtonsoft.Json;
 using MIT.Data;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Hosting;
+using System.IO;
+using Microsoft.Extensions.OptionsModel;
+using MIT.CRM.Models.Helper;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,14 +26,20 @@ namespace MIT.CRM.Controllers
         [FromServices]
         public ApplicationDbContext _context { get; set; }
 
+        private IOptions<AppSettings> _config;
+
         [FromServices]
         public UserManager<ApplicationUser> _userManager {get;set;}
 
+        private readonly IHostingEnvironment _environment;
+
         private readonly IEmailSender _emailSender;
 
-        public FuncionarioController(IEmailSender emailSender)
+        public FuncionarioController(IEmailSender emailSender, IHostingEnvironment environment, IOptions<AppSettings> config)
         {
             _emailSender = emailSender;
+            _environment = environment;
+            _config = config;
         }
 
         // GET: /<controller>/
@@ -47,7 +58,8 @@ namespace MIT.CRM.Controllers
                 nome = nome,
                 telemovel = telemovel,
                 email = email.Trim(),
-                empresaId = empresaId
+                empresaId = empresaId,
+                activo = true
             };
             
 
@@ -210,5 +222,6 @@ namespace MIT.CRM.Controllers
         {
             
         }
+        
     }
 }

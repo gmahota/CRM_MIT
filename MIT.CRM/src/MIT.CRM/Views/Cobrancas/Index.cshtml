@@ -8,14 +8,16 @@
 </environment>
 <environment names="Staging,Production">
     @{conexao = "http://ferias.mit.co.mz:8989/signalr";}
+    
 </environment>
 
 
 @section scripts {
-    
+    <script src="http://ferias.mit.co.mz:8989/signalr/hubs" ></script>
+
     <!--SignalR script to update the chat page and send messages.-->
     <script>
-        $.connection.hub.url = "@conexao";
+        $.connection.hub.url = "http://ferias.mit.co.mz:8989/signalr";
 
             var cobrancasHub = $.connection.cobrancasHub;
 

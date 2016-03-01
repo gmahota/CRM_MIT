@@ -11,6 +11,10 @@ using MIT.CRM.Models;
 using MIT.CRM.Services;
 using MIT.CRM.ViewModels.Manage;
 using MIT.Data;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Hosting;
+using System.IO;
+using Microsoft.Net.Http.Headers;
 
 namespace MIT.CRM.Controllers
 {
@@ -22,19 +26,23 @@ namespace MIT.CRM.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        private IHostingEnvironment _environment;
+        private ApplicationDbContext _context;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,IHostingEnvironment environment, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _environment = environment;
+            _context = context;
         }
 
         //
@@ -190,6 +198,57 @@ namespace MIT.CRM.Controllers
                 }
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        }
+
+        //
+        // POST: /Manage/SetAvatar
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SetAvatar(ICollection<IFormFile> files)
+        {
+            var user = await GetCurrentUserAsync();
+            Funcionario funcionario = _context.Funcionarios.Single(m => m.utilizadorId == user.Id);
+            if (funcionario == null)
+            {
+                return RedirectToAction(nameof(Index), new { Message = "O seu utilizador não se encontra ligado a nenhum funcionario" });
+            }
+
+            var uploads = Path.Combine(_environment.WebRootPath, "uploads");
+            uploads = Path.Combine(uploads, "funcionarios");
+            uploads = Path.Combine(uploads, funcionario.codigo);
+
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+
+                    if (!Directory.Exists(uploads))
+                    {
+                        Directory.CreateDirectory(uploads);
+                    }
+
+                    var fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                    await file.SaveAsAsync(Path.Combine(uploads, fileName));
+
+                    FileDescription f = new FileDescription()
+                    {
+                        ContentType = file.ContentType,
+                        Description = "Avatar",
+                        FileName = fileName,
+                        CreatedTimestamp = DateTime.Now,
+                        UpdatedTimestamp = DateTime.Now,
+                    };
+
+                    _context.FileDescription.Add(f);
+                    _context.SaveChanges();
+
+                    funcionario.avatarId = f.Id;
+                    _context.SaveChanges();
+                }
+
+            }
+
+            return RedirectToAction(nameof(Index), new { Message = "O seu avatar foi actualizado com sucesso" });
         }
 
         //

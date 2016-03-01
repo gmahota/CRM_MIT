@@ -1,0 +1,68 @@
+@model MIT.Data.FuncInfFerias
+
+<div class="col-md-4">
+    <small class="text-muted">Marcação</small>
+
+    <table class="table table-hover table-striped table-align-middle table-clear m-b-0">
+        <tr>
+            <td><span class="title ng-binding">Dias Marcados</span> </td>
+            <td style="padding-right:10px">
+                <input type="number" id="txtDiasMarcados" disabled="disabled" value="@Model.ferias_Itens?.Count" min="0" maxlength="4" size="4" style="max-width:40px">
+            </td>
+
+
+            <td><span class="title ng-binding">Dias Antecipados</span> </td>
+            <td style="padding-right:10px"> <input type="number" id="txtDiasAntecipados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">  </td>
+        </tr>
+        <tr>
+            <td><span class="title ng-binding">Meios Dias</span> </td>
+            <td style="padding-right:10px"> <input type="number" id="txtMeiosDiasMarcados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px">  </td>
+
+            <td> <span class="title ng-binding">Meios Dias Antecipados</span> </td>
+            <td style="padding-right:10px"> <input type="number" id="txtMeiosDiasAntecipados" disabled="disabled" value="0" min="0" maxlength="4" size="4" style="max-width:40px"> </td>
+
+        </tr>
+    </table>
+
+
+</div>
+
+<div class="col-md-4">
+    <small class="text-muted">Dados de Ferias</small>
+
+
+    <table class="table table-hover table-striped table-align-middle table-clear m-b-0">
+        <tr>
+            <td>
+                <span class="title ng-binding">Máximo de dias</span>
+
+            </td>
+            <td style="padding-right:10px"> <text id="txttotalDias">@Model.totalDias</text> </td>
+
+            <td> <span class="title ng-binding">Dias do Ano Anterior</span> </td>
+            <td style="padding-right:10px"> <text id="txtdiasAnoAnterior">@Model.diasAnoAnterior</text> </td>
+
+        </tr>
+
+
+        <tr>
+            <td><span class="title ng-binding">Dias Adicionais</span></td>
+            <td>
+                <text id="txtdiasAdicionais">@Model.diasAdicionais</text>
+            </td>
+
+            <td><span class="title ng-binding">Dias Direito</span></td>
+            <td>
+                <text id="txtdiasDireito">@Model.diasDireito</text>
+            </td>
+        </tr>
+        @*<tr>
+                <td> <span class="title ng-binding">Gozados</span> </td>
+                <td style="padding-right:10px"> <text id="txtGozados">0,0</text> </td>
+
+                <td> <span class="title ng-binding">Por Gozar</span> </td>
+                <td style="padding-right:10px"> <text id="txtPorGozar">0,0</text> </td>
+
+            </tr>*@
+    </table>
+</div>

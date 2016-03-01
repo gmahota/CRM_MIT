@@ -12,6 +12,8 @@ using MIT.CRM.Models;
 using MIT.CRM.Services;
 using Newtonsoft.Json;
 using MIT.Data;
+using Microsoft.Extensions.OptionsModel;
+using MIT.CRM.Models.Helper;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,9 +27,12 @@ namespace MIT.CRM.Controllers
 
         private readonly IEmailSender _emailSender;
 
-        public RHController(IEmailSender emailSender)
+        private IOptions<AppSettings> _config;
+
+        public RHController(IEmailSender emailSender, IOptions<AppSettings> config)
         {
             _emailSender = emailSender;
+            _config = config;
         }
 
         // GET: /<controller>/
@@ -40,14 +45,7 @@ namespace MIT.CRM.Controllers
                     .Include(m => m.departamento)
                     .Include(m => m.empresa)
                     .Single( m=> m.utilizador.UserName == User.Identity.Name);
-                //ApplicationUser user = _context.Users.Include(m => m.funcionario)
-                //.Include(m => m.funcionario)
-                //.Single(c => c.UserName == User.Identity.Name);
-
-                //user.departamento = _context.Departamentos.Single(m => m.departamento==);
-
-                 
-
+                
                 if (funcionario != null)
                 {
                     //ViewData["ResponsaveId"] = user;
@@ -81,6 +79,8 @@ namespace MIT.CRM.Controllers
 
             var list = _context.Funcionarios.Where(f => f.utilizadorId == user.Id);
 
+            ViewData["conexao"] = _config.Value.signalRConfig.server_Url;
+            ViewData["url"] = _config.Value.signalRConfig.javaScript_Url;
 
             if (list.Count() > 0)
             {
@@ -98,7 +98,9 @@ namespace MIT.CRM.Controllers
 
         public IActionResult Edit(int id)
         {
-            
+            ViewData["conexao"] = _config.Value.signalRConfig.server_Url;
+            ViewData["url"] = _config.Value.signalRConfig.javaScript_Url;
+
             ApplicationUser user = _context.Users.First(c => c.UserName == User.Identity.Name);
 
             Funcionario funcionario = _context.Funcionarios.Include(f => f.departamento).Single(f => f.id == id);
@@ -128,6 +130,9 @@ namespace MIT.CRM.Controllers
 
         public IActionResult Create(int id)
         {
+            ViewData["conexao"] = _config.Value.signalRConfig.server_Url;
+            ViewData["url"] = _config.Value.signalRConfig.javaScript_Url;
+
             //ApplicationUser user = _applicationDbContext.Users.First(c => c.UserName == User.Identity.Name);
 
             //var list = _applicationDbContext.Funcionarios.Where(f => f.utilizadorId == user.Id);
@@ -145,7 +150,7 @@ namespace MIT.CRM.Controllers
             }
         }
 
-        [HttpPost]
+        
         public async void MarcacaoFerias(short ano, DateTime dataFeria, int funcionarioId, string tipo, string estado,int tipoMarcacao)
         {
             Ferias_Itens feria = new Ferias_Itens()
@@ -236,8 +241,9 @@ namespace MIT.CRM.Controllers
             Ferias_Itens feria = new Ferias_Itens();
             var list = _context.Ferias_Itens.Where(f => 
                 f.dataFeria.Date.Equals(_feria.dataFeria.Date) &&
-                f.funcionarioId == _feria.funcionarioId && 
-                f.tipo == _feria.tipo
+                f.funcionarioId == _feria.funcionarioId &&
+                f.estado == "Por Aprovar"
+                //&& f.tipo == _feria.tipo
             );
 
             if(list.Count() > 0)

@@ -32,6 +32,7 @@ namespace MIT.CRM.Models
         public DbSet<Module> Module { get; set; }
         public DbSet<CompanyModule> CompanyModule { get; set; }
         public DbSet<Report> Report { get; set; }
+        public DbSet<FileDescription> FileDescription { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)

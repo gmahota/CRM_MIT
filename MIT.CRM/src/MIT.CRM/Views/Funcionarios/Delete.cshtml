@@ -1,0 +1,155 @@
+@model MIT.Data.Funcionario
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Funcionario</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.activo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.activo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.categoria)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.categoria)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.classificacao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.classificacao)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.codigo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.codigo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.dataAdmissao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dataAdmissao)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.dataClassificacao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dataClassificacao)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.dataFimContrato)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dataFimContrato)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.dataNascimento)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dataNascimento)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.dataReadmissao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.dataReadmissao)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.distrito)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.distrito)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.estadoCivil)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.estadoCivil)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.habilitacao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.habilitacao)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.localidade)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.localidade)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.nacionalidade)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.nacionalidade)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.naturalidade)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.naturalidade)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.nome)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.nome)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.profissao)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.profissao)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.sexo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.sexo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.telefone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.telefone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.telefoneAlternativo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.telefoneAlternativo)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.telemovel)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.telemovel)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </form>
+</div>

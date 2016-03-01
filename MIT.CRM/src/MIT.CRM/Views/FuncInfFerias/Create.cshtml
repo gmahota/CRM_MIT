@@ -1,0 +1,108 @@
+@model MIT.Data.FuncInfFerias
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+
+<form asp-action="Create">
+    <div class="form-horizontal">
+        <h4>FuncInfFerias</h4>
+        <hr />
+        <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="ano" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="ano" class="form-control" />
+                <span asp-validation-for="ano" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="diasAdicionais" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="diasAdicionais" class="form-control" />
+                <span asp-validation-for="diasAdicionais" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="diasAnoAnterior" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="diasAnoAnterior" class="form-control" />
+                <span asp-validation-for="diasAnoAnterior" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="diasDireito" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="diasDireito" class="form-control" />
+                <span asp-validation-for="diasDireito" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="diasFeriasJaPagas" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="diasFeriasJaPagas" class="form-control" />
+                <span asp-validation-for="diasFeriasJaPagas" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="diasJaGozados" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="diasJaGozados" class="form-control" />
+                <span asp-validation-for="diasJaGozados" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="diasPorGozar" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="diasPorGozar" class="form-control" />
+                <span asp-validation-for="diasPorGozar" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="diasPorMarcar" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="diasPorMarcar" class="form-control" />
+                <span asp-validation-for="diasPorMarcar" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <div class="checkbox">
+                    <input asp-for="funcSemFerias" />
+                    <label asp-for="funcSemFerias"></label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="funcionarioId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <select asp-for="funcionarioId" class ="form-control"></select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="totalDias" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="totalDias" class="form-control" />
+                <span asp-validation-for="totalDias" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

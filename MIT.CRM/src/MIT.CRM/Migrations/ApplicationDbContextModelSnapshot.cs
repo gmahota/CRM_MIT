@@ -347,6 +347,8 @@ namespace MIT.CRM.Migrations
 
                     b.Property<int?>("feriasId");
 
+                    b.Property<int?>("feriasInfFeriasId");
+
                     b.Property<int>("funcionarioId");
 
                     b.Property<bool>("originouFalta");
@@ -358,6 +360,24 @@ namespace MIT.CRM.Migrations
                     b.Property<int>("tipoMarcacao");
 
                     b.HasKey("id");
+                });
+
+            modelBuilder.Entity("MIT.Data.FileDescription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ContentType");
+
+                    b.Property<DateTime>("CreatedTimestamp");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("FileName");
+
+                    b.Property<DateTime>("UpdatedTimestamp");
+
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("MIT.Data.FuncFerias", b =>
@@ -419,6 +439,11 @@ namespace MIT.CRM.Migrations
 
                     b.Property<bool>("activo");
 
+                    b.Property<int?>("avatarId");
+
+                    b.Property<string>("cargo")
+                        .HasAnnotation("MaxLength", 25);
+
                     b.Property<string>("categoria");
 
                     b.Property<string>("classificacao");
@@ -454,6 +479,9 @@ namespace MIT.CRM.Migrations
                     b.Property<string>("naturalidade");
 
                     b.Property<string>("nome");
+
+                    b.Property<string>("nomeAbreviado")
+                        .HasAnnotation("MaxLength", 25);
 
                     b.Property<string>("profissao");
 
@@ -596,6 +624,10 @@ namespace MIT.CRM.Migrations
                         .WithMany()
                         .HasForeignKey("feriasId");
 
+                    b.HasOne("MIT.Data.FuncInfFerias")
+                        .WithMany()
+                        .HasForeignKey("feriasInfFeriasId");
+
                     b.HasOne("MIT.Data.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
@@ -617,6 +649,10 @@ namespace MIT.CRM.Migrations
 
             modelBuilder.Entity("MIT.Data.Funcionario", b =>
                 {
+                    b.HasOne("MIT.Data.FileDescription")
+                        .WithMany()
+                        .HasForeignKey("avatarId");
+
                     b.HasOne("MIT.Data.Departamento")
                         .WithMany()
                         .HasForeignKey("departamentoId");

@@ -1,8 +1,9 @@
-﻿@{
+﻿@model IEnumerable<MIT.Data.Funcionario>
+@inject MIT.CRM.Services.AppServices AppSettings
+
+@{
     ViewData["Title"] = "Home Page";
 }
-
-<h4 class="page-header">Pagina Inicial</h4>
 
 @section scripts {
 
@@ -16,27 +17,251 @@
 	    });
 
     </script>
+
+<script>
+		var randomScalingFactor = function(){ return Math.round(Math.random()*100)};
+		var lineChartData = {
+			labels : ["January","February","March","April","May","June","July"],
+			datasets : [
+				{
+					label: "My First dataset",
+					fillColor : "rgba(220,220,220,0.2)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(220,220,220,1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				},
+				{
+					label: "My Second dataset",
+					fillColor : "rgba(151,187,205,0.2)",
+					strokeColor : "rgba(151,187,205,1)",
+					pointColor : "rgba(151,187,205,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(151,187,205,1)",
+					data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()]
+				}
+			]
+
+		}
+
+	window.onload = function(){
+		var ctx = document.getElementById("canvas").getContext("2d");
+		window.myLine = new Chart(ctx).Line(lineChartData, {
+			responsive: true
+		});
+	}
+
+
+</script>
 }
 
-@{
-            List<MIT.Data.Empresa> list = ViewBag.empresas;
-            if (list.Count() > 0)
-            {
-        <div class="row placeholders">
-            @{
-                foreach (MIT.Data.Empresa item in list)
-                {
-                    <div class="col-xs-6 col-sm-3 placeholder">
-                        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="50" height="50" class="img-responsive" alt="Generic placeholder thumbnail">
-                        <h4>@item.codigo</h4>
-                        <span class="text-muted">@item.nome</span>
-                    </div>
 
-                }
-            }
+<!--Page Header -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-7">
+            <h1 class="h2"><span class="ng-binding ng-isolate-scope" ncy-breadcrumb-last="">Pagina Inicial</span></h1>
+            <div class="text-muted ng-binding"> Welcome to MIT CRM </div>
+        </div>
+        <div class="col-md-5 charts">
+            <div class="row ng-scope" ng-controller="chartsCtrl">
+                @*<div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-container"><canvas style="width: 140px; height: 31px;" width="140" class="chart chart-bar ng-isolate-scope" chart-data="data" chart-labels="labels" chart-legend="false" chart-series="false" chart-options="options" chart-colours="colours" height="31"></canvas></div>
+                    </div>
+                    <div class="text-xs-center title"><span class="text-muted">Income: </span><strong>$189.128</strong></div>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-container"><canvas style="width: 123px; height: 27px;" width="123" class="chart chart-bar ng-isolate-scope" chart-data="data1" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="colours" height="27"></canvas></div>
+                    </div>
+                    <div class="text-xs-center title"><span class="text-muted">New clients: </span><strong class="text-danger">1.128</strong></div>
+                </div>*@
+                <div class="col-xs-6 col-sm-4 col-md-4">
+                    <div class="chart-wrapper">
+                        <div class="chart-container"><canvas style="width: 123px; height: 27px;" width="123" class="chart chart-bar ng-isolate-scope" chart-data="data2" chart-labels="labels" chart-legend="false" chart-series="series" chart-options="options" chart-colours="colours" height="27"></canvas></div>
+                    </div>
+                    <div class="text-xs-center title"><span class="text-muted">Funcionarios: </span><strong class="text-success">@ViewBag.totalFuncionarios</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Page Breadcrumb -->
+<ol class="breadcrumb" breadcrumb="">
+    <li><span>Root</span></li>
+    <!-- ngRepeat: step in steps -->
+    <li class="ng-scope active" ng-repeat="step in steps" ng-class="{active: $last}" ng-switch="$last || !!step.abstract"><!-- ngSwitchWhen: false --><!-- ngSwitchWhen: true --><span class="ng-binding ng-scope" ng-switch-when="true">Home</span><!-- end ngSwitchWhen: --></li><!-- end ngRepeat: step in steps -->
+    <!-- Breadcrumb Menu-->
+
+    @await Html.PartialAsync("_BreadcrumbMenu")
+
+    
+</ol>
+
+<div class="container-fluid">
+    
+        <div class="animated fadeIn ng-scope">
+            <div class="card card-full ng-scope" ng-controller="trafficDemoCtrl">
+                <div class="card-block">
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <h4 class="card-title">Pedidos Ferias</h4>
+                            <div class="small text-muted" style="margin-top:-10px;">Janeiro 2016</div>
+                        </div>
+                        <div class="col-xs-7">
+                            <div class="btn-toolbar pull-right" role="toolbar" aria-label="Toolbar with button groups">
+                                <div class="btn-group" data-toggle="buttons" aria-label="First group">
+                                    <label class="btn btn-sm btn-secondary-outline">
+                                        <input name="options" id="option1" autocomplete="off" checked="" type="radio"> Day
+                                    </label>
+                                    <label class="btn btn-sm btn-secondary-outline active">
+                                        <input name="options" id="option2" autocomplete="off" type="radio"> Month
+                                    </label>
+                                    <label class="btn btn-sm btn-secondary-outline">
+                                        <input name="options" id="option3" autocomplete="off" type="radio"> Year
+                                    </label>
+                                </div>
+                                <div class="btn-group hidden-sm-down" role="group" aria-label="Second group">
+                                    <button type="button" class="btn btn-sm btn-primary"><i class="icon-cloud-download"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper" style="height:300px;margin-top:40px;">
+                        <div class="chart-container">
+                            <div style="width:30%">
+                                <div>
+                                    <canvas style="width: 360px; height: 270px;" id="canvas" height="270" width="360"></canvas>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <ul>
+                        <li>
+                            <div class="text-muted">Aprovados</div>
+                            <strong>29.703 Users (40%)</strong>
+                            <progress class="progress progress-xs progress-success" value="40" max="100">40%</progress>
+                        </li>
+                        <li>
+                            <div class="text-muted">Em Analise</div>
+                            <strong>24.093 Unique Users (20%)</strong>
+                            <progress class="progress progress-xs progress-info" value="20" max="100">20%</progress>
+                        </li>
+                        <li class="hidden-sm-down">
+                            <div class="text-muted">Pendentes </div>
+                            <strong>78.706 Views (60%)</strong>
+                            <progress class="progress progress-xs progress-warning" value="60" max="100">60%</progress>
+                        </li>
+                        <li class="hidden-sm-down">
+                            <div class="text-muted">Reprovados</div>
+                            <strong>22.123 Users (80%)</strong>
+                            <progress class="progress progress-xs progress-danger" value="80" max="100">80%</progress>
+                        </li>
+                        <li class="hidden-sm-down">
+                            <div class="text-muted">Gozados</div>
+                            <strong>40.15%</strong>
+                            <progress class="progress progress-xs progress-primary" value="40" max="100">40%</progress>
+                        </li>
+                    </ul>
+                </div>
+            </div><!--/.card-->
+
+            <div class="row">
+                <div class="card card-full ng-scope">
+                    <div class="card-block">
+
+                        <table class="table table-hover table-outline hidden-sm-down">
+                            <thead class="thead-default">
+                                <tr>
+                                    <th class="text-xs-center"><i class="icon-people"></i></th>
+                                    <th>User</th>
+                                    
+                                    <th>Ferias</th>
+                                    <th class="text-xs-center">Direito Ferias</th>
+
+                                    <th class="text-xs-center"><i class="icon-settings"></i></th>
+                                </tr>
+                            </thead>
+                            <tbody class="ng-scope">
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-xs-center">
+
+                                            <div class="avatar">
+                                                
+                                                <img src = "@await AppSettings.getCurrentAvatar(item.utilizador.UserName)" class="img-avatar">
+                                                 
+
+                                                 @*alt="@item.utilizador.Email"*@
+                                                
+    
+                                            @*<span class="avatar-status label-success" ng-class="{ 'label-success' : user.status == 'active',
+                                            'label-warning' : user.status == 'away',
+                                            'label-danger'  : user.status == 'busy',
+                                            'label-default' : user.status == 'offline' }"></span>*@
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div class="ng-binding">@item.nome</div>
+                                            <div class="small text-muted ng-binding">
+                                                @item.empresa.codigo |
+                                                <span class="ng-scope" ng-if="user.new == true">@item.departamento.descricao</span>
+
+                                                | @item.cargo
+                                            </div>
+
+                                        </td>
+                                        
+                                        <td>
+                                            @{
+                                                if (item.ferias_item != null)
+                                                {
+                                                    <a asp-controller="RH" asp-action="Edit" asp-route-id="@item.id">
+                                                        @item.ferias_item?.Count()
+                                                    </a>
+
+                                                }
+                                                else
+                                                {
+                                                    <text>0</text>
+
+                                                }
+                                            }
+
+
+
+                                        </td>
+                                        <td class="text-xs-center">@item.ferias?.Count()</td>
+
+                                        <td class="text-xs-center">
+                                            <a asp-action="Edit" asp-route-id="@item.id">
+                                                <i class="icon-settings"></i>
+                                            </a>
+
+                                        </td>
+                                    </tr>
+
+                                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
 
 
         </div>
-
-                }
-}
+        <div class="ng-scope" ng-controller="toastrWelcome"></div>
+   
+</div>

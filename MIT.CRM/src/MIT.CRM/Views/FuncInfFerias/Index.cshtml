@@ -1,0 +1,87 @@
+@model IEnumerable<MIT.Data.FuncInfFerias>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ano)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diasAdicionais)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diasAnoAnterior)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diasDireito)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diasFeriasJaPagas)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diasJaGozados)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diasPorGozar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.diasPorMarcar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.funcSemFerias)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalDias)
+        </th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ano)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.diasAdicionais)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.diasAnoAnterior)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.diasDireito)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.diasFeriasJaPagas)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.diasJaGozados)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.diasPorGozar)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.diasPorMarcar)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.funcSemFerias)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.totalDias)
+        </td>
+        <td>
+            <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
+            <a asp-action="Details" asp-route-id="@item.id">Details</a> |
+            <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+        </td>
+    </tr>
+}
+</table>
