@@ -17,6 +17,7 @@ using MIT.Data;
 using System.Threading;
 using Microsoft.AspNet.Localization;
 using Microsoft.Extensions.Localization;
+using MIT.CRM.Services.Primavera;
 
 namespace MIT.CRM
 {
@@ -49,7 +50,7 @@ namespace MIT.CRM
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            
 
             // Add framework services.
             services.AddEntityFramework()
@@ -73,7 +74,11 @@ namespace MIT.CRM
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-            
+            services.AddTransient<MIT.CRM.Services.AppServices>();
+            services.AddTransient<IPrimavera, PrimaveraService>();
+
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
