@@ -6,13 +6,17 @@
         <title>@ViewData["Title"] - MIT.CRM</title>
 
         <environment names="Development">
-            
-            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+            <link href="~/lib/genesisui/static_dev_grunt/css/style.css" rel="stylesheet" />
+
+            @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
             <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" />
             <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
             <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
             
-            <link rel="stylesheet" href="~/css/dashboard.css" />
+            
+
+
+
         </environment>
         <environment names="Staging,Production">
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -20,9 +24,6 @@
             <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
             <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
             
-        
-        
-
             <link href="~/lib/genesisui/angular_dev/dist/css/style.css" rel="stylesheet" />
             <link href="~/lib/genesisui/angular_dev/dist/css/docs.min.css" rel="stylesheet" />
         
@@ -34,574 +35,475 @@
         
         </environment>
     </head>
-    <body class="navbar-fixed fixed-nav sidebar-nav">
+<body class="navbar-fixed sidebar-nav fixed-nav">
 
-        <header class="navbar ng-scope navbar-light brand-dark">
-            <button class="navbar-toggler hidden-lg-up" type="button">☰</button>
-            <a href="#/dashboard" class="navbar-brand" ui-sref="app.main"></a>
-            <button class="navbar-toggler layout-toggler hidden-md-down" type="button" data-before="sidebar-nav" data-after="sidebar-nav compact-nav">☰</button>
-            <ul class="nav navbar-nav pull-right hidden-md-down">
-                <li class="nav-item dropdown ng-scope" ng-controller="languageCtrl">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><img src="dist/img/flags/United-Kingdom.png" ng-src="dist/img/flags/United-Kingdom.png" class="img-flag" alt="English"></a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-header text-xs-center"><strong class="ng-binding">Choose language</strong></div>
-                        <!-- ngRepeat: language in languages --><a ng-repeat="language in languages" class="dropdown-item ng-binding ng-scope" href="#" ng-click="changeLanguage(language.langKey)">
-                            <img src="dist/img/flags/Poland.png" ng-src="dist/img/flags/Poland.png" class="img-flag" alt="Polish"> Polish
-                        </a><!-- end ngRepeat: language in languages --><a ng-repeat="language in languages" class="dropdown-item ng-binding ng-scope" href="#" ng-click="changeLanguage(language.langKey)">
-                            <img src="dist/img/flags/United-Kingdom.png" ng-src="dist/img/flags/United-Kingdom.png" class="img-flag" alt="English"> English
-                        </a><!-- end ngRepeat: language in languages --><a ng-repeat="language in languages" class="dropdown-item ng-binding ng-scope" href="#" ng-click="changeLanguage(language.langKey)">
-                            <img src="dist/img/flags/Spain.png" ng-src="dist/img/flags/Spain.png" class="img-flag" alt="Español"> Español
-                        </a><!-- end ngRepeat: language in languages -->
+    <header class="navbar ng-scope navbar-light brand-dark">
+        <button class="navbar-toggler hidden-lg-up" type="button">☰</button>
+        <a href="#/dashboard" class="navbar-brand"></a>
+        <button class="navbar-toggler layout-toggler hidden-md-down" type="button" data-before="sidebar-nav" data-after="sidebar-nav compact-nav">☰</button>
+
+        <ul class="nav navbar-nav pull-right hidden-md-down">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <img src="img/flags/United-Kingdom.png" class="img-flag" alt="English">
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-header text-xs-center">
+                        <strong>Choose language</strong>
                     </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="icon-bell"></i><span class="label label-pill label-danger">5</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="icon-list"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img src="dist/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                        <span class="hidden-md-down">admin</span>
+                    <a class="dropdown-item" href="#">
+                        <img src="img/flags/Poland.png" class="img-flag" alt="Polish"> Polish
                     </a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-header text-xs-center"><strong class="ng-binding">Account</strong></div>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-bell-o"></i> Updates<span class="label label-info">42</span></a>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="label label-success">42</span></a>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-tasks"></i> Tasks<span class="label label-danger">42</span></a>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-comments"></i> Comments<span class="label label-warning">42</span></a>
-                        <div class="dropdown-header text-xs-center"><strong class="ng-binding">Settings</strong></div>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-user"></i> Profile</a>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-wrench"></i> Settings</a>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-usd"></i> Payments<span class="label label-default">42</span></a>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-file"></i> Projects<span class="label label-primary">42</span></a>
+                    <a class="dropdown-item" href="#">
+                        <img src="img/flags/United-Kingdom.png" class="img-flag" alt="English"> English
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <img src="img/flags/Spain.png" class="img-flag" alt="Espa&#xF1;ol"> Español
+                    </a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="icon-bell"></i><span class="label label-pill label-danger">5</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="icon-list"></i></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="icon-location-pin"></i></a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                    <span class="hidden-md-down">admin</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <div class="dropdown-header text-xs-center">
+                        <strong>Account</strong>
+                    </div>
+                    <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Updates<span class="label label-info">42</span></a>
+                    <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="label label-success">42</span></a>
+                    <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="label label-danger">42</span></a>
+                    <a class="dropdown-item" href="#"><i class="fa fa-comments"></i> Comments<span class="label label-warning">42</span></a>
+                    <div class="dropdown-header text-xs-center">
+                        <strong>Settings</strong>
+                    </div>
+                    <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+                    <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Settings</a>
+                    <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Payments<span class="label label-default">42</span></a>
+                    <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="label label-primary">42</span></a>
+                    <div class="divider"></div>
+                    <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock Account</a>
+                    <a class="dropdown-item" href="#"><i class="fa fa-lock"></i> Logout</a>
+                </div>
+            </li>
+        </ul>
+
+
+    </header>
+
+    <nav id="navigation" class="collapse navbar-toggleable-sm nav-dark">
+        <div id="navigation-header">
+            <img src="img/avatars/8.jpg" class="img-avatar" alt="Avatar">
+            <div>
+                <strong>JOHN DOE</strong>
+            </div>
+            <div class="text-muted">
+                <small>Founder &amp; CEO</small>
+            </div>
+            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                <button type="button" class="btn btn-link">
+                    <i class="icon-settings"></i>
+                </button>
+                <button type="button" class="btn btn-link">
+                    <i class="icon-speech"></i>
+                    <span class="label label-warning label-pill">5</span>
+                </button>
+                <div class="btn-group" role="group">
+                    <button id="btnGroupDrop1" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="icon-user"></i>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                        <div class="dropdown-header text-xs-center">
+                            <strong>Account</strong>
+                        </div>
+                        <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Updates<span class="label label-info">42</span></a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="label label-success">42</span></a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="label label-danger">42</span></a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-comments"></i> Comments<span class="label label-warning">42</span></a>
+                        <div class="dropdown-header text-xs-center">
+                            <strong>Settings</strong>
+                        </div>
+                        <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Settings</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Payments<span class="label label-default">42</span></a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="label label-primary">42</span></a>
                         <div class="divider"></div>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-shield"></i> Lock account</a>
-                        <a class="dropdown-item ng-binding" href="#"><i class="fa fa-lock"></i> Logout</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock Account</a>
+                        <a class="dropdown-item" href="#"><i class="fa fa-lock"></i> Logout</a>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div id="navigation-items">
+            <ul class="nav">
+                <li class="nav-title">
+                    Dashboard
                 </li>
-            </ul>
-        </header>
-
-
-
-        @*<div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a asp-controller="Home" asp-action="Index" class="navbar-brand">MIT.CRM</a>
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a asp-controller="Home" asp-action="Index"> <i class="fa fa-home"></i> Home</a></li>
-
-                        <li>
-
-                            <a asp-controller="Home" asp-action="About">
-                                <i class="fa fa-question"></i>
-                                Sobre Aplicação
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-controller="Home" asp-action="Contact">
-                                <i class="fa fa-info"></i>
-                                Contacto
-                            </a>
-                        </li>
-                    </ul>
-                    @await Html.PartialAsync("_LoginPartial")
-                </div>
-            </div>
-        </div>*@
-
-
-
-        <!-- ngInclude: 'views/common/navigation.html' -->
-        <nav id="navigation" class="collapse navbar-toggleable-sm ng-scope nav-dark">
-            <div id="navigation-header">
-                <img src="dist/img/avatars/8.jpg" class="img-avatar" alt="Avatar">
-                <div><strong>JOHN DOE</strong></div>
-                <div class="text-muted"><small>Founder &amp; CEO</small></div>
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <button type="button" class="btn btn-link">
-                        <i class="icon-settings"></i>
-                    </button>
-                    <button type="button" class="btn btn-link">
-                        <i class="icon-speech"></i>
-                        <span class="label label-warning label-pill">5</span>
-                    </button>
-                    <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="icon-user"></i>
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                            <div class="dropdown-header text-xs-center"><strong class="ng-binding">Account</strong></div>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-bell-o"></i> Updates<span class="label label-info">42</span></a>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="label label-success">42</span></a>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-tasks"></i> Tasks<span class="label label-danger">42</span></a>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-comments"></i> Comments<span class="label label-warning">42</span></a>
-                            <div class="dropdown-header text-xs-center"><strong class="ng-binding">Settings</strong></div>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-user"></i> Profile</a>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-wrench"></i> Settings</a>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-usd"></i> Payments<span class="label label-default">42</span></a>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-file"></i> Projects<span class="label label-primary">42</span></a>
-                            <div class="divider"></div>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-shield"></i> Lock account</a>
-                            <a class="dropdown-item ng-binding" href="#"><i class="fa fa-lock"></i> Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div style="height: 595px;" id="navigation-items">
-                <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html"><i class="icon-speedometer"></i> DASHBOARD <span class="label label-info">NEW</span></a>
+                </li>
+                
+                <li class="divider"></li>
+                
+                
+                @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
+                {
                     <li class="nav-title">
-                        Dashboard
+                        Recursos Humanos
                     </li>
 
-                    @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area") || User.IsInRole("Cobranças"))
-                    {
-                        <li id="menu_home" class="nav-item">
-                            <a asp-controller="Home" asp-action="Dashboard" class="nav-link ng-binding">
-                                <i class="fa fa-fw fa-dashboard"></i> Dashboard
-                            </a>
-                        </li>
-                    }
+                    <li class="nav-item nav-dropdown ">
+                        <a class="nav-link nav-dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+                            <i class="icon-layers"></i> Gestão Ferias
+                        </a>
 
-
-                    @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
-                    {
-                        <li class="nav-title">
-                            Recursos Humanos
-                        </li>
-
-                        <li class="nav-item nav-dropdown open">
-                            <a class="nav-link nav-dropdown-toggle" href="#">
-                                <i class="icon-layers"></i> Gestão Ferias
-                            </a>
-
-                            <ul id="menu_rh_ul" class="nav-dropdown-items" aria-expanded="true">
-                                <li id="menu_rh_index" class="nav-item" href="#" data-target="#menu_rh_ul" aria-expanded="true">
-                                    <a asp-controller="RH" asp-action="Details" class="nav-link ng-binding">
-                                        <i class="fa fa-calendar-plus-o"></i>
-                                        Marcação Ferias
-                                    </a>
-                                </li>
-
-                                <li id="menu_rh_index" class="nav-item">
-                                    <a asp-controller="RH" asp-action="Index" class="nav-link ng-binding">
-                                        <i class="fa fa-calendar"></i>
-                                        Mapa Ferias
-                                    </a>
-                                </li>
-
-                                @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
-                                {
-                                    <li id="menu_rh_aprovacao" class="nav-item">
-                                        <a asp-controller="RH" asp-action="Aprovacao" class="nav-link ng-binding">
-                                            <i class="fa fa-calendar-check-o"></i>
-                                            Aprovação Ferias
-                                        </a>
-                                    </li>
-                                }
-                            
-                            </ul>
-
-                        </li>
-
-                        @if (User.IsInRole("Administrator"))
-                        {
-                            <li role="presentation" class="nav-item nav-dropdown" >
-                                <a class="nav-link nav-dropdown-toggle" href="#" data-toggle="nav-dropdown" data-target="#menu_gestao_ul" aria-expanded="true">
-                                    <i class="fa fa-bars"></i>
-                                    Gestão
-                                    
-                                </a>
-
-                                <ul id="menu_gestao_ul" class="nav-dropdown-items">
-                                    <li class="nav-item">
-                                        <a id="menu_gestao_index" asp-controller="Gestao" asp-action="Index" class="nav-link ng-binding">
-                                            Geral
-                                        </a>
-                                    </li>
-                                    
-                                    <li class="nav-item">
-                                        <a id="menu_departamento_index" asp-controller="Departamento" asp-action="Index" class="nav-link ng-binding">
-                                            Departamentos
-                                        </a>
-                                    </li>
-                                </ul>
-
-
-                            </li>
-                        }
-
-                        @if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
-                        {
-                            <li class="nav-item">
-                                <a id="menu_cobrancas_index" asp-controller="Cobrancas" asp-action="Index" class="nav-link ng-binding"> 
-                                    <i class="fa fa-money"></i> Cobranças
-                                </a>
-                            </li>
-                        }
-
-                        @*<li>
-                            <a id="menu_rh" data-toggle="collapse" href="#" data-target="#menu_rh_ul" aria-expanded="true">
-
-                                <i class="fa fa-users"></i>
-                                Ferias
-                                <i class="fa fa-fw fa-caret-down"></i>
-                            </a>
-
-                            <ul id="menu_rh_ul" class="collapse" aria-expanded="true">
-                                <li id="menu_rh_index">
-                                    <a asp-controller="RH" asp-action="Index">
-                                        <i class="fa fa-calendar"></i>
-                                        Mapa Ferias
-                                    </a>
-                                </li>
-                                <li id="menu_rh_details">
-                                    <a asp-controller="RH" asp-action="Details">
-                                        <i class="fa fa-calendar-plus-o"></i>
-                                        Marcação Ferias
-                                    </a>
-                                </li>
-                                @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
-                                {
-                                    <li id="menu_rh_aprovacao">
-                                        <a asp-controller="RH" asp-action="Aprovacao">
-                                            <i class="fa fa-calendar-check-o"></i>
-                                            Aprovação Ferias
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-
-
-                        </li>*@
-                    }
-
-                    
-                </ul>
-            </div>
-
-            <div id="navigation-footer">
-                <ul class="menu">
-                    <li>
-                        <div class="btn-group dropup">
-                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icon-speedometer"></i><span>Usage</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-header">Usage <a href="#" class="btn pull-right"><i class="icon-settings"></i></a></div>
-                                <div class="dropdown-item">
-                                    <div class="title">Memory<span>2GB of 8GB</span></div>
-                                    <progress class="progress progress-xs progress-success m-b-0" value="25" max="100">25%</progress>
-                                </div>
-                                <div class="dropdown-item">
-                                    <div class="title">HDD<span>750GB of 1TB</span></div>
-                                    <progress class="progress progress-xs progress-warning m-b-0" value="75" max="100">75%</progress>
-                                </div>
-                                <div class="dropdown-item">
-                                    <div class="title">SSD<span>300GB of 1TB</span></div>
-                                    <progress class="progress progress-xs progress-info m-b-0" value="30" max="100">30%</progress>
-                                </div>
-                                <div class="dropdown-item">
-                                    <div class="title">Bandwidth<span>50TB of 50TB</span></div>
-                                    <progress class="progress progress-xs progress-danger m-b-0" value="100" max="100">100%</progress>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="btn-group dropup">
-                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icon-list"></i><span>Menu</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-header text-xs-center"><strong class="ng-binding">Account</strong></div>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-bell-o"></i> Updates<span class="label label-info">42</span></a>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="label label-success">42</span></a>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-tasks"></i> Tasks<span class="label label-danger">42</span></a>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-comments"></i> Comments<span class="label label-warning">42</span></a>
-                                <div class="dropdown-header text-xs-center"><strong class="ng-binding">Settings</strong></div>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-user"></i> Profile</a>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-wrench"></i> Settings</a>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-usd"></i> Payments<span class="label label-default">42</span></a>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-file"></i> Projects<span class="label label-primary">42</span></a>
-                                <div class="divider"></div>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-shield"></i> Lock account</a>
-                                <a class="dropdown-item ng-binding" href="#"><i class="fa fa-lock"></i> Logout</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="action">
-                        <div class="btn-group dropup">
-                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="icon-people"></i><span>Contacts</span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-header">Contacts <a href="#" class="btn pull-right"><i class="icon-settings"></i></a></div>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-success"></span>
-                                    </div>
-                                    Anton Phunihel
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-success"></span>
-                                    </div>
-                                    Alphonse Ivo
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-success"></span>
-                                    </div>
-                                    Thancmar Theoph
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-warning"></span>
-                                    </div>
-                                    Walerian Khwaja
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-warning"></span>
-                                    </div>
-                                    Clemens Janko
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-warning"></span>
-                                    </div>
-                                    Chidubem Gottlob
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-danger"></span>
-                                    </div>
-                                    Hristofor Sergio
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/8.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-danger"></span>
-                                    </div>
-                                    Tadhg Griogair
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-danger"></span>
-                                    </div>
-                                    Pollux Beaumont
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-danger"></span>
-                                    </div>
-                                    Adam Alister
-                                </a>
-                                <a class="dropdown-item p-l-0" href="#">
-                                    <div class="avatar avatar-sm">
-                                        <img src="dist/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
-                                        <span class="avatar-status label-danger"></span>
-                                    </div>
-                                    Carlito Roffe
-                                </a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-                <ul class="terms">
-                    <li><a href="#">Terms</a></li>
-                    <li><a href="#">Privacy</a></li>
-                    <li><a href="#">Help</a></li>
-                    <li><a href="#">About</a></li>
-                </ul>
-            </div>
-        </nav>
-
-
-
-        <main id="content" class="ng-scope">
-
-
-        
-            <nav class="navbar-default navbar-static-side " role="navigation">
-                    <div class="sidebar-collapse">
-                        <ul class="nav navbar-nav side-nav">
-                            <li id="menu_dashboard">
-                                <a asp-controller="Home" asp-action="Index">
-                                    <i class="fa fa-fw fa-home"></i> Pagina Inicial
+                        <ul id="menu_rh_ul" class="nav-dropdown-items" role="menu">
+                            <li id="menu_rh_index" class="nav-item" href="#" data-target="#menu_rh_ul" aria-expanded="true">
+                                <a asp-controller="RH" asp-action="Details" class="nav-link ng-binding">
+                                    <i class="fa fa-calendar-plus-o"></i>
+                                    Marcação Ferias
                                 </a>
                             </li>
 
+                            <li id="menu_rh_index" class="nav-item">
+                                <a asp-controller="RH" asp-action="Index" class="nav-link ng-binding">
+                                    <i class="fa fa-calendar"></i>
+                                    Mapa Ferias
+                                </a>
+                            </li>
 
-                            @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area") || User.IsInRole("Cobranças"))
+                            @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
                             {
-                                <li id="menu_home">
-                                    <a asp-controller="Home" asp-action="Dashboard">
-                                        <i class="fa fa-fw fa-dashboard"></i> Dashboard
+                                <li id="menu_rh_aprovacao" class="nav-item">
+                                    <a asp-controller="RH" asp-action="Aprovacao" class="nav-link ng-binding">
+                                        <i class="fa fa-calendar-check-o"></i>
+                                        Aprovação Ferias
                                     </a>
                                 </li>
                             }
-
-
-
-
-                            @if (User.IsInRole("Administrator") || User.IsInRole("Funcionario") || User.IsInRole("Director de Area"))
-                            {
-
-                                <li>
-                                    <a id="menu_rh" data-toggle="collapse" href="#" data-target="#menu_rh_ul" aria-expanded="true">
-
-                                        <i class="fa fa-users"></i>
-                                        RH
-                                        <i class="fa fa-fw fa-caret-down"></i>
-                                    </a>
-
-                                    <ul id="menu_rh_ul" class="collapse" aria-expanded="true">
-                                        <li id="menu_rh_index">
-                                            <a asp-controller="RH" asp-action="Index">
-                                                <i class="fa fa-calendar"></i>
-                                                Mapa Ferias
-                                            </a>
-                                        </li>
-                                        <li id="menu_rh_details">
-                                            <a asp-controller="RH" asp-action="Details">
-                                                <i class="fa fa-calendar-plus-o"></i>
-                                                Marcação Ferias
-                                            </a>
-                                        </li>
-                                        @if (User.IsInRole("Administrator") || User.IsInRole("Director de Area"))
-                                        {
-                                            <li id="menu_rh_aprovacao">
-                                                <a asp-controller="RH" asp-action="Aprovacao">
-                                                    <i class="fa fa-calendar-check-o"></i>
-                                                    Aprovação Ferias
-                                                </a>
-                                            </li>
-                                        }
-                                    </ul>
-
-
-                                </li>
-                            }
-
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <li>
-                                    <a data-toggle="collapse" href="#" data-target="#menu_gestao_ul" aria-expanded="true">
-                                        <i class="fa fa-bars"></i>
-                                        Gestão
-                                        <i class="fa fa-fw fa-caret-down"></i>
-                                    </a>
-
-                                    <ul id="menu_gestao_ul" class="collapse" role="menu">
-                                        <li><a id="menu_gestao_index" asp-controller="Gestao" asp-action="Index">Geral</a></li>
-                                        <li><a id="menu_departamento_index" asp-controller="Departamento" asp-action="Index">Departamentos</a></li>
-                                    </ul>
-
-
-                                </li>
-                            }
-
-                            @if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
-                            {
-                                <li><a id="menu_cobrancas_index" asp-controller="Cobrancas" asp-action="Index"> <i class="fa fa-money"></i> Cobranças</a></li>
-                            }
-
 
                         </ul>
 
+                    </li>
+
+                    
+
+
+                }
+
+                @if (User.IsInRole("Administrator"))
+                {
+                    <li class="nav-title">
+                        Administração
+                    </li>
+                    <li role="presentation" class="nav-item nav-dropdown">
+                        <a class="nav-link nav-dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <i class="fa fa-bars"></i>
+                            Gestão
+
+                        </a>
+
+                        <ul id="menu_gestao_ul" class="nav-dropdown-items" role="menu">
+                            <li class="nav-item">
+                                <a id="menu_gestao_index" asp-controller="Gestao" asp-action="Index" class="nav-link ng-binding">
+                                    Geral
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a id="menu_departamento_index" asp-controller="Departamento" asp-action="Index" class="nav-link ng-binding">
+                                    Departamentos
+                                </a>
+                            </li>
+                        </ul>
+
+
+                    </li>
+                }
+
+
+                @if (User.IsInRole("Cobranças") || User.IsInRole("Administrator"))
+                {
+                    <li class="nav-title">
+                        Finanças
+                    </li>
+                    <li class="nav-item">
+                        <a id="menu_cobrancas_index" asp-controller="Cobrancas" asp-action="Index" class="nav-link ng-binding">
+                            <i class="fa fa-money"></i> Cobranças
+                        </a>
+                    </li>
+                }
+            </ul>
+
+        </div>
+        <div id="navigation-footer">
+            <ul class="menu">
+                <li>
+                    <div class="btn-group dropup">
+                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="icon-speedometer"></i>
+                            <span>Usage</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header">Usage <a href="#" class="btn pull-right"><i class="icon-settings"></i></a></div>
+                            <div class="dropdown-item">
+                                <div class="title">
+                                    Memory
+                                    <span>2GB of 8GB</span>
+                                </div>
+                                <progress class="progress progress-xs progress-success m-b-0" value="25" max="100">25%</progress>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="title">
+                                    HDD
+                                    <span>750GB of 1TB</span>
+                                </div>
+                                <progress class="progress progress-xs progress-warning m-b-0" value="75" max="100">75%</progress>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="title">
+                                    SSD
+                                    <span>300GB of 1TB</span>
+                                </div>
+                                <progress class="progress progress-xs progress-info m-b-0" value="30" max="100">30%</progress>
+                            </div>
+                            <div class="dropdown-item">
+                                <div class="title">
+                                    Bandwidth
+                                    <span>50TB of 50TB</span>
+                                </div>
+                                <progress class="progress progress-xs progress-danger m-b-0" value="100" max="100">100%</progress>
+                            </div>
+                        </div>
                     </div>
-                </nav>
+                </li>
+                <li>
+                    <div class="btn-group dropup">
+                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="icon-list"></i>
+                            <span>Menu</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header text-xs-center">
+                                <strong>Account</strong>
+                            </div>
+                            <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Updates<span class="label label-info">42</span></a>
+                            <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="label label-success">42</span></a>
+                            <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="label label-danger">42</span></a>
+                            <a class="dropdown-item" href="#"><i class="fa fa-comments"></i> Comments<span class="label label-warning">42</span></a>
+                            <div class="dropdown-header text-xs-center">
+                                <strong>Settings</strong>
+                            </div>
+                            <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+                            <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Settings</a>
+                            <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Payments<span class="label label-default">42</span></a>
+                            <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="label label-primary">42</span></a>
+                            <div class="divider"></div>
+                            <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock Account</a>
+                            <a class="dropdown-item" href="#"><i class="fa fa-lock"></i> Logout</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="action">
+                    <div class="btn-group dropup">
+                        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="icon-people"></i>
+                            <span>Contacts</span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header">Contacts <a href="#" class="btn pull-right"><i class="icon-settings"></i></a></div>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-success"></span>
+                                </div>
+                                Anton Phunihel
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-success"></span>
+                                </div>
+                                Alphonse Ivo
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-success"></span>
+                                </div>
+                                Thancmar Theoph
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-warning"></span>
+                                </div>
+                                Walerian Khwaja
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-warning"></span>
+                                </div>
+                                Clemens Janko
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-warning"></span>
+                                </div>
+                                Chidubem Gottlob
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/7.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-danger"></span>
+                                </div>
+                                Hristofor Sergio
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/8.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-danger"></span>
+                                </div>
+                                Tadhg Griogair
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-danger"></span>
+                                </div>
+                                Pollux Beaumont
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-danger"></span>
+                                </div>
+                                Adam Alister
+                            </a>
+                            <a class="dropdown-item p-l-0" href="#">
+                                <div class="avatar avatar-sm">
+                                    <img src="img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                                    <span class="avatar-status label-danger"></span>
+                                </div>
+                                Carlito Roffe
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul class="terms">
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Help</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+        </div>
+    </nav>
 
 
-            <div class="main">
-                @RenderBody()
+    
+    <main id="content">
+        @RenderBody()
+    </main>
 
-                <hr />
-                <div class="row placeholders">
-                    <footer>
-                        <p>&copy; 2015 - MIT</p>
-                    </footer>
-                </div>
-                        
-            </div>
-           
-        </main>
-      
+    <footer id="footer">
+        <span class="text-left">
+            <a href="http://bootstrapmaster.com">Root</a> &copy; 2016 creativeLabs.
+        </span>
+        <span class="pull-right">
+            Powered by <a href="http://genesisui.com">GenesisUI</a>
+        </span>
+    </footer>
 
-        <environment names="Development">
-            <script src="~/lib/jquery/dist/jquery.js"></script>
+    <environment names="Development">
 
-            <script src="~/lib/genesisui/angular_dev/dist/js/libs/tether.min.js"></script>
+        <!-- Bootstrap and necessary plugins -->
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/tether/dist/js/tether.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/pace/pace.min.js"></script>
 
-            <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-            <script src="~/lib/moment/moment.js"></script>
-            <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
-            <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
-            <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.js"></script>
-            
-            <script src="~/lib/signalr/jquery.signalR.min.js"></script>
-
-            <!--Reference the autogenerated SignalR hub script. -->
-            <script src="http://localhost:8989/signalr/hubs"></script>
-        </environment>
-        <environment names="Staging,Production">
-            <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
-                    asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                    asp-fallback-test="window.jQuery">
-            </script>
-
-            <script src="~/lib/genesisui/angular_dev/dist/js/libs/tether.min.js"></script>
-
-            <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
-                    asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                    asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-            </script>
-            <script src="~/js/site.min.js" asp-append-version="true"></script>
-
-            <script src="~/lib/moment/moment.js"></script>
-            <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
-            <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
-            <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.min.js"></script>
-            <script src="~/lib/signalr/jquery.signalR.min.js"></script>
-
-
-            <script src="~/lib/genesisui/angular_dev/dist/js/holder.min.js"></script>
-            <script src="~/lib/genesisui/angular_dev/dist/js/docs.js"></script>
+        <!-- Plugins and scripts required by all views -->
+        <script src="~/lib/Chart.js/Chart.min.js"></script>
+        <script src="~/lib/genesisui/static_dev_grunt/js/views/shared.js"></script>
+        <!-- GenesisUI main scripts -->
+        <script src="~/lib/genesisui/static_dev_grunt/js/app.js"></script>
+        
+        <!-- Plugins and scripts required by this views -->
+        <script src="~/lib/toastr/toastr.min.js"></script>
+        <script src="~/lib/gauge.js/dist/gauge.min.js"></script>
+        <script src="~/lib/moment/moment.js"></script>
+        <script src="~/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <!-- Custom scripts required by this view -->
+        <script src="~/lib/genesisui/static_dev_grunt/js/views/main.js"></script>
 
 
 
 
-            <!--Reference the autogenerated SignalR hub script. -->
-            <script src="http://ferias.mit.co.mz:8989/signalr/hubs"></script>
-        </environment>
 
-        @RenderSection("scripts", required: false)
-    </body>
+        @*<script src="~/lib/genesisui/angular_dev/dist/js/libs/tether.min.js"></script>
+
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        
+        <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
+        <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
+        <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.js"></script>
+
+        <script src="~/lib/signalr/jquery.signalR.min.js"></script>
+
+        <script src="http://localhost:8989/signalr/hubs"></script>*@
+
+
+
+
+
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery">
+        </script>
+
+        <script src="~/lib/genesisui/angular_dev/dist/js/libs/tether.min.js"></script>
+
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+
+        <script src="~/lib/moment/moment.js"></script>
+        <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
+        <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
+        <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.min.js"></script>
+        <script src="~/lib/signalr/jquery.signalR.min.js"></script>
+
+
+        <script src="~/lib/genesisui/angular_dev/dist/js/holder.min.js"></script>
+        <script src="~/lib/genesisui/angular_dev/dist/js/docs.js"></script>
+
+
+
+
+        <!--Reference the autogenerated SignalR hub script. -->
+        <script src="http://ferias.mit.co.mz:8989/signalr/hubs"></script>
+    </environment>
+
+    @RenderSection("scripts", required: false)
+</body>
 </html>
