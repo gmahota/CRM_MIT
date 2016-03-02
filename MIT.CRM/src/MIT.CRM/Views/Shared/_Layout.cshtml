@@ -6,17 +6,16 @@
         <title>@ViewData["Title"] - MIT.CRM</title>
 
         <environment names="Development">
-            <link href="~/lib/genesisui/static_dev_grunt/css/style.css" rel="stylesheet" />
+            <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
 
-            @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />*@
+            
             <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" />
             <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
             <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
+
             
+            <link href="~/lib/genesisui/static_dev_grunt/css/style.css" rel="stylesheet" />
             
-
-
-
         </environment>
         <environment names="Staging,Production">
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -101,56 +100,23 @@
 
     </header>
 
+    
+
     <nav id="navigation" class="collapse navbar-toggleable-sm nav-dark">
-        <div id="navigation-header">
-            <img src="img/avatars/8.jpg" class="img-avatar" alt="Avatar">
-            <div>
-                <strong>JOHN DOE</strong>
-            </div>
-            <div class="text-muted">
-                <small>Founder &amp; CEO</small>
-            </div>
-            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                <button type="button" class="btn btn-link">
-                    <i class="icon-settings"></i>
-                </button>
-                <button type="button" class="btn btn-link">
-                    <i class="icon-speech"></i>
-                    <span class="label label-warning label-pill">5</span>
-                </button>
-                <div class="btn-group" role="group">
-                    <button id="btnGroupDrop1" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="icon-user"></i>
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                        <div class="dropdown-header text-xs-center">
-                            <strong>Account</strong>
-                        </div>
-                        <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Updates<span class="label label-info">42</span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="label label-success">42</span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="label label-danger">42</span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-comments"></i> Comments<span class="label label-warning">42</span></a>
-                        <div class="dropdown-header text-xs-center">
-                            <strong>Settings</strong>
-                        </div>
-                        <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Settings</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Payments<span class="label label-default">42</span></a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="label label-primary">42</span></a>
-                        <div class="divider"></div>
-                        <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock Account</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-lock"></i> Logout</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @await Html.PartialAsync("_LoginPartial")
+
+
         <div id="navigation-items">
             <ul class="nav">
                 <li class="nav-title">
                     Dashboard
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="index.html"><i class="icon-speedometer"></i> DASHBOARD <span class="label label-info">NEW</span></a>
+                    <a class="nav-link" asp-controller="Home" asp-action="Dashboard">
+                        <i class="icon-speedometer"></i> DASHBOARD <span class="label label-info">NEW</span>
+                    </a>
+
+
                 </li>
                 
                 <li class="divider"></li>
@@ -432,15 +398,16 @@
 
         <!-- Bootstrap and necessary plugins -->
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.js"></script>
         <script src="~/lib/tether/dist/js/tether.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/lib/pace/pace.min.js"></script>
 
         <!-- Plugins and scripts required by all views -->
         <script src="~/lib/Chart.js/Chart.min.js"></script>
-        <script src="~/lib/genesisui/static_dev_grunt/js/views/shared.js"></script>
+        @*<script src="~/lib/genesisui/static_dev_grunt/js/views/shared.js"></script>*@
         <!-- GenesisUI main scripts -->
-        <script src="~/lib/genesisui/static_dev_grunt/js/app.js"></script>
+        @*<script src="~/lib/genesisui/static_dev_grunt/js/app.js"></script>*@
         
         <!-- Plugins and scripts required by this views -->
         <script src="~/lib/toastr/toastr.min.js"></script>
@@ -448,29 +415,14 @@
         <script src="~/lib/moment/moment.js"></script>
         <script src="~/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
         <!-- Custom scripts required by this view -->
-        <script src="~/lib/genesisui/static_dev_grunt/js/views/main.js"></script>
+        @*<script src="~/lib/genesisui/static_dev_grunt/js/views/main.js"></script>*@
 
-
-
-
-
-        @*<script src="~/lib/genesisui/angular_dev/dist/js/libs/tether.min.js"></script>
-
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        
         <script src="~/js/site.js" asp-append-version="true"></script>
         
-        <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
-        <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
-        <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.js"></script>
+        
 
-        <script src="~/lib/signalr/jquery.signalR.min.js"></script>
-
-        <script src="http://localhost:8989/signalr/hubs"></script>*@
-
-
-
-
-
+        
     </environment>
 
     <environment names="Staging,Production">
