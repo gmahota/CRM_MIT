@@ -1,33 +1,76 @@
 ﻿@using System.Security.Claims
 
-@if (User.IsSignedIn())
-{
-    <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-controller="Manage" asp-action="Index" title="Manage">Hello @User.GetUserName()!</a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">
-                    <i class="fa fa-sign-in"></i>
-                    Log off
+@inject MIT.CRM.Services.AppServices AppSettings
+
+<div id="navigation-header">
+    
+
+
+    @if (User.IsSignedIn())
+    {
+
+        <img src="@await AppSettings.getCurrentAvatar(User.GetUserName())" class="img-avatar" alt="Avatar">
+
+
+        <div><strong> @await AppSettings.getCurrentDisplayUserName(User.GetUserName())</strong></div>
+        <div class="text-muted"><small>@await AppSettings.getCurrentCargo(User.GetUserName())</small></div>
+
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <button type="button" class="btn btn-link">
+                <i class="icon-settings"></i>
+            </button>
+            <button type="button" class="btn btn-link">
+                <i class="icon-speech"></i>
+                <span class="label label-warning label-pill">5</span>
+            </button>
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="icon-user"></i>
                 </button>
-            </li>
-        </ul>
-    </form>
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        @if (User.IsInRole("Administrator"))
-        {
-            <li><a asp-controller="Account" asp-action="Register">Register</a></li>
-        }
-        <li>
-            <a asp-controller="Account" asp-action="Login">
-                <i class="fa fa-sign-in"></i>
-                Log in
-            </a>
-        </li>
-    </ul>
-}
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    @*<div class="dropdown-header text-xs-center"><strong class="ng-binding">Account</strong></div>
+                    <a class="dropdown-item ng-binding" href="#"><i class="fa fa-bell-o"></i> Updates<span class="label label-info">42</span></a>
+                    <a class="dropdown-item ng-binding" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="label label-success">42</span></a>
+                    <a class="dropdown-item ng-binding" href="#"><i class="fa fa-tasks"></i> Tasks<span class="label label-danger">42</span></a>
+                    <a class="dropdown-item ng-binding" href="#"><i class="fa fa-comments"></i> Comments<span class="label label-warning">42</span></a>*@
+                    
+                    <div class="dropdown-header text-xs-center"><strong class="ng-binding">Settings</strong></div>
+                    
+                    <a class="dropdown-item ng-binding" href="#"><i class="fa fa-user"></i> Profile</a>
+
+                    <a asp-controller="Manage" asp-action="Index" class="dropdown-item ng-binding" ><i class="fa fa-wrench"></i> Settings</a>
+                    
+                    @*<a class="dropdown-item ng-binding" href="#"><i class="fa fa-usd"></i> Payments<span class="label label-default">42</span></a>
+                    <a class="dropdown-item ng-binding" href="#"><i class="fa fa-file"></i> Projects<span class="label label-primary">42</span></a>*@
+                    
+                    <div class="divider"></div>
+                    <a onclick="document.getElementById('logoutForm').submit()"  class="dropdown-item ng-binding" ><i class="fa fa-lock"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+
+
+        <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right">
+            
+        </form>
+    }
+    else
+    {
+        <div>
+            <strong> 
+                <a asp-controller="Account" asp-action="Login">
+                    <i class="fa fa-sign-in"></i>
+                    Log in
+                </a>
+            </strong>
+        </div>
+        
+    }
+</div>
+
+
+
+
+
+
+
