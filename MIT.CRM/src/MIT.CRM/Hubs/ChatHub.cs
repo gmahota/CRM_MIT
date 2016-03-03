@@ -55,11 +55,17 @@ namespace MIT.CRM.Hubs
         /// <returns>a <see cref="Task"/></returns>
         public override async Task OnConnected()
         {
-            string name = Context.User.Identity.Name;
+            string user = Context.User.Identity.Name;
+
+            string name = Context.QueryString["Name"];
+            string type = Context.QueryString["Type"];
+
+            
+
             Logger.LogInformation("OnConnected " + name);
 
-            //await Manager.AddConnectionIdAsync(name, Context.ConnectionId, "signalR");
-            //await Groups.Add(this.Context.ConnectionId, name);
+            await Manager.AddConnectionIdAsync(name, Context.ConnectionId, "signalR");
+            await Groups.Add(this.Context.ConnectionId, name);
 
             Clients.Caller.userConnected("Connected : "+name );
             await base.OnConnected();

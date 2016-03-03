@@ -17,8 +17,6 @@ namespace MIT.WPF_Server.Model
     [HubName("rhHub")]
     public class RhHub : Hub
     {
-        MotoresErp m = new MotoresErp();
-
         public override Task OnConnected()
         {
             //Use Application.Current.Dispatcher to access UI thread from outside the MainWindow class
@@ -36,29 +34,7 @@ namespace MIT.WPF_Server.Model
 
             return base.OnDisconnected(stopCalled);
         }
-
-        public void daListaEmpresas(int tipoPlataforma, string codUtilizador, string password, string categoria = "")
-        {
-            try
-            {
-                //inicializa(tipoPlataforma, codEmpresa, codUtilizador, password);
-                m._administradorErp = new MotoresPrimavera.Parametros.AdministradorErp(codUtilizador, password);
-                List<Empresa> listEntidades = m._administradorErp.listaEmpresas(categoria);
-
-                Clients.Caller.daListaEmpresas(listEntidades);
-                //return listEntidades;
-            }
-            catch (Exception e)
-            {
-                //List<Empresa> listEmpresas = new List<Empresa>();
-                //listEmpresas.Add(new Empresa() { codigo = "Demo" });
-
-                //Clients.Caller.daListaEmpresas(listEmpresas);
-                //return listEmpresas;
-            }
-
-        }
-
+        
         public void daDadosEmpresa(int tipoPlataforma, string codEmpresa, string codUtilizador, string password)
         {
             try

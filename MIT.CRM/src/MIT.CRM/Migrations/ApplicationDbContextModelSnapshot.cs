@@ -157,6 +157,19 @@ namespace MIT.CRM.Migrations
                     b.HasKey("companyId", "moduleId");
                 });
 
+            modelBuilder.Entity("MIT.Repository.Connection", b =>
+                {
+                    b.Property<string>("ConnectionID");
+
+                    b.Property<string>("ApplicationUserId");
+
+                    b.Property<bool>("Connected");
+
+                    b.Property<string>("UserAgent");
+
+                    b.HasKey("ConnectionID");
+                });
+
             modelBuilder.Entity("MIT.Repository.Contact", b =>
                 {
                     b.Property<int>("id")
@@ -591,6 +604,13 @@ namespace MIT.CRM.Migrations
                     b.HasOne("MIT.Repository.Module")
                         .WithMany()
                         .HasForeignKey("moduleId");
+                });
+
+            modelBuilder.Entity("MIT.Repository.Connection", b =>
+                {
+                    b.HasOne("MIT.Repository.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("MIT.Repository.Contact_Item", b =>

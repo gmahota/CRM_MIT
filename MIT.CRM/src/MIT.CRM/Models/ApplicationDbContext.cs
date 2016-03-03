@@ -10,6 +10,10 @@ namespace MIT.CRM.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+        #region System
+        public DbSet<Connection> Connections { get; set; }
+        #endregion
+
         #region RH DbSet
         public DbSet<Funcionario> Funcionarios { get; set; }
         public DbSet<FuncFerias> FuncionariosFerias { get; set; }
