@@ -3,7 +3,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using MIT.CRM.Models;
-using MIT.Data;
+using MIT.Repository;
 using Microsoft.AspNet.Hosting;
 using System.Collections.Generic;
 using Microsoft.AspNet.Http;

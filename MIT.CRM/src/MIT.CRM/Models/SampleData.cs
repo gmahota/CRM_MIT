@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.OptionsModel;
 using System.Collections.Generic;
-using MIT.Data;
+using MIT.Repository;
 
 namespace MIT.CRM.Models
 {

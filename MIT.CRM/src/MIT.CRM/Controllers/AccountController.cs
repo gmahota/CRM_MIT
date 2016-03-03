@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using MIT.CRM.Models;
 using MIT.CRM.Services;
 using MIT.CRM.ViewModels.Account;
-using MIT.Data;
+using MIT.Repository;
 
 namespace MIT.CRM.Controllers
 {

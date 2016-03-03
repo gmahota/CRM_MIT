@@ -384,7 +384,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Contact", b =>
+            modelBuilder.Entity("MIT.Repository.Contact", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -413,7 +413,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Contact_Entity", b =>
+            modelBuilder.Entity("MIT.Repository.Contact_Entity", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -427,7 +427,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Contact_Item", b =>
+            modelBuilder.Entity("MIT.Repository.Contact_Item", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -443,7 +443,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Entity", b =>
+            modelBuilder.Entity("MIT.Repository.Entity", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -477,7 +477,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Report", b =>
+            modelBuilder.Entity("MIT.Repository.Report", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -600,9 +600,9 @@ namespace MIT.CRM.Migrations
                         .HasForeignKey("utilizadorId");
                 });
 
-            modelBuilder.Entity("MIT.Data.Contact_Item", b =>
+            modelBuilder.Entity("MIT.Repository.Contact_Item", b =>
                 {
-                    b.HasOne("MIT.Data.Contact")
+                    b.HasOne("MIT.Repository.Contact")
                         .WithMany()
                         .HasForeignKey("contactId")
                         .HasPrincipalKey("contactId");

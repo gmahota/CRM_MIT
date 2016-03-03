@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23EA97E8-461C-436F-8355-F1FBE2AC46BA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MIT.MotoresPrimavera</RootNamespace>
+    <AssemblyName>MIT.MotoresPrimavera</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RegisterForComInterop>false</RegisterForComInterop>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Interop.AdmBE900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.AdmBE900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.AdmBS900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.AdmBS900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.CblBE900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.CblBE900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.CrmBE900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.CrmBE900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.ErpBE900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.ErpBE900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.ErpBS900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.ErpBS900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.ErpDS900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.ErpDS900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.GcpBE900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.GcpBE900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.ICblBS900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.ICblBS900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.ICrmBS900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.ICrmBS900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.IGcpBS900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.IGcpBS900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.IRhpBS900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.IRhpBS900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.RhpBE900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.RhpBE900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.StdBE900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.StdBE900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.StdPlatBE900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.StdPlatBE900.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.StdPlatBS900">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Common Files\PRIMAVERA\SG900\Interop.StdPlatBS900.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="SimpleReports, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimpleReports.1.0.0.2\lib\net45\SimpleReports.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Comercial\Instancia.cs" />
+    <Compile Include="Comercial\MotoresComercial.cs" />
+    <Compile Include="Modulos\MotoresRH.cs" />
+    <Compile Include="MotoresErp.cs" />
+    <Compile Include="Parametros\EmpresaErp.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MIT.Data\MIT.Data.csproj">
+      <Project>{a3d1c671-b470-452c-90e4-293380da092b}</Project>
+      <Name>MIT.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

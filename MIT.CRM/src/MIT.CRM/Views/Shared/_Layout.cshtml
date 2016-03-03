@@ -19,27 +19,24 @@
         </environment>
         <environment names="Staging,Production">
             <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
+
             <link rel="stylesheet" href="~/lib/fullcalendar/dist/fullcalendar.css" />
             <link rel="stylesheet" href="~/lib/Font-Awesome/css/font-awesome.min.css">
             <link rel="stylesheet" href="~/lib/bootstrap-year-calendar/css/bootstrap-year-calendar.css" />
-            
-            <link href="~/lib/genesisui/angular_dev/dist/css/style.css" rel="stylesheet" />
-            <link href="~/lib/genesisui/angular_dev/dist/css/docs.min.css" rel="stylesheet" />
-        
-        
-        
-        
-        
+
+
+            <link href="~/lib/genesisui/static_dev_grunt/css/style.css" rel="stylesheet" />
         
         
         </environment>
     </head>
-<body class="navbar-fixed sidebar-nav fixed-nav">
+<body class="navbar-fixed sidebar-nav fixed-nav ">
 
     <header class="navbar ng-scope navbar-light brand-dark">
         <button class="navbar-toggler hidden-lg-up" type="button">☰</button>
         <a href="#/dashboard" class="navbar-brand"></a>
-        <button class="navbar-toggler layout-toggler hidden-md-down" type="button" data-before="sidebar-nav" data-after="sidebar-nav compact-nav">☰</button>
+        <button class="navbar-toggler layout-toggler hidden-md-down" type="button"  data-before="sidebar-nav" data-after="sidebar-nav compact-nav">☰</button>
 
         <ul class="nav navbar-nav pull-right hidden-md-down">
             <li class="nav-item dropdown">
@@ -426,28 +423,30 @@
     </environment>
 
     <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.1.4.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery">
-        </script>
 
-        <script src="~/lib/genesisui/angular_dev/dist/js/libs/tether.min.js"></script>
+        <!-- Bootstrap and necessary plugins -->
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.js"></script>
+        <script src="~/lib/tether/dist/js/tether.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/lib/pace/pace.min.js"></script>
 
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <!-- Plugins and scripts required by all views -->
+        <script src="~/lib/Chart.js/Chart.min.js"></script>
+        @*<script src="~/lib/genesisui/static_dev_grunt/js/views/shared.js"></script>*@
+        <!-- GenesisUI main scripts -->
+        @*<script src="~/lib/genesisui/static_dev_grunt/js/app.js"></script>*@
 
+        <!-- Plugins and scripts required by this views -->
+        <script src="~/lib/toastr/toastr.min.js"></script>
+        <script src="~/lib/gauge.js/dist/gauge.min.js"></script>
         <script src="~/lib/moment/moment.js"></script>
-        <script src="~/lib/fullcalendar/dist/fullcalendar.js"></script>
-        <script src='~/lib/fullcalendar/dist/lang-all.js'></script>
-        <script src="~/lib/bootstrap-year-calendar/js/bootstrap-year-calendar.min.js"></script>
-        <script src="~/lib/signalr/jquery.signalR.min.js"></script>
+        <script src="~/lib/bootstrap-daterangepicker/daterangepicker.js"></script>
+        <!-- Custom scripts required by this view -->
+        @*<script src="~/lib/genesisui/static_dev_grunt/js/views/main.js"></script>*@
 
 
-        <script src="~/lib/genesisui/angular_dev/dist/js/holder.min.js"></script>
-        <script src="~/lib/genesisui/angular_dev/dist/js/docs.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
 
 
 

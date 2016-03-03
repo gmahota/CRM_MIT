@@ -23,6 +23,52 @@
             <param name="Role"></param>
             <returns></returns>
         </member>
+        <member name="T:MIT.CRM.Hubs.ChatHub">
+            <summary>
+            Chat Hub
+            </summary>
+        </member>
+        <member name="P:MIT.CRM.Hubs.ChatHub.Manager">
+            <summary>
+            The chat repository manager
+            </summary>
+        </member>
+        <member name="P:MIT.CRM.Hubs.ChatHub.Logger">
+            <summary>
+            Logger
+            </summary>
+        </member>
+        <member name="M:MIT.CRM.Hubs.ChatHub.#ctor(ChatLe.Models.IChatManager{System.String,ChatLe.Models.ChatLeUser,ChatLe.Models.Conversation,ChatLe.Models.Attendee,ChatLe.Models.Message,ChatLe.Models.NotificationConnection},Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="manager">The chat repository manager</param>
+        </member>
+        <member name="M:MIT.CRM.Hubs.ChatHub.OnConnected">
+            <summary>
+            Called when the connection connects to this hub instance.
+            <para>Create a signalR group for the connected user with is name</para>
+            </summary>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:MIT.CRM.Hubs.ChatHub.OnReconnected">
+            <summary>
+            Called when the connection reconnects to this hub instance.
+            <para>Create a signalR group for the connected user with is name</para>
+            </summary>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:MIT.CRM.Hubs.ChatHub.OnDisconnected(System.Boolean)">
+            <summary>
+            Called when a connection disconnects from this hub gracefully or due to a timeout.
+            <para>Remove the signalR group for the user</para>
+            </summary>
+            <param name="stopCalled">true, if stop was called on the client closing the connection gracefully; false,
+            <para>if the connection has been lost for longer than the Configuration.IConfigurationManager.DisconnectTimeout.</para>
+            <para>Timeouts can be caused by clients reconnecting to another SignalR server in scaleout.</para>
+            </param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
         <member name="M:MIT.CRM.Models.SampleData.CreateAdminUser(System.IServiceProvider)">
             <summary>
             Creates a store manager user who can manage the inventory.

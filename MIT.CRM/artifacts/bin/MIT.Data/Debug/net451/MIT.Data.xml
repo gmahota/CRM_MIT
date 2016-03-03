@@ -4,5 +4,338 @@
         <name>MIT.Data</name>
     </assembly>
     <members>
+        <!-- Badly formed XML comment ignored for member "T:ChatLe.Models.ChatManager`6" -->
+        <member name="M:ChatLe.Models.ChatManager`6.#ctor(ChatLe.Models.IChatStore{`0,`1,`2,`3,`4,`5},Microsoft.Extensions.OptionsModel.IOptions{ChatLe.Models.ChatOptions},Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="store">the store</param>
+        </member>
+        <member name="P:ChatLe.Models.ChatManager`6.Store">
+            <summary>
+            Gets the store
+            </summary>
+        </member>
+        <member name="P:ChatLe.Models.ChatManager`6.Options">
+            <summary>
+            Gets the options
+            </summary>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.AddConnectionIdAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Adds a notification connection assotiate to a user
+            </summary>
+            <param name="userName">The user name</param>
+            <param name="connectionId">The connection id</param>
+            <param name="notificationType">The notification type</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.RemoveConnectionIdAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Removes a notification connection assotiate to a user
+            </summary>
+            <param name="connectionId">The connection id</param>
+            <param name="notificationType">the type of notification</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>A Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.AddMessageAsync(System.String,`0,`4,System.Threading.CancellationToken)">
+            <summary>
+            Adds a message to a conversation
+            </summary>
+            <param name="fromName">The sender name</param>
+            <param name="toConversationId">The conversation id</param>
+            <param name="message">The message</param>
+            <param name="cancellationToken">an  optional cancellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.GetOrCreateConversationAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets or creates a conversation
+            </summary>
+            <param name="from">The name of the 1st attendee</param>
+            <param name="to">The name of the second attendee</param>
+            <param name="inialMessage">The initial message if any</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.AddMessageAsync(`2,`1,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Add a message in a conversation
+            </summary>
+            <param name="conv">the conversation</param>
+            <param name="sender">the sender</param>
+            <param name="content">the message content</param>
+            <param name="cancellationToken">a cancellation</param>
+            <returns>an async task</returns>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.AddAttendeeAsync(`2,`0,System.Threading.CancellationToken)">
+            <summary>
+            Add an attendee in a conversation by ids
+            </summary>
+            <param name="convId">the conversation id</param>
+            <param name="userId">the user id</param>
+            <param name="cancellationToken">a cancellation token</param>
+            <returns>an async task</returns>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.GetMessagesAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Gets the messages list for a conversation
+            </summary>
+            <param name="id">the conversation id</param>
+            <param name="cancellationToken">an optional concellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.GetUsersConnectedAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a page of connected users
+            </summary>
+            <param name="pageIndex">the page index</param>
+            <param name="cancellationToken">an optional concellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.ChatManager`6.GetConversationsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the list of conversation for a user
+            </summary>
+            <param name="userName">the user name</param>
+            <param name="cancellationToken">an optional concellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="T:ChatLe.Models.IChatManager`6">
+            <summary>
+            Interface defining chat manager
+            </summary>
+            <typeparam name="TKey">type of primary key</typeparam>
+            <typeparam name="TUser">type of user, must implement <see cref="T:ChatLe.Models.IChatUser`1"/></typeparam>
+            <typeparam name="TConversation">type of Conversation, must be <see cref="T:ChatLe.Models.Conversation`1"/></typeparam>
+            <typeparam name="TAttendee">type of attendee, must be <see cref="T:ChatLe.Models.Attendee`1"/></typeparam>
+            <typeparam name="TMessage">type of message, must be <see cref="T:ChatLe.Models.Message`1"/></typeparam>
+            <typeparam name="TNotificationConnection">type of notification connecction, must be <see cref="T:ChatLe.Models.NotificationConnection`1"/></typeparam>
+        </member>
+        <member name="P:ChatLe.Models.IChatManager`6.Store">
+            <summary>
+            Gets the store
+            </summary>
+        </member>
+        <member name="P:ChatLe.Models.IChatManager`6.Options">
+            <summary>
+            Gets the options
+            </summary>
+        </member>
+        <member name="M:ChatLe.Models.IChatManager`6.AddConnectionIdAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Adds a notification connection assotiate to a user
+            </summary>
+            <param name="userName">The user name</param>
+            <param name="connectionId">The connection id</param>
+            <param name="notificationType">The notification type</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ChatLe.Models.IChatManager`6.RemoveConnectionIdAsync(System.String,System.String,System.Threading.CancellationToken)" -->
+        <member name="M:ChatLe.Models.IChatManager`6.GetOrCreateConversationAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets or creates a conversation
+            </summary>
+            <param name="from">The name of the 1st attendee</param>
+            <param name="to">The name of the second attendee</param>
+            <param name="inialMessage">The initial message if any</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatManager`6.AddMessageAsync(System.String,`0,`4,System.Threading.CancellationToken)">
+            <summary>
+            Adds a message to a conversation
+            </summary>
+            <param name="fromName">The sender name</param>
+            <param name="toConversationId">The conversation id</param>
+            <param name="message">The message</param>
+            <param name="cancellationToken">an  optional cancellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatManager`6.GetUsersConnectedAsync(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets a page of connected users
+            </summary>
+            <param name="pageIndex">the page index</param>
+            <param name="cancellationToken">an optional concellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatManager`6.GetMessagesAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Gets the messages list for a conversation
+            </summary>
+            <param name="id">the conversation id</param>
+            <param name="cancellationToken">an optional concellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatManager`6.GetConversationsAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets the list of conversation for a user
+            </summary>
+            <param name="userName">the user name</param>
+            <param name="cancellationToken">an optional concellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatManager`6.RemoveUserAsync(`1,System.Threading.CancellationToken)">
+            <summary>
+            Removes a user
+            </summary>
+            <param name="user">the user to remove</param>
+            <param name="cancellationToken">an optional concellation token</param>
+            <returns>a Task</returns>
+        </member>
+        <member name="T:ChatLe.Models.IChatStore`6">
+            <summary>
+            Chat store interface
+            </summary>
+            <typeparam name="TKey">type of primary key</typeparam>
+            <typeparam name="TUser">type of user, must be a class and implement <see cref="T:ChatLe.Models.IChatUser`1"/></typeparam>
+            <typeparam name="TConversation">type of conversation, must be a <see cref="T:ChatLe.Models.Conversation`1"/></typeparam>
+            <typeparam name="TAttendee">type of attendee, must be a <see cref="T:ChatLe.Models.Attendee`1"/></typeparam>
+            <typeparam name="TMessage">type of message, must be a <see cref="T:ChatLe.Models.Message`1"/></typeparam>
+            <typeparam name="TNotificationConnection">type of notifciation connection, must be a <see cref="T:ChatLe.Models.NotificationConnection`1"/></typeparam>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.FindUserByNameAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Find a user by her name
+            </summary>
+            <param name="userName">the user name</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.FindUserByIdAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Find a user by her Id
+            </summary>
+            <param name="id">the user id</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.CreateMessageAsync(`4,System.Threading.CancellationToken)">
+            <summary>
+            Create a message on the database
+            </summary>
+            <param name="message">The message to create</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.CreateAttendeeAsync(`3,System.Threading.CancellationToken)">
+            <summary>
+            Create an attendee on the database
+            </summary>
+            <param name="attendee">The attendee to create</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.CreateConversationAsync(`2,System.Threading.CancellationToken)">
+            <summary>
+            Create a conversation on the database
+            </summary>
+            <param name="conversation">The conversation to create</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.GetConversationAsync(`1,`1,System.Threading.CancellationToken)">
+            <summary>
+            Update the user on the database
+            </summary>
+            <param name="user">The user to update</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.UpdateUserAsync(`1,System.Threading.CancellationToken)">
+            <summary>
+            Gets a conversation for 2 attendees
+            </summary>
+            <param name="attendee1">the 1st attendee</param>
+            <param name="attendee2">the 2dn attendee</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ChatLe.Models.IChatStore`6.GetConversationAsync(`0,System.Threading.CancellationToken)" -->
+        <member name="M:ChatLe.Models.IChatStore`6.GetMessagesAsync(`0,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets messages in a conversation
+            </summary>
+            <param name="convId">the conversation id</param>
+            <param name="max">max number of messages to get, default is 50</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.GetUsersConnectedAsync(System.Int32,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Gets connected users
+            </summary>
+            <param name="pageIndex">the 1 based page index, default is 1</param>
+            <param name="pageLength">number of user per page, default is 50</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ChatLe.Models.IChatStore`6.DeleteUserAsync(`1,System.Threading.CancellationToken)" -->
+        <member name="M:ChatLe.Models.IChatStore`6.UserHasConnectionAsync(`0)">
+            <summary>
+            Check if a user has connection
+            </summary>
+            <param name="userId">the <see cref="!:TKey"/> user id</param>
+            <returns>true if user has connection</returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.CreateNotificationConnectionAsync(`5,System.Threading.CancellationToken)">
+            <summary>
+            Create a notification connection on the database
+            </summary>
+            <param name="connection">the notification connection</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.DeleteNotificationConnectionAsync(`5,System.Threading.CancellationToken)">
+            <summary>
+            Delete a notification connection on the database
+            </summary>
+            <param name="connection">the notification connection</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.GetNotificationConnectionAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets a notification connection by her id and her type
+            </summary>
+            <param name="connectionId">the notification connection id</param>
+            <param name="notificationType">the type of notification</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.Init">
+            <summary>
+            Initialise the database
+            </summary>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.GetNotificationConnectionsAsync(`0,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Gets notification connections for a user id and notification type
+            </summary>
+            <param name="userId">the user id</param>
+            <param name="notificationType">the notification type</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.GetAttendeesAsync(`2,System.Threading.CancellationToken)">
+            <summary>
+            Gets attendees in a conversation
+            </summary>
+            <param name="conv">the conversation</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
+        <member name="M:ChatLe.Models.IChatStore`6.GetConversationsAsync(`0,System.Threading.CancellationToken)">
+            <summary>
+            Gets conversations for a user id
+            </summary>
+            <param name="userId">the user id</param>
+            <param name="cancellationToken">an optional cancellation token</param>
+            <returns>a <see cref="T:System.Threading.Tasks.Task`1"/></returns>
+        </member>
     </members>
 </doc>

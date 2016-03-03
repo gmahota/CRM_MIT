@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="MIT.Data.Model.Pendente">
+    <Position X="0.5" Y="8" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AABAIQIAgAAAAAAIAAAAAAIAIAoBAABAAgQEQAAAAgA=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.Banco">
+    <Position X="7.75" Y="3.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAEAQAAAAAAAAAACAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.ContaBancaria">
+    <Position X="5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AACAIAAAAAAAAAQAAQAAAAIAAAAAgAAIAACAAAAAAAA=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.FormatoBancario">
+    <Position X="0.5" Y="0.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAIAwAAAAAAAAAAgAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.LinhasFormatoBancario">
+    <Position X="7.75" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAEAAAAgAAAAAAAAAAAAAAAAAQAAAAwgAA=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.CabecExtractoBancario">
+    <Position X="5" Y="3.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAIAAAAIAAAAJAAAAAACAACAAAAAAwA=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.LinhasExtractoBancario">
+    <Position X="3.25" Y="8" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>CAIAAAAQAAAAIAAgAAAAAAQAQAAAAAABAHEACCAAAgA=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.HistoricoExpPS2">
+    <Position X="6" Y="9" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgECAAAAACAIACEAAAAAAAIAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.MovimentosBancos">
+    <Position X="0.5" Y="3.25" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAIAAAAQAAAAAIAAACQAAAACRAQAAgCEAAAgAgA=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MIT.Data.Model.EntidadeExportacao">
+    <Position X="7.75" Y="5.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAACAAAAAABQAAAAAEAAgAAAAAAAAAAAMAAAI=</HashCode>
+      <FileName>Model\Logistica_Tesouraria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

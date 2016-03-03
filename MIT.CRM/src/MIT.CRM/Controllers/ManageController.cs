@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using MIT.CRM.Models;
 using MIT.CRM.Services;
 using MIT.CRM.ViewModels.Manage;
-using MIT.Data;
+using MIT.Repository;
 using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Hosting;
 using System.IO;

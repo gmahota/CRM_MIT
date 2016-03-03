@@ -13,21 +13,33 @@ using MIT.CRM.Models;
 using MIT.CRM.Services;
 using MIT.CRM.Models.Helper;
 using System.Globalization;
-using MIT.Data;
+using MIT.Repository;
 using System.Threading;
 using Microsoft.AspNet.Localization;
 using Microsoft.Extensions.Localization;
 using MIT.CRM.Services.Primavera;
+using ChatLe.Models;
 
 namespace MIT.CRM
 {
     public class Startup
     {
+        enum DBEngine
+        {
+            SqlServer,
+            InMemory,
+            Redis,
+            SQLite
+        }
+        readonly IHostingEnvironment _environment;
+
+        public IConfigurationRoot Configuration { get; set; }
+
+        public ILoggerFactory LoggerFactory { get; private set; }
+
         public Startup(IHostingEnvironment env)
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("pt-BR");
-
+            
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
@@ -44,9 +56,7 @@ namespace MIT.CRM
             Configuration = builder.Build();
             
         }
-
-        public IConfigurationRoot Configuration { get; set; }
-
+        
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -64,12 +74,17 @@ namespace MIT.CRM
 
             services.AddLocalization(options => options.ResourcesPath = "resources");
 
+           
             services.AddMvc()
                 .AddViewLocalization(options => options.ResourcesPath = "Resources")
                 .AddDataAnnotationsLocalization();
 
-            //services.AddScoped<LanguageActionFilter>();
             
+
+            services.AddSignalR();
+
+            //services.AddScoped<LanguageActionFilter>();
+
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -111,9 +126,7 @@ namespace MIT.CRM
             };
 
             app.UseRequestLocalization(requestLocalizationOptions, new RequestCulture (new CultureInfo("pt-PT")));
-
-
-
+            
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
@@ -143,8 +156,6 @@ namespace MIT.CRM
 
             app.UseIdentity();
 
-           
-
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseMvc(routes =>
@@ -153,6 +164,9 @@ namespace MIT.CRM
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseWebSockets();
+
+            app.UseSignalR();
 
             //Populates the Admin user and role
             SampleData.InitializeIdentityDatabaseAsync(app.ApplicationServices).Wait();

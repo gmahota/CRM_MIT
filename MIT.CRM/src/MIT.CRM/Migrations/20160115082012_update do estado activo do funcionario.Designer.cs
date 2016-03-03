@@ -99,7 +99,7 @@ namespace MIT.CRM.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("MIT.Data.ApplicationUser", b =>
+            modelBuilder.Entity("MIT.Repository.ApplicationUser", b =>
                 {
                     b.Property<string>("Id");
 
@@ -147,7 +147,7 @@ namespace MIT.CRM.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("MIT.Data.Contact", b =>
+            modelBuilder.Entity("MIT.Repository.Contact", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -176,7 +176,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Contact_Entity", b =>
+            modelBuilder.Entity("MIT.Repository.Contact_Entity", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -190,7 +190,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Contact_Item", b =>
+            modelBuilder.Entity("MIT.Repository.Contact_Item", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -206,7 +206,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Departamento", b =>
+            modelBuilder.Entity("MIT.Repository.Departamento", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -226,7 +226,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Empresa", b =>
+            modelBuilder.Entity("MIT.Repository.Empresa", b =>
                 {
                     b.Property<string>("codigo");
 
@@ -277,7 +277,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("codigo");
                 });
 
-            modelBuilder.Entity("MIT.Data.Entity", b =>
+            modelBuilder.Entity("MIT.Repository.Entity", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -311,7 +311,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Ferias", b =>
+            modelBuilder.Entity("MIT.Repository.Ferias", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -325,7 +325,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Ferias_Itens", b =>
+            modelBuilder.Entity("MIT.Repository.Ferias_Itens", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -353,7 +353,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.FuncFerias", b =>
+            modelBuilder.Entity("MIT.Repository.FuncFerias", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -375,7 +375,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.FuncInfFerias", b =>
+            modelBuilder.Entity("MIT.Repository.FuncInfFerias", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -405,7 +405,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Funcionario", b =>
+            modelBuilder.Entity("MIT.Repository.Funcionario", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -463,7 +463,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Historio_Ferias_Item", b =>
+            modelBuilder.Entity("MIT.Repository.Historio_Ferias_Item", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -479,7 +479,7 @@ namespace MIT.CRM.Migrations
                     b.HasKey("id");
                 });
 
-            modelBuilder.Entity("MIT.Data.Report", b =>
+            modelBuilder.Entity("MIT.Repository.Report", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();
@@ -510,14 +510,14 @@ namespace MIT.CRM.Migrations
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MIT.Data.ApplicationUser")
+                    b.HasOne("MIT.Repository.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MIT.Data.ApplicationUser")
+                    b.HasOne("MIT.Repository.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
@@ -528,84 +528,84 @@ namespace MIT.CRM.Migrations
                         .WithMany()
                         .HasForeignKey("RoleId");
 
-                    b.HasOne("MIT.Data.ApplicationUser")
+                    b.HasOne("MIT.Repository.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("MIT.Data.Contact_Item", b =>
+            modelBuilder.Entity("MIT.Repository.Contact_Item", b =>
                 {
-                    b.HasOne("MIT.Data.Contact")
+                    b.HasOne("MIT.Repository.Contact")
                         .WithMany()
                         .HasForeignKey("contactId")
                         .HasPrincipalKey("contactId");
                 });
 
-            modelBuilder.Entity("MIT.Data.Departamento", b =>
+            modelBuilder.Entity("MIT.Repository.Departamento", b =>
                 {
-                    b.HasOne("MIT.Data.Empresa")
+                    b.HasOne("MIT.Repository.Empresa")
                         .WithMany()
                         .HasForeignKey("empresaId");
 
-                    b.HasOne("MIT.Data.ApplicationUser")
+                    b.HasOne("MIT.Repository.ApplicationUser")
                         .WithOne()
-                        .HasForeignKey("MIT.Data.Departamento", "responsavelId");
+                        .HasForeignKey("MIT.Repository.Departamento", "responsavelId");
                 });
 
-            modelBuilder.Entity("MIT.Data.Ferias", b =>
+            modelBuilder.Entity("MIT.Repository.Ferias", b =>
                 {
-                    b.HasOne("MIT.Data.Funcionario")
+                    b.HasOne("MIT.Repository.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
                 });
 
-            modelBuilder.Entity("MIT.Data.Ferias_Itens", b =>
+            modelBuilder.Entity("MIT.Repository.Ferias_Itens", b =>
                 {
-                    b.HasOne("MIT.Data.Ferias")
+                    b.HasOne("MIT.Repository.Ferias")
                         .WithMany()
                         .HasForeignKey("feriasId");
 
-                    b.HasOne("MIT.Data.Funcionario")
+                    b.HasOne("MIT.Repository.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
                 });
 
-            modelBuilder.Entity("MIT.Data.FuncFerias", b =>
+            modelBuilder.Entity("MIT.Repository.FuncFerias", b =>
                 {
-                    b.HasOne("MIT.Data.Funcionario")
+                    b.HasOne("MIT.Repository.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
                 });
 
-            modelBuilder.Entity("MIT.Data.FuncInfFerias", b =>
+            modelBuilder.Entity("MIT.Repository.FuncInfFerias", b =>
                 {
-                    b.HasOne("MIT.Data.Funcionario")
+                    b.HasOne("MIT.Repository.Funcionario")
                         .WithMany()
                         .HasForeignKey("funcionarioId");
                 });
 
-            modelBuilder.Entity("MIT.Data.Funcionario", b =>
+            modelBuilder.Entity("MIT.Repository.Funcionario", b =>
                 {
-                    b.HasOne("MIT.Data.Departamento")
+                    b.HasOne("MIT.Repository.Departamento")
                         .WithMany()
                         .HasForeignKey("departamentoId");
 
-                    b.HasOne("MIT.Data.Empresa")
+                    b.HasOne("MIT.Repository.Empresa")
                         .WithMany()
                         .HasForeignKey("empresaId");
 
-                    b.HasOne("MIT.Data.ApplicationUser")
+                    b.HasOne("MIT.Repository.ApplicationUser")
                         .WithOne()
-                        .HasForeignKey("MIT.Data.Funcionario", "utilizadorId");
+                        .HasForeignKey("MIT.Repository.Funcionario", "utilizadorId");
                 });
 
-            modelBuilder.Entity("MIT.Data.Historio_Ferias_Item", b =>
+            modelBuilder.Entity("MIT.Repository.Historio_Ferias_Item", b =>
                 {
-                    b.HasOne("MIT.Data.Ferias_Itens")
+                    b.HasOne("MIT.Repository.Ferias_Itens")
                         .WithMany()
                         .HasForeignKey("ferias_item_id");
 
-                    b.HasOne("MIT.Data.ApplicationUser")
+                    b.HasOne("MIT.Repository.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("utilizadorId");
                 });
