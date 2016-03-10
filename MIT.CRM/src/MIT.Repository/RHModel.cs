@@ -60,6 +60,8 @@ namespace MIT.Repository
 
         public int departamentoId { get; set; }
 
+        public string departamentoCodigo { get; set; }
+
         public string empresaId { get; set; }
 
         public int? avatarId { get; set; }

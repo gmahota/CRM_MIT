@@ -106,4 +106,41 @@ namespace MIT.Repository
         
         
     }
+
+    /// <summary>
+    /// Classe Instancia para a gestão das versões do primavera e as suas respectivas assemblies
+    /// </summary>
+    public class Instancia
+    {
+
+        public int instancia = 1;
+        public string empresa;
+        public string usuario;
+        public string password;
+        public string instanciaSql;
+        public string empresaSql;
+        public string usuarioSql;
+        public string passwordSql;
+        public static string versaoErp = "V900";
+        public const string pastaConfigV800 = "PRIMAVERA\\SG800";
+
+        public const string pastaConfigV900 = "PRIMAVERA\\SG900";
+
+        public string getConnectionString()
+        {
+            return string.Format("Data Source={0} ;Initial Catalog={1};User Id={2};Password={3} ", instanciaSql, empresaSql, usuarioSql, passwordSql);
+        }
+
+        public static string daPastaConfig()
+        {
+            if (versaoErp == "V800")
+            {
+                return pastaConfigV800;
+            }
+            else
+            {
+                return pastaConfigV900;
+            }
+        }
+    }
 }
