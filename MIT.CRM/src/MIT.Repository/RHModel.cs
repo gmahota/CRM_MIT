@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,27 +12,36 @@ namespace MIT.Repository
     {
         public int id { get; set; }
 
+        [StringLength(250)]
         public string codigo { get; set; }
 
+        [StringLength(250)]
         public string nome { get; set; }
 
         [StringLength(25)]
         [Display(Name = "Alcunha")]
         public string nomeAbreviado { get; set; }
 
+        [StringLength(50)]
         public string localidade { get; set; }
 
+        [StringLength(50)]
         public string naturalidade { get; set; }
 
+        [StringLength(50)]
         public string distrito { get; set; }
 
+        [StringLength(50)]
         public string nacionalidade { get; set; }
 
+        [StringLength(20)]
         public string telefone { get; set; }
 
+        [StringLength(30)]
         public string estadoCivil { get; set; }
 
-        public string sexo { get; set; }
+        [DefaultValue("true")]
+        public bool sexo { get; set; }
 
         public DateTime? dataNascimento { get; set; }
 
@@ -41,25 +51,35 @@ namespace MIT.Repository
 
         public DateTime? dataFimContrato { get; set; }
 
+        [StringLength(30)]
         public string categoria { get; set; }
 
+        [StringLength(30)]
         public string profissao { get; set; }
 
+        [StringLength(30)]
         public string classificacao { get; set; }
 
         public DateTime? dataClassificacao { get; set; }
 
+        [StringLength(30)]
         public string habilitacao { get; set; }
 
+        [StringLength(50)]
         public string email { get; set; }
 
+        [StringLength(30)]
         public string telemovel { get; set; }
+
+        [StringLength(30)]
         public string telefoneAlternativo { get; set; }
 
+        [DefaultValue("true")]
         public bool activo { get; set; }
 
         public int departamentoId { get; set; }
 
+        [StringLength(20)]
         public string departamentoCodigo { get; set; }
 
         public string empresaId { get; set; }
@@ -89,6 +109,8 @@ namespace MIT.Repository
         [ForeignKey("avatarId")]
         public virtual FileDescription avatar { get; set; }
 
+        public virtual List<Responsalvel_Departamento> listaResponsavelDepartamentos { get; set; }
+
     }
 
     public class FuncInfFerias
@@ -116,6 +138,9 @@ namespace MIT.Repository
         public double diasFeriasJaPagas { get; set; }
 
         public bool funcSemFerias { get; set; }
+
+        [StringLength(250)]
+        public string notas { get; set; }
 
         [ForeignKey("funcionarioId")]
         public virtual Funcionario funcionario { get; set; }
@@ -153,14 +178,15 @@ namespace MIT.Repository
         public string empresaId { get; set; }
 
         [Required]
+        [StringLength(30)]
         public string descricao { get; set; }
 
-        [Display(Name = "Responsavel Departamento")]
-
+        [Display(Name = "Responsavel")]
         public string responsavelId { get; set; }
 
+        [DefaultValue(true)]
         public bool activo { get; set; }
-
+        
         [ForeignKey("responsavelId")]
         public virtual ApplicationUser responsavel { get; set; }
 
@@ -168,6 +194,24 @@ namespace MIT.Repository
         public virtual Empresa empresa { get; set; }
         
         public virtual List<Funcionario> listaFuncionarios { get; set; }
+
+        public virtual List<Responsalvel_Departamento> listaResponsavelDepartamentos { get; set; }
+
+        //public ICollection<ApplicationUser> listResponsible { get; set; }
+    }
+
+    public class Responsalvel_Departamento
+    {
+        [Key]
+        public int Id { get; set; }
+
+        public int? funcionarioId { get; set; }
+
+        public int? departamentoId { get; set; }
+
+        public virtual Funcionario funcionario { get; set; }
+
+        public virtual Departamento departamento { get; set; }
     }
 
     public class Ferias
@@ -204,8 +248,14 @@ namespace MIT.Repository
         public int tipoMarcacao { get; set; }
         public bool originouFaltaSubAlim { get; set; }
 
+        [StringLength(10)]
         public string estado { get; set; }
+
+        [StringLength(10)]
         public string tipo { get; set; }
+
+        [StringLength(250)]
+        public string notas { get; set; }
 
         [ForeignKey("feriasId")]
         public Ferias ferias { get; set; }
@@ -230,7 +280,11 @@ namespace MIT.Repository
 
         public int ferias_item_id { get; set; }
 
+        [StringLength(20)]
         public string estado { get; set; }
+
+        [StringLength(250)]
+        public string notas { get; set; }
 
         public string utilizadorId { get; set; }
 

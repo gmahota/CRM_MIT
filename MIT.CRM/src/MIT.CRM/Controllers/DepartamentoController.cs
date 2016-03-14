@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Text;
 using MIT.Repository;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace MIT.CRM.Controllers
 {
@@ -30,14 +31,12 @@ namespace MIT.CRM.Controllers
         // GET: Departamento
         public IActionResult Index()
         {
-            var applicationDbContext = _context.Empresas.ToList();
-
-            for(int i = 0; i < applicationDbContext.Count(); i++)
-            {
-                applicationDbContext.ElementAt(i).departamentosList = _context.Departamentos.Include(e => e.responsavel).Where(e => e.empresaId == applicationDbContext.ElementAt(i).codigo).ToList();
-            }
-           
-            return View(applicationDbContext.ToList());
+            var empresas = _context
+                .Empresas
+                .Include(d => d.departamentosList)
+                .ToList();
+            
+            return View(empresas);
         }
 
         // GET: Departamento/Details/5
@@ -120,20 +119,28 @@ namespace MIT.CRM.Controllers
                 return HttpNotFound();
             }
 
-            Departamento departamento = _context.Departamentos.Single(m => m.Id == id);
+            Departamento departamento = _context.Departamentos
+                .Include(d=> d.listaResponsavelDepartamentos)
+                .Single(m => m.Id == id);
+
             if (departamento == null)
             {
                 return HttpNotFound();
             }
+            
+            
+
             ViewData["empresaId"] = new SelectList(_context.Empresas, "codigo", "nome", departamento.empresaId);
-            ViewData["responsavelId"] = new SelectList(_context.Users, "Id", "UserName", departamento.responsavelId);
+            ViewData["responsavelId"] = new MultiSelectList(
+                _context.Funcionarios, "id", "nome");
+
             return View(departamento);
         }
 
         // POST: Departamento/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Departamento dep )
+        public async Task<IActionResult> Edit(Departamento dep , int []  ResponsavelDepartamentos)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("pt-BR");
@@ -141,26 +148,45 @@ namespace MIT.CRM.Controllers
             if (ModelState.IsValid)
             {
                 _context.Update(dep);
+
+                foreach (var item in ResponsavelDepartamentos)
+                {
+                    var list= _context.Responsalvel_Departamento.Where(c => c.funcionarioId == item && c.departamentoId == dep.Id);
+
+                    if(list.Count() == 0)
+                    {
+                        var depResp = new Responsalvel_Departamento()
+                        {
+                            departamentoId = dep.Id,
+                            funcionarioId = item
+                        };
+                        _context.Responsalvel_Departamento.Add(depResp);
+                    }
+                }
+                
+
                 _context.SaveChanges();
+
+
 
                 var callbackUrl = "http://ferias.mit.co.mz:5000/";
 
-                ApplicationUser user = _context.Users.Include(m => m.funcionario).Single(m => m.Id == dep.responsavelId);
-                Empresa emp = _context.Empresas.Single(m => m.codigo == dep.empresaId);
-                if (dep != null && user != null)
-                {
-                    string mensaguem = " <h4>Caro (a) " + user.funcionario.nome + " </h4> <br/>" +
-                        "<p>Foi adicionado como responsavel do departamento " + dep.descricao + " da empresa " + emp.nome + " para a gestão das ferias do colobaroados afectos ao respectivo departamento.</p> <br/>" +
-                        "<p><b>Aplicação:  </b> <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>";
+                //ApplicationUser user = _context.Users.Include(m => m.funcionario).Single(m => m.Id == dep.responsavelId);
+                //Empresa emp = _context.Empresas.Single(m => m.codigo == dep.empresaId);
+                //if (dep != null && user != null)
+                //{
+                //    string mensaguem = " <h4>Caro (a) " + user.funcionario.nome + " </h4> <br/>" +
+                //        "<p>Foi adicionado como responsavel do departamento " + dep.descricao + " da empresa " + emp.nome + " para a gestão das ferias do colobaroados afectos ao respectivo departamento.</p> <br/>" +
+                //        "<p><b>Aplicação:  </b> <a href=\"" + callbackUrl + "\">" + callbackUrl + "</a> </p> <br/>";
 
-                    string a =string.Format(CultureInfo.GetCultureInfo("pt-PT"), "Não Responder");
+                //    string a =string.Format(CultureInfo.GetCultureInfo("pt-PT"), "Não Responder");
 
-                    var b = @"Aplicação de Marcação de Ferias -Em Produção / Teste";
+                //    var b = @"Aplicação de Marcação de Ferias -Em Produção / Teste";
                     
-                    var host = HttpContext.Request.Host.Value;
+                //    var host = HttpContext.Request.Host.Value;
 
-                    await _emailSender.SendAsync("do-not-reply@meridian32.com", a, user.Email,"", b, mensaguem, host );
-                }
+                //    await _emailSender.SendAsync("do-not-reply@meridian32.com", a, user.Email,"", b, mensaguem, host );
+                //}
 
 
                 

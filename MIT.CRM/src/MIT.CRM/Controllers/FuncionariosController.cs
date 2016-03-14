@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using Microsoft.AspNet.Http;
 using System.IO;
 using Microsoft.Net.Http.Headers;
+using MIT.CRM.Services;
+using System.Threading.Tasks;
 
 namespace MIT.CRM.Controllers
 {
@@ -18,44 +20,28 @@ namespace MIT.CRM.Controllers
 
         private IHostingEnvironment _environment;
 
-        public FuncionariosController(ApplicationDbContext context, IHostingEnvironment environment)
+        private AppServices _appServices;
+
+        public FuncionariosController(ApplicationDbContext context, IHostingEnvironment environment, AppServices appServices)
         {
             _context = context;
             _environment = environment;
+            _appServices = appServices;
         }
 
         // GET: Funcionarios
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var responsavel = _context.Users
-                .Include(m=> m.departamento)
-                .First(m => m.UserName == User.Identity.Name);
 
-            var departamento = responsavel.departamento;
-            departamento.empresa = _context.Empresas.Single(m => m.codigo == departamento.empresaId);
-            
-            if (departamento != null)
+            if ((await _appServices.getResponsavelDepartamento(User.Identity.Name)))
             {
-                //ViewData["ResponsaveId"] = user;
-                ViewBag.departamento = departamento.descricao;
-                ViewBag.empresa = departamento.empresa.codigo;
-                ViewBag.empresaNome = departamento.empresa.nome;
-            }
-            else {
-                ViewBag.departamento = "";
-                ViewBag.empresa = "";
+                //ViewData["modulo_value"] = funcionario.codigo + " - " + funcionario.nome;
+                return View(await _appServices.getFuncionariosFromResponsavelDepartamento(User.Identity.Name));
             }
 
 
-
-
-            var applicationDbContext = _context.Funcionarios.Include(f => f.departamento)
-                .Include(f => f.empresa).Include(f => f.utilizador)
-                .Include(f => f.ferias_item)
-                .Include(f => f.funcInfFerias)
-                .Where(f=> f.empresaId == departamento.empresaId);
-            
-            return View(applicationDbContext.ToList());
+           
+            return View(new List<Funcionario>());
         }
 
         // GET: Funcionarios/Details/5

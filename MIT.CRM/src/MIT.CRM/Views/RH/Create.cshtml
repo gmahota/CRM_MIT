@@ -14,7 +14,7 @@
     var ferias = [];
     var tipoFerias = "Dia de Férias";
     var numDiasMarcados = 0;
-
+    var totalDiasMarcados = $("txttotalDias").text();
     var numMeiosDiasMarcados = 0;
     var numDiasAntecipados = 0;
     var numMeiosAntecipados = 0;
@@ -92,12 +92,21 @@
                     } else {
 
                         if (existeData(ferias, feria) == false) {
+
+                            
+
+
+
                             switch (tipoFerias) {
                                 case 'Dia de Férias':
                                     evento.color = '#eea236';
                                     //$(this).css('background-color', '#eea236');
                                     numDiasMarcados++;
 
+                                    totalDiasMarcados = $("#txttotalDias").text();
+                                    totalDiasMarcados--;
+
+                                    $("#txttotalDias").text(totalDiasMarcados);
                                     $("#txtDiasMarcados").val(numDiasMarcados);
 
                                     break;
@@ -106,17 +115,24 @@
                                     //$(this).css('background-color', '#d43f3a');
                                     evento.color = '#d43f3a';
                                     numMeiosDiasMarcados++;
+                                    totalDiasMarcados = $("#txttotalDias").text();
+                                    totalDiasMarcados= totalDiasMarcados- 0.5;
+
+
                                     $("#txtMeiosDiasMarcados").val(numMeiosDiasMarcados);
                                     break;
 
                                 case 'Dia Antecipado':
                                     numDiasAntecipados++;
-
+                                    totalDiasMarcados = $("#txttotalDias").text();
+                                    totalDiasMarcados--;
                                     $("#txtDiasAntecipados").val(numDiasAntecipados);
 
                                     break;
                                 case 'Meio Dia Antecipado':
                                     numMeiosAntecipados++;
+                                    totalDiasMarcados = $("#txttotalDias").text();
+                                    totalDiasMarcados = totalDiasMarcados - 0.5;
 
                                     $("#txtMeiosDiasAntecipados").val(numMeiosAntecipados);
 
@@ -124,11 +140,64 @@
 
                             }
 
-                            ferias.push(feria)
+                            if (totalDiasMarcados < 0) {
+                                alert("Já não existem dias desponiveis para a marcação")
 
-                            $(e.element).css('background-color', evento.color);
-                            $(e.element).css('color', 'white');
-                            $(e.element).css('border-radius', '15px');
+                                switch (tipoFerias) {
+                                    case 'Dia de Férias':
+                                        evento.color = '#eea236';
+                                        //$(this).css('background-color', '#eea236');
+                                        numDiasMarcados--;
+
+                                        totalDiasMarcados = $("#txttotalDias").text();
+                                        totalDiasMarcados++;
+
+                                        $("#txttotalDias").text(totalDiasMarcados);
+                                        $("#txtDiasMarcados").val(numDiasMarcados);
+
+                                        break;
+
+                                    case 'Meio Dia de Férias':
+                                        //$(this).css('background-color', '#d43f3a');
+                                        evento.color = '#d43f3a';
+                                        numMeiosDiasMarcados--;
+                                        totalDiasMarcados = $("#txttotalDias").text();
+                                        totalDiasMarcados = totalDiasMarcados + 0.5;
+
+
+                                        $("#txtMeiosDiasMarcados").val(numMeiosDiasMarcados);
+                                        break;
+
+                                    case 'Dia Antecipado':
+                                        numDiasAntecipados--;
+                                        totalDiasMarcados = $("#txttotalDias").text();
+                                        totalDiasMarcados++;
+                                        $("#txtDiasAntecipados").val(numDiasAntecipados);
+
+                                        break;
+                                    case 'Meio Dia Antecipado':
+                                        numMeiosAntecipados--;
+                                        totalDiasMarcados = $("#txttotalDias").text();
+                                        totalDiasMarcados = totalDiasMarcados + 0.5;
+
+                                        $("#txtMeiosDiasAntecipados").val(numMeiosAntecipados);
+
+                                        break;
+
+                                }
+
+
+                            } else {
+                                ferias.push(feria)
+
+                                $(e.element).css('background-color', evento.color);
+                                $(e.element).css('color', 'white');
+                                $(e.element).css('border-radius', '15px');
+
+                            }
+
+
+                            
 
                         }
                     }
@@ -169,26 +238,36 @@
 
                         switch (value.tipo) {
                             case 'Dia de Férias':
-
                                 numDiasMarcados++;
 
+                                totalDiasMarcados = $("#txttotalDias").text();
+                                totalDiasMarcados--;
+
+                                $("#txttotalDias").text(totalDiasMarcados);
                                 $("#txtDiasMarcados").val(numDiasMarcados);
 
                                 break;
 
                             case 'Meio Dia de Férias':
                                 numMeiosDiasMarcados++;
+                                totalDiasMarcados = $("#txttotalDias").text();
+                                totalDiasMarcados = totalDiasMarcados - 0.5;
+
+
                                 $("#txtMeiosDiasMarcados").val(numMeiosDiasMarcados);
                                 break;
 
                             case 'Dia Antecipado':
                                 numDiasAntecipados++;
-
+                                totalDiasMarcados = $("#txttotalDias").text();
+                                totalDiasMarcados--;
                                 $("#txtDiasAntecipados").val(numDiasAntecipados);
 
                                 break;
                             case 'Meio Dia Antecipado':
                                 numMeiosAntecipados++;
+                                totalDiasMarcados = $("#txttotalDias").text();
+                                totalDiasMarcados--;
 
                                 $("#txtMeiosDiasAntecipados").val(numMeiosAntecipados);
 
@@ -199,7 +278,7 @@
                         var day = moment(value.dataFeria);
 
                         var currentYear = new Date().getFullYear();
-                        console.log(value.dataFeria)
+                        
                         var evento = {
                             id: 0,
                             name: value.tipo,
@@ -276,6 +355,12 @@
 <script type="text/javascript">
 
     function submeterPedido() {
+        $("#btSave").prop("disabled", true);
+        $(".toast-title").text("Gravação dos Pedidos");
+        $(".toast-progress").width('0%');
+        $(".toast-message").text("Inicio");
+        
+        $("#toast-container").css("visibility", "visible");
 
         for (i = 0; i < ferias.length; i++) {
             
@@ -302,7 +387,8 @@
                     url: location.origin + "/RH/MarcacaoFerias",
                     data: feri ,
                     success: function (data) {
-
+                        var percentLoaded = Math.round((i / ferias.length) * 100);
+                        $(".toast-progress").width(percentLoaded+'%');
                         //window.location = "/RH/Index";
 
                     },
@@ -314,6 +400,10 @@
 
         }
 
+        $(".toast-progress").width('100%');
+        
+        $(".toast-title").text("Envio de Emails");
+        $(".toast-progress").width('0%');
 
         var mensaguem = "";
         mensaguem = "<table>"
@@ -333,7 +423,7 @@
         }
 
         mensaguem += "</table>";
-
+        $(".toast-progress").width('50%');
         var apiUrl = location.origin + "/Funcionario/sendEmailCriacaoFerias";
 
         $.ajax({
@@ -351,6 +441,8 @@
                 var x = error; //break here for debugging.
             }
         });
+        
+        $(".toast-progress").width('100%');
 
         window.location = "/RH/Details/" + '@Model.id';
 
@@ -439,7 +531,7 @@
     <div class="breadcrumb-menu">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <center>
-                <button type="button" class="btn btn-success btn-sm " role="button" onclick="submeterPedido()"> @*data-toggle="modal" data-target="#myModal"*@
+                <button id="btSave" type="button" class="btn btn-success btn-sm " role="button" onclick="submeterPedido()"> @*data-toggle="modal" data-target="#myModal"*@
                     <span class="fa fa-save" aria-hidden="true"></span>
                     Submeter
                 </button>
@@ -543,3 +635,22 @@
 </div>
 
 
+<div role="alert" aria-live="polite" class="toast-top-right" id="toast-container" style="visibility:hidden">
+    <div style="display: block;" class="toast toast-info">
+        <div style="width: 100%;" class="toast-progress">
+
+        </div>
+        <button role="button" class="toast-close-button" type="button">
+            ×
+        </button>
+
+        <div class="toast-title">
+            Welcome to ROOT Admin
+        </div>
+
+        <div class="toast-message">
+            Bootstrap 4 on steroids
+        </div>
+    
+    </div>
+</div>

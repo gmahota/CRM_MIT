@@ -5,74 +5,98 @@
 }
 
 
+<!--Page Header -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-7">
+            <h1 class="h2"><span class="ng-binding ng-isolate-scope" ncy-breadcrumb-last="">Departamento - Editar Dados</span></h1>
+            <div class="text-muted ng-binding"> @Model.departamento - @Model.descricao </div>
+        </div>
+
+    </div>
+</div>
 
 
-
-<h4 class="page-header">Departamento - Editar Dados - @Model.departamento , @Model.descricao  </h4>
-
-
-<div class="row placeholders">
-    <div class="col-md-8 placeholder">
-                    
-
-        <form  asp-controller="Departamento" asp-action="Edit"  method="post" asp-route-id="@Model.Id">
-            <div class="form-horizontal">
-                           
-                <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
-                <div class="form-group">
-                    <label asp-for="departamento" class="col-md-2 control-label" ></label>
+<div class="container-fluid">
+    <div class="animated fadeIn ng-scope">
+        <div class="card card-full ng-scope">
+            <div class="card-block">
+                <div class="row">
                     <div class="col-md-10">
-                        <input asp-for="departamento" class="form-control" readonly="readonly" />
-                        <span asp-validation-for="departamento" class="text-danger" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="descricao" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <input asp-for="descricao" class="form-control" />
-                        <span asp-validation-for="descricao" class="text-danger" />
-                    </div>
-                </div>
-                           
+                        <form asp-controller="Departamento" asp-action="Edit" method="post" asp-route-id="@Model.Id">
+                            <div class="form-horizontal">
 
-                <div class="form-group">
-                    <label asp-for="empresaId" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <select asp-for="empresaId" asp-items='ViewBag.empresaId' class="form-control"></select>
-                        <span asp-validation-for="empresaId" class="text-danger" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label asp-for="responsavelId" class="col-md-2 control-label"></label>
-                    <div class="col-md-10">
-                        <select asp-for="responsavelId" asp-items='ViewBag.responsavelId' class="form-control"></select>
-                        <span asp-validation-for="responsavelId" class="text-danger" />
-                    </div>
-                </div>
+                                <div asp-validation-summary="ValidationSummary.ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="Id" />
+                                <div class="form-group">
+                                    <label asp-for="departamento" class="col-md-2 control-label"></label>
+                                    <div class="col-md-10">
+                                        <input asp-for="departamento" class="form-control" readonly="readonly" />
+                                        <span asp-validation-for="departamento" class="text-danger" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="descricao" class="col-md-2 control-label"></label>
+                                    <div class="col-md-10">
+                                        <input asp-for="descricao" class="form-control" />
+                                        <span asp-validation-for="descricao" class="text-danger" />
+                                    </div>
+                                </div>
 
 
+                                <div class="form-group">
+                                    <label asp-for="empresaId" class="col-md-2 control-label"></label>
+                                    <div class="col-md-10">
 
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-default" />
+                                        <select asp-for="empresaId" asp-items='ViewBag.empresaId' class="form-control" disabled></select>
+                                        <span asp-validation-for="empresaId" class="text-danger" />
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                    <label asp-for="responsavelId" class="col-md-2 control-label"></label>
+                                    <div class="col-md-10">
+                                        <select asp-for="responsavelId" asp-items='ViewBag.responsavelId' class="form-control"></select>
+                                        <span asp-validation-for="responsavelId" class="text-danger" />
+                                    </div>
+                                </div>*@
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label"> Responsaveis:</label>
+                                    <div class="col-md-10">
+
+                                        @Html.ListBox("ResponsavelDepartamentos", (MultiSelectList)ViewBag.responsavelId, new { size = 20 })
+
+                                        @*<select asp-for="listaResponsavelDepartamentos" asp-items='ViewBag.responsavelId' class="form-control"></select>
+                                        <span asp-validation-for="responsavelId" class="text-danger" />*@
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-10">
+                                        <input type="submit" value="Save" class="btn btn-default" />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div>
+                            <a asp-action="Index">Back to List</a>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </form>
-
-        <div>
-            <a asp-action="Index">Back to List</a>
         </div>
     </div>
-
 </div>
 
 
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
+
+
 
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

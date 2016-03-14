@@ -14,6 +14,8 @@ namespace MIT.Repository
         
         public ICollection<Connection> Connections { get; set; }
 
+        //public ICollection<Departamento> listDepartamentos { get; set; }
+
         public void Dispose()
         {
             

@@ -1,77 +1,112 @@
 @model IEnumerable<MIT.Repository.Empresa>
-
+@inject MIT.CRM.Services.AppServices AppSettings
 @{
     ViewData["Title"] = "View";
 }
-<h4 class="page-header">Lista Departamentos</h4>
 
-<div class="table-responsive">
+<!--Page Header -->
+<div class="page-header">
+    <div class="row">
+        <div class="col-md-7">
+            <h1 class="h2"><span class="ng-binding ng-isolate-scope" ncy-breadcrumb-last="">Lista Departamentos</span></h1>
+            <div class="text-muted ng-binding"> Das Empresas </div>
+        </div>
 
-    @foreach (var item in Model)
-    {
-        <div class="panel-group" id="accordion">
-            <!-- accordion 1 -->
-            <div class="panel panel-primary">
+    </div>
+</div>
 
-                <div class="panel-heading">
-                    <!-- panel-heading -->
-                    <h4 class="panel-title">
-                        <!-- title 1 -->
-                        <a data-toggle="collapse" data-parent="#accordion" href="#accordion_@item.codigo ">
-                            @item.codigo - @item.nome
-                        </a>
-                    </h4>
-                </div>
-                <!-- panel body -->
-                <div id="accordion_@item.codigo" class="panel-collapse collapse ">
-                    <div class="panel-body">
+<div class="container-fluid">
+    <div class="animated fadeIn ng-scope">
+        <div class="card card-full ng-scope">
+            <div class="card-block">
+                <div class="row">
+                    <div class="col-md-10">
 
-                        <table class="table table-striped">
-                            <tr>
-                                <th>
-                                    Departamento
-                                </th>
-                                <th>
-                                    Descrição
-                                </th>
-                                <th>Responsavel</th>
-                                <th></th>
-                            </tr>
+                        <div class="table-responsive">
 
-                            @foreach (var dep in item.departamentosList)
+                            @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => dep.departamento)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => dep.descricao)
-                                    </td>
-                                    <td>
-                                        @{ if (dep.responsavel != null)
-                                            {
+                                <div class="panel-group" id="accordion">
+                                    <!-- accordion 1 -->
+                                    <div class="panel panel-primary">
 
-                                                @Html.DisplayFor(modelItem => dep.responsavel.Email)
-                                            }
+                                        <div class="panel-heading">
+                                            <!-- panel-heading -->
+                                            <h4 class="panel-title">
+                                                <!-- title 1 -->
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#accordion_@item.codigo ">
+                                                    @item.codigo - @item.nome
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <!-- panel body -->
+                                        <div id="accordion_@item.codigo" class="panel-collapse collapse ">
+                                            <div class="panel-body">
 
-                                        }
-                                    </td>
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@dep.Id">Edit</a> |
-                                        <a asp-action="Details" asp-route-id="@dep.Id">Details</a> |
-                                        <a asp-action="Delete" asp-route-id="@dep.Id">Delete</a>
-                                    </td>
-                                </tr>
-                            }
-                        </table>
+                                                <table class="table table-striped">
+                                                    <tr>
+                                                        <th>
+                                                            Departamento
+                                                        </th>
+                                                        <th>
+                                                            Descrição
+                                                        </th>
+                                                        <th>Responsavel</th>
+                                                        <th></th>
+                                                    </tr>
+
+                                                    @foreach (var dep in item.departamentosList)
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => dep.departamento)
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(modelItem => dep.descricao)
+                                                            </td>
+                                                            <td>
+                                                                @{
+                                                                    foreach (var funcionario in await AppSettings.getResponsaveisDepartamento(dep.Id))
+                                                                    {
+                                                                        @funcionario.nomeAbreviado;
+
+                                                                    }
+
+                                                                }
+                                                                        
+
+                                                                        
+                                                                    
+                                                            </td>
+                                                            <td>
+                                                                <a asp-action="Edit" asp-route-id="@dep.Id">Edit</a> |
+                                                                <a asp-action="Details" asp-route-id="@dep.Id">Details</a> |
+                                                                <a asp-action="Delete" asp-route-id="@dep.Id">Delete</a> |
+                                                                <a asp-action="Create" asp-controller="Responsalvel_Departamento"  asp-route-departamentoId ='@dep.Id' >+ Responsavel</a>
+                                                            </td>
+                                                        </tr>
+                                                      }
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                                                    }
+
+
+                        </div>
+
 
                     </div>
                 </div>
             </div>
-
         </div>
-    }
-
-                
+    </div>
 </div>
+
+
+
+                        
 

@@ -6,6 +6,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using MIT.Repository;
 
+using Microsoft.Data.Entity.Metadata;
+
 namespace MIT.CRM.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -22,6 +24,7 @@ namespace MIT.CRM.Models
         public DbSet<Ferias> Ferias { get; set; }
         public DbSet<Ferias_Itens> Ferias_Itens { get; set; }
         public DbSet<Historio_Ferias_Item> Historio_Ferias_Item { get; set; }
+        public DbSet<Responsalvel_Departamento> Responsalvel_Departamento { get; set; }
         #endregion
 
         #region CRM
@@ -39,11 +42,28 @@ namespace MIT.CRM.Models
         public DbSet<FileDescription> FileDescription { get; set; }
         #endregion
 
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.Entity<CompanyModule>().HasKey(x => new { x.companyId, x.moduleId });
+            //builder.Entity<Responsalvel_Departamento>()
+            //    .HasKey(x => new { x.departamentoId, x.funcionarioId });
+
+            
+            builder.Entity<Responsalvel_Departamento>()
+            .HasOne(p => p.funcionario)
+            .WithMany(p=> p.listaResponsavelDepartamentos)
+            .HasForeignKey(p=>p.funcionarioId)
+            .OnDelete(DeleteBehavior.Restrict); // no ON DELETE
+
+            builder.Entity<Responsalvel_Departamento>()
+            .HasOne(p => p.departamento)
+            .WithMany(p => p.listaResponsavelDepartamentos)
+            .HasForeignKey(p => p.departamentoId)
+            .OnDelete(DeleteBehavior.Restrict); // no ON DELETE
+
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
